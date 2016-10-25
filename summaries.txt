@@ -16,3 +16,4 @@ The author then provides case studies for the different types of cloud platforms
 There is a short discussion on big data storage systems such that traditional RDBMS systems. This section mainly focuses on hadoop based systems with HDFS and MapReduce.
 
 The author then concludes with a set of research challenges such as scalability, availability, data integrity, transformation, data quality, heterogeneity, privacy, legal/regulatory issues, and governance. The author also includes several open research issues as data staging, distributed storage systems, data analysis, and data security.  
+

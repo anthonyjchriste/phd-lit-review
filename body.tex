@@ -2,11 +2,30 @@
 
 \section{Big Data}
 
+value of big data as defined in the white house report and mckinney paper
+
+\section{Data Transfer}
+\subsection{Publish-Subscribe}
+Publish-subscribe is an architecture in which producers create data and consumer consume data. Data can be broken up into different categories and consumers can subscribe to different types of data depending on the category that they are interested in.
+
 \section{Cloud Computing}
+Kamburugamuve \emph{et al.} describe a cloud based platform for connecting to, processing data from, and controlling distributed sensors using scalable cloud based computing.\cite{kamburugamuve_framework_2015}.  Their proposed architecture is based off of the idea that sensors within the network that they want to observe will send information as a stream of events. Because their sensor streams are event based, they chose to forgo the traditional request/response/polling architecture and chose to instead utilize a system that provides publish-subscribe semantics which are shown to provide robust solutions for event based data streams and loosely coupled components\cite{eugster_many_2003}. Kamburugamuve \emph{et al.} chose a topic based subscription policy rather than a content based due to lower computational requirements and decreased latencies.
+
+This proposed architecture should support both stream-based real time processing as well as batch analysis and processing. However, discussion of their results show that they only implemented real-time streaming and not the ability to provide batch analysis. 
+
+To perform real-time processing, they used Apache Storm as a distributed event processing engine (DSPE). To build their architecture in the cloud, the authors chose a Cloud DIKW- (Data, Information, Knowledge, and Wisdom-) architecture to build upon. 
+
+To show that their system works they created a robotic application that is driven using real-time communication and analysis between the cloud to drive the robot to complete simple tasks.
+
+% History of cloud computing
+
 \subsection{Distributed Storage Systems}
 
+% History of distrubted storage systems.
 
 \subsection{Analysis}
 
 
 \section{}
+
+streaming vs batch processing

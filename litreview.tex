@@ -1,134 +1,98 @@
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-%!NOTE: This example file has been prepared according to the University of
-%!      Hawaii Style & Policy Manual for Theses and Dissertations dated
-%!      "Revised September 2010". If you have one with a later date, you may
-%!      need to make revisions to this document as well. In any event, making
-%!      sure your thesis complies with Graduate Education guidelines is
-%!      ultimately your responsibility. Caveat LaTeXtor. :)
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\documentclass[twocolumn]{article}
 
-%% The options are (you can only choose one from each group):
-%%
-%% 10pt, 11pt, 12pt: chooses the point size for the document. "11pt" is the
-%%                   default.
-%%
-%% oneside, twoside: whether you want your document onesided or twosided. Note
-%%                   that twosided is not guaranteed to work, and style
-%%                   guidelines prohibit double sided printouts on final
-%%                   copy. "oneside" is the default.
-%%
-%% draft, final: when printing drafts you can save a lot of paper by using the
-%%               "draft" option. It switches to single spacing, displays overful
-%%               hboxes with a black box, prints a version number on title page 
-%%               and omits signature page. Of course for the final copy make
-%%               sure to use the "final" option! "final" is the default.
-%%
-%% thesis, dissertation: switches between the style for a master's thesis and a 
-%%                       Ph.D. dissertation. The differences are fairly minor
-%%                       and limited to the front matter. "thesis" is the
-%%                       default.
-%%
-%% actual, proposal: switches between actual document and proposal mode. In
-%%                   proposal mode: the title page is simplified and the
-%%                   version number is always printed.
-%%
-%%% Load the new uhthesis document class
-\documentclass[11pt, draft, dissertaion]{uhthesis}
-
-%%% Load some useful packages:
-%% New LaTeX2e graphics support
 \usepackage{graphicx}
-%% Package to linebreak URLs in a sane manner.
 \usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{microtype}
 
-%%% Declarations for Front Matter. Capitalize all of these values
-%%% "normally". This allows the document class to format them properly.
-%% Full title of thesis or dissertation, capitalized like a title should be.
+%opening
 \title{Cloud Based Sensor Big Data Management: A Literature Review}
-%% Your name, capitalized normally. Do not include any titles like Dr.
 \author{Anthony J. Christe}
-%% Month in which you intend to receive your degree (i.e. graduation).
-%% Presumably this will be one of: May, August, or December.
-\degreemonth{May}
-%% Year of expected graduation.
-\degreeyear{2017}
-%% Type of degree to be conferred.
-\degree{Ph.D.}
-%% This is the chairperson of your committee. Do not use titles like Dr.
-\chair{Philip Johnson}
-%% The other members of your committee, seperated by "\\". Again, no titles,
-%% and it is customary to list the outside committee member (if you have one)
-%% last.
-\othermembers{Milton Garces\\
-Jane Doe\\
-The Who}
-%% The field in which you are obtaining your degree, capitalized normally.
-\field{Computer Science}
-%% If your discipline allows subfields, you can add it here. Note that this
-%% is strictly controlled, so consult the Style & Policy guide before adding
-%% a subfield.
-%\subfield{Bioinformatics}
-%% 4-6 optional keywords/phrases for use in indexing or as search terms
-\keywords{literature, review, sensor, networks}
-%% The version number of your document. Consistent use of this will enable you
-%% to tell old drafts from new ones. Final actual documents omit this
-%% automatically so you can use it without fear of submission problems at the
-%% end. If you do not define this parameter, it defaults to "1.0.0".
-\versionnum{0.0.2}
 
-%%% End of preamble
 \begin{document}
+
 \maketitle
 
-\begin{frontmatter}
+\begin{abstract}
 
-%%% Note, there is no longer a signature page included in the document, it
-%%% has been replaced by Form IV
+\end{abstract}
 
-%%% Create the copyright page (optional)
-\copyrightpage
+\section{Introduction (abstract?)}
+The exponential increase in volume, variety, velocity, veracity, and value of data has caused us to rethink traditional server architectures when it comes to data acquisition, storage, analysis, quality of data, and governance of data. With the emergence of Internet of Things (IoT) and increasing numbers of ubiquitous mobile sensors such as mobile phones, distributed sensor networks are growing at an unprecedented pace and producing an unprecedented amount of streaming data. It's predicted by the European Comission that IoT devices will number between 50 to 100 billion devices by 2020\cite{6072197}.
 
-%%% Bring in the dedication page from external file (optional)
-%\include{dedication}
+The size of sensor networks is quickly growing. BBC Research provides figures that the market share for sensor networks in 2010 was \$56 billion and was predicted to be closer to \$91 billion by the end of 2016 \cite{zaslavsky_sensing_2013}. Data generated from the IoT are surpassing the compute and memory resources of existing IT infrastructures. \cite{chen_big_2014}. Not only is the size of data rapidly exploding, but data is also becoming more complex. Data from sensor networks is often semi-structured on unstructured with data quality issues. 
 
-%%% Bring in the acknowledgments section from external file (optional)
-%\include{acknowledgments}
+Sensor networks can benefit from the generally ``unlimited resources'' of the cloud, namely processing, storage, and network resources. We believe that by leveraging cloud computing, distributed persistence models, and distributed anayltics, its possible to provide a platform that is able to meet the demands of the increasing distributed sensor market and the increasing volume, velocity, variety, and value of data that comes along with that. 
 
-%%% Bring in the abstract section from external file
-%\include{abstract}
+This review hopes to summarize the current state of the art surrounding distributed sensor networks and the use of cloud computing as a means for big sensor data acquisition and analysis. We will also briefly discuss privacy concerns relating to sensor data in the cloud.
 
-%%% Generate table of contents
-\tableofcontents
+% Rest of the paper
+The rest of this review is as follows: The rest of chapter 1 will review the concepts cloud computing, big data, and sensor networks with motivation as to why these technologies are intertwined. Chapter 2 will compare and contrast various Big Data persistence models. Chapter 3 will provide a review of the current state of the art analytics for Big Data. Chapter 4 will discuss privacy in relation to sensor networks and the cloud. Chapter 5 compares reference implementations of sensor frameworks in the cloud. Chapter 6 discusses future directions and open research questions.
 
-%%% Generate list of tables
-\listoftables
+\subsection{Big Sensing Data}
+Sensor data is generally different from Big Data in several ways \cite{chen_big_2014}. One of the most common characteristics of sensor data is the amount of noise in the data. Environmental sensing will always include noise because the data is born analog\cite{pcast}. Often sensor networks provide data in a large variety of unstructured formats with missing, partial, or conflicting meta-data. Sensor data can also contain a large amount of data redundency from multiple sensors in similar locations. The problem very quickly becomes a needle-in-the-haystack problem or more aptly put, finding the signal in the noise.
 
-%%% Generate list of figures
-\listoffigures
+\subsection{Cloud Computing}
+NIST\cite{mell2011nist} defines cloud computing as ``Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''
 
-\end{frontmatter}
+Cloud computing frameworks can provide on-demand availability and scaling of virtual computing resources for storage, processing, and analyzing of very large data sets in real-time or near real-time. This model makes it possible to build applications in the cloud for dealing with Big Data sets such as those produced from large distributed sensor networks.
 
-%\include{introduction}
+By using the cloud as a central sink of data for our devices within a sensor network, it's possible to take advantage of central repositories of information, localized dynamic computing resources, and parallel computations.  With the advent of cheap and ubiquitous network connections, it's becoming easier to do less processing within sensor networks and to offload the work to a distributed set of servers and processes in the cloud\cite{kamburugamuve_framework_2015}.
+
+Cloud computing includes both technical and economical advantages as discussed in \cite{botta_integration_2016}. 
+
+On the economical side, computing resources are pay-per-use. Businesses can dynamically increase or decrease the computing resources they are currently leasing. This makes it possible to utilize massive amounts of computing power for short amounts of time and then scale back resources when demand isn't at its peak. Before cloud computing these same businesses would be required to manage and maintain their own hardware for peak load without the ability to dynamically scale their hardware if the peak load were to increase.
+
+On the technical side, the localization of computing resources provides for a wide variety of benefits including energy efficiency, hardware optimizations, software optimizations, and performance isolation. 
+
+% Other advantages of cloud computing for mobile devices and data
+% maybe a brief forway into fog and jungle computing
+% The cloud as a collection of services
+\subsubsection{Cloud Computing Service Models}
+When discussing cloud computing, it's useful to understand the service layers that cloud computing provide. The three service models are Infrastructure as a Service (IaaS), Platform as a Service (PaaS), and Software as a Service (SaaS).
+
+At the lowest level is IaaS which provides virtual machines that users have the ability to manage. Users can install operating systems on these virtual machines and interact with this virtual machines as if they were local servers. Users do not need to worry about the underlying hardware or network infrastructures at this level. This level of interaction is lower-level than we would like to examine for our survey. 
+
+At the next lowest level is the PaaS layer which provides infrastructure for users to deploy custom software to. At this level, users do not have control over their operating systems or virtual machines and these are managed by cloud. 
+
+At the highest level is the SaaS layer. This layer provides for pre-built applications running in the cloud that users interact with.
+
+This review aims to look at software and architecture somewhere between and including the PaaS and SaaS layers. There are many examples in the literature at optimizing data centers for cloud architecture and the IaaS service level (i.e. \cite{khanghahi_new_2014}, \cite{wang_survey_2015}, \cite{shen_cloudscale_2011}, \cite{qi_sierpinski_2014}, \cite{khethavath_towards_2016}). These discussions are outside of the scope of this review as we want to focus on software framework for sensor data collection in the cloud.
 
 
-%\normalsize
-%%% Bring in the body of the thesis from external file
-\include{body}
+%It's mentioned in \cite{botta_integration_2016} that cloud computing can receive benefits from large sensor networks by being a viable option for interfacing with sensor networks that have real-world impacts. 
 
-%%% Switch to appendix mode
-\appendix
+\subsection{Mobile Cloud Computing}
+Mobile devices such as smartphones make fantastic distributed sensors for temporalspatial data. Not only do they carry a wide array of sensors on-board (microphones, barometers, accelerometers, GPS, compasses, cameras, clocks), but they generally have multiple modes of offloading data (WiFi, bluetooth, cellular, SD cards), and support some pre-processing on-board.
 
-%%% Bring in any appendices from external file (optional)
-%\include{appendix}
+\subsection{Applications of Distributed Sensor Networks}
+Zaslaveky et al. \cite{zaslavsky_sensing_2013} cites several examples of distributed sensor networks in-the-wild including: a real-time greenhouse gas detection network deployed across California, real-time structural monitoring such as the St. Anthony Falls Bridge sensor network in Minneapolis, distributed radiation detection in Fukushima, real-time parking space inventory in San Francisco
 
-%% Just for demo purposes, include all entries from bib file
-\nocite{*}
+Software for cloud environments include distributed fault-tolerant databases and distributed parallel algorithms for computer clusters. 
 
-%%% Input file for bibliography
+%% smart grid
+One area that shows a lot of promise for distributed sensor networks with centralized management is smart grids. The smart grid is an collection of technologies aiming to advance the electrical grid into the future with respect to intelligent energy distribution and integration of renewables. Electrical grids can benefit by using a large distributed sensor network to collect power consumption, production, and quality information and use that information to control power production and consumption in real-time. 
+
+Many times, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{botta_integration_2016}.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Big Data Persistence Models}
+
+\section{Big Data Analytics}
+
+\section{Privacy}
+
+\section{Reference Implementations}
+
+\section{Open Research Question}
+
 \bibliography{litreview}
-%% Use this for an alphabetically organized bibliography
 \bibliographystyle{plain}
-%% Use this for a reference order organized bibliography
-%\bibliographystyle{unsrt}
 
 \end{document}

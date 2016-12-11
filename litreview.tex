@@ -6,7 +6,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{hyperref}
-\usepackage{microtype}
+%\usepackage{microtype}
 
 %opening
 \title{Cloud Based Sensor Big Data Management: A Literature Review}
@@ -32,7 +32,7 @@ This review hopes to summarize the current state of the art surrounding distribu
 % Rest of the paper
 The rest of this review is as follows: The rest of chapter 1 will review the concepts cloud computing, big data, and sensor networks with motivation as to why these technologies are intertwined. Chapter 2 will compare and contrast various Big Data persistence models. Chapter 3 will provide a review of the current state of the art analytics for Big Data. Chapter 4 will discuss privacy in relation to sensor networks and the cloud. Chapter 5 compares reference implementations of sensor frameworks in the cloud. Chapter 6 discusses future directions and open research questions.
 
-\subsection{Big Sensing Data}
+\subsection{Big Sensor Data}
 Sensor data is generally different from Big Data in several ways \cite{chen_big_2014}. One of the most common characteristics of sensor data is the amount of noise in the data. Environmental sensing will always include noise because the data is born analog\cite{pcast}. Often sensor networks provide data in a large variety of unstructured formats with missing, partial, or conflicting meta-data. Sensor data can also contain a large amount of data redundency from multiple sensors in similar locations. The problem very quickly becomes a needle-in-the-haystack problem or more aptly put, finding the signal in the noise.
 
 \subsection{Cloud Computing}
@@ -68,6 +68,8 @@ This review aims to look at software and architecture somewhere between and incl
 \subsection{Mobile Cloud Computing}
 Mobile devices such as smartphones make fantastic distributed sensors for temporalspatial data. Not only do they carry a wide array of sensors on-board (microphones, barometers, accelerometers, GPS, compasses, cameras, clocks), but they generally have multiple modes of offloading data (WiFi, bluetooth, cellular, SD cards), and support some pre-processing on-board.
 
+\subsection{Scientific Data Infrastructure}
+
 \subsection{Applications of Distributed Sensor Networks}
 Zaslaveky et al. \cite{zaslavsky_sensing_2013} cites several examples of distributed sensor networks in-the-wild including: a real-time greenhouse gas detection network deployed across California, real-time structural monitoring such as the St. Anthony Falls Bridge sensor network in Minneapolis, distributed radiation detection in Fukushima, real-time parking space inventory in San Francisco
 
@@ -83,6 +85,36 @@ Many times, the sensor nodes in smart grids lack powerful local computation abil
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Big Data Persistence Models}
+Traditional storage methods for meta-data and related products has traditionally made use of the filesystem and relational database systems (RDMS).
+
+Big Sensor Data by its nature can be structured, unstructured, large, diverse, noisy, etc. Many of the properties of BSD do not fit nicely into the structured world of traditional RDMSs.
+
+In-order to meet the needs of Big Sensor Data and distributed sensor networks, we look to the ever growing field of NoSQL (not only SQL) and related Big Data storage models. There are multiple types of data models with different use cases. We will review the current players in this field and with a focus on how these technologies could aid in managing Big Sensor Data in the cloud.
+
+According to Song et al.\cite{5980904} an ideal NoSQL data model strives for ``high concurrency, low latency, efficient storage, high scalability, high availability, reduced management and operation costs.'' The challenges of realizing an ideal NoSQL data model however are lie in three main areas\cite{chen_big_2014}: consistency, availability, and partition tolerance. 
+
+% Discussions on consistency
+Several of the persistence models we review do not support ACID (Atomicty, Consistency, Isolation, Durability). A consequence of this is less than perfect consistency. Consistency issues occur when data is stored in a distributed manner with multiple copies. In situations of server failure (or with systems that support different consistency models), situations can arise where multiple copies of the same resource contain different contents. 
+
+Vogels and Wener\cite{vogels_eventually_2008} explain the main forms of consistency. Assume a record is being updated across multiple servers. With ``strong consistency'', any access of that resource after the update will return the updated result. With ``weak consistency'', subsequent access of that resource is not guaranteed to return the updated result if that access is within a certain ``inconsistency window''. With eventual consistency, the only guarantee you get is that access to the resource will be show up ``eventually'' where eventually can depend on many factors.
+
+We also believe, ease of use, maturity of the product, and community (or commercial) support should also factor into the comparisons. 
+
+With the above factors in mind, we big categorizing and analyzing.
+
+\subsection{Data Models}
+\subsubsection{Key-Value}
+\subsubsection{Document}
+\subsubsection{Graph}
+\subsubsection{Wide Column Store}
+
+\subsection{Data Guarentees}
+\subsubsection{title}
+
+\subsection{Indexing}
+
+
+% Provide a small forray into TSDBs
 
 \section{Big Data Analytics}
 

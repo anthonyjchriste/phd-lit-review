@@ -91,20 +91,48 @@ Big Sensor Data by its nature can be structured, unstructured, large, diverse, n
 
 In-order to meet the needs of Big Sensor Data and distributed sensor networks, we look to the ever growing field of NoSQL (not only SQL) and related Big Data storage models. There are multiple types of data models with different use cases. We will review the current players in this field and with a focus on how these technologies could aid in managing Big Sensor Data in the cloud.
 
-According to Song et al.\cite{5980904} an ideal NoSQL data model strives for ``high concurrency, low latency, efficient storage, high scalability, high availability, reduced management and operation costs.'' The challenges of realizing an ideal NoSQL data model however are lie in three main areas\cite{chen_big_2014}: consistency, availability, and partition tolerance. 
+According to Song et al.\cite{5980904} an ideal NoSQL data model strives for ``high concurrency, low latency, efficient storage, high scalability, high availability, reduced management and operation costs.'' The challenges of realizing an ideal NoSQL data model however lie in three main areas\cite{chen_big_2014}: consistency, availability, and partition tolerance. 
 
 % Discussions on consistency
 Several of the persistence models we review do not support ACID (Atomicty, Consistency, Isolation, Durability). A consequence of this is less than perfect consistency. Consistency issues occur when data is stored in a distributed manner with multiple copies. In situations of server failure (or with systems that support different consistency models), situations can arise where multiple copies of the same resource contain different contents. 
 
 Vogels and Wener\cite{vogels_eventually_2008} explain the main forms of consistency. Assume a record is being updated across multiple servers. With ``strong consistency'', any access of that resource after the update will return the updated result. With ``weak consistency'', subsequent access of that resource is not guaranteed to return the updated result if that access is within a certain ``inconsistency window''. With eventual consistency, the only guarantee you get is that access to the resource will be show up ``eventually'' where eventually can depend on many factors.
 
-We also believe, ease of use, maturity of the product, and community (or commercial) support should also factor into the comparisons. 
+% Discussions on availability
+As the amount of hardware (servers, switches, \textit{etc}) increases in a distributed system so does the amount of hardware errors. Availability refers to the ability to remain operational even as parts of a distributed system drop in and drop out\cite{chen_big_2014}. Gilbert\cite{gilbert2002brewer} defines availability as ``every request received by a non-failing node in the system must result in a response." He goes on further to point out that this definition does allow for unbounded computation since it's possible to wait for a result that never returns.
 
-With the above factors in mind, we big categorizing and analyzing.
+% Discussion on partition tolerance
+As the amount of hardware increases in a distributed system, the number of communication packets that drops also increases. The ability to maintain service in the face of some amount of drops refers to partition tolerance\cite{chen_big_2014}.
+
+The above ideas are all tied together into the CAP theorem proposed by Brewer\cite{brewer2000towards} which states that in any shared data system, you can only achieve two of the three following properties: Consistency, Availability, or Partition (tolerance). As we review different Big Data architectures, we will examine how they fit into the CAP theorem and what guarantees they provide for these three major areas of distributed data management.
+
+We also believe, ease of use, maturity of the product, and community (or commercial) support should also factor into the comparisons between data models. 
+
+With the above factors in mind, we can begin categorizing and analyzing several major Big Data model solutions.
 
 \subsection{Data Models}
 \subsubsection{Key-Value}
+The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
+
+Keys in KV systems are the unit parallelism that provide the main means of concurrency. If you want to guarentee transactions, then keys can be naively sharded across servers. This does now however provide safety of data loss in which case a system will strive to provide replication at the cost if ACID compliance. Stores and requests can usually be achieved in $O(1)$ even in distributed systems\cite{ravendb}.
+
+If the major advantages are simplicity and query response time\cite{chen_big_2014}, the major disadvantage to KV stores is the fact that they lack advanced query capabilities. The only way to query a database is by its unique key. Range based queries, secondary, and tertiary indexes are only supported by a third party systems.
+
+Popular KV based solutions include Dynamo, Riak, Voldemort, Redis, MemcacheDB, Ignite  and others.
+
+Key-Value stores can be useful tools for simple distributed sensor networks that keep track of a handful of non-complex data such as current temperature, current voltage, etc. Issues arise when you want to start recording timestamped data. If timestamped data arrives at irregular intervals, KV stores to not provide range based queries to query on timestamps. Thus, KV stores may be poorly suited for time based sensor data. Finally, KV stores do not provide queries for location based sensor data making it potentially a poor choice for geo-spatial data.
+
 \subsubsection{Document}
+Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
+
+Even though documents are restricted to their underlying structure (i.e. JSON, YAML, etc), document databases do not impose a schema like traditional RDMS databases. This allows for painless transitions of data storage when the underlying data change\cite{sharma_extended_2015}.  This is of special concern with heterogenous sensor networks which can produce large varieties of data in different and changing formats.
+
+Document based data stores often present less of an impendance mismatch between data structures in a programming language and their underlying representation in the data store. Compared to the way data is structured in a RDMS, it's often easier to understand the underlying data structure in a documented based store. There are many common libraries for converting between documents in a document store and a data structure in a particular programming language. Compared to RDBMS, fields in document stores generally do not normalize their data which also enhances the readability of the underlying data structure\cite{ravendb}.
+
+An advantage that document based stores have over KV stores is that its possible to create more complex queries. Not only can you query on the primary key, but its possible to create queries over any keys in the document including in sub-documents. Indexes can be created on key and sub-keys. Many document based stores provide range and geospatial based queries. This advantage alone makes document based stores a decent choice for distributed sensor data.
+
+Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, SimpleDB, 
+
 \subsubsection{Graph}
 \subsubsection{Wide Column Store}
 

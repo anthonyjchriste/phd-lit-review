@@ -36,7 +36,21 @@ The rest of this review is as follows: The rest of chapter 1 will review the con
 Sensor data is generally different from Big Data in several ways \cite{chen_big_2014}. One of the most common characteristics of sensor data is the amount of noise in the data. Environmental sensing will always include noise because the data is born analog\cite{pcast}. Often sensor networks provide data in a large variety of unstructured formats with missing, partial, or conflicting meta-data. Sensor data can also contain a large amount of data redundency from multiple sensors in similar locations. The problem very quickly becomes a needle-in-the-haystack problem or more aptly put, finding the signal in the noise.
 
 \subsection{Cloud Computing}
-NIST\cite{mell2011nist} defines cloud computing as ``Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''
+NIST\cite{mell2011nist} defines cloud computing as ``Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''.
+
+The major five tennants of cloud computing as defined by NIST are as follows: 
+
+\textbf{On-demand self-service} where the user can provision network, storage, and compute capactity automatically without the need for human intervention. In essense, this becomes a virtual shopping mart where to the comsumer it appears that virtually unlimeted cloud resources are avaiable to chose from and the user (or algorithm) can increase or decrease the utilization of cloud resources at any time.
+
+\textbf{Broad network acess} where computation capabilities are performed over a network and results are delivered to clients such as mobile devices. 
+
+\textbf{Resource pooling} where resources within a cloud such as storage, network, or compute capacity are shared among multiple tenants. This allows for efficient utilization of hardware when generally virtual services are provided to clients. Clients don't nesisarily know where their physical hardware is located or provisioned. 
+
+\textbf{Rapid elasticty} is the ability to provision or remove cloud resources (i.e. storage, network, or compute resources) at any time from a system as demand on that system either increases or shrinks. Often times a human may not even be involed in making these descisions and this scaling will take place autimatically using a set of predefined usage thresholds.
+
+\textbf{Measure service} where cloud providers provide a means of metering the compute resources that are used by clients. This provides a transparent means of selling cloud computing resources to clients and clients can always know how much capacity they have consumed.
+
+Even though the NIST definition is starting to show its age, it's major tenants are still the underlying foundation of cloud software even today. Many additional service and deployment models have been developed since NIST defined cloud computing, but an understanding of the basic underpinnings is required before exploring the rest of this vast filed.
 
 Cloud computing frameworks can provide on-demand availability and scaling of virtual computing resources for storage, processing, and analyzing of very large data sets in real-time or near real-time. This model makes it possible to build applications in the cloud for dealing with Big Data sets such as those produced from large distributed sensor networks.
 
@@ -52,18 +66,46 @@ On the technical side, the localization of computing resources provides for a wi
 % maybe a brief forway into fog and jungle computing
 % The cloud as a collection of services
 \subsubsection{Cloud Computing Service Models}
-When discussing cloud computing, it's useful to understand the service layers that cloud computing provide. The three service models are Infrastructure as a Service (IaaS), Platform as a Service (PaaS), and Software as a Service (SaaS).
+When discussing cloud computing, it's useful to understand the service models that traditional cloud computing provide. The three major service models as defined by NIST\cite{mell2011nist} are \textbf{Infrastructure as a Service} (IaaS), \textbf{Platform as a Service} (PaaS) and \textbf{Software as a Service} (SaaS).
 
-At the lowest level is IaaS which provides virtual machines that users have the ability to manage. Users can install operating systems on these virtual machines and interact with this virtual machines as if they were local servers. Users do not need to worry about the underlying hardware or network infrastructures at this level. This level of interaction is lower-level than we would like to examine for our survey. 
+At the lowest level is  the Infrastructure as a Service (IaaS) model which provides virtual machines that users have the ability to  deploy and manage. Users can install operating systems on these virtual machines and interact with deployed virtual machines as if they were local servers.  Consumers using IaaS have the ability to manage and provision virtual hardware and network resources, but do not need to worry about the underlying hardware or network infrastructures. Other than providing virtual resources, consuming utilizing IaaS still require a decent amount of systems administration knowledge develop, deploy, and secure applications into the cloud using IaaS.
 
-At the next lowest level is the PaaS layer which provides infrastructure for users to deploy custom software to. At this level, users do not have control over their operating systems or virtual machines and these are managed by cloud. 
+Sitting in the middle of the traditional cloud service models is the Platform as a Service (PaaS)  model. In this service model consumers don't have the ability to interact or provision individual cloud resources such as virtual machines, storage, networking, or compute capacity. Instead, users have the ability to deploy their application to the cloud via custom cloud provides tools or via a cloud provided application programming interfaces (APIs).
 
-At the highest level is the SaaS layer. This layer provides for pre-built applications running in the cloud that users interact with.
+At the highest level is the Software as a Service (SaaS) layer. Generally speaking, applications in a SaaS environment are generally provided by the cloud provider. In a SaaS model, users do not have the ability to control their own cloud resources and users do not have the ability to upload their own applications to the cloud. Users do sometimes have the ability to alter the configuration of the software they are interacting with in this model.
 
 This review aims to look at software and architecture somewhere between and including the PaaS and SaaS layers. There are many examples in the literature at optimizing data centers for cloud architecture and the IaaS service level (i.e. \cite{khanghahi_new_2014}, \cite{wang_survey_2015}, \cite{shen_cloudscale_2011}, \cite{qi_sierpinski_2014}, \cite{khethavath_towards_2016}). These discussions are outside of the scope of this review as we want to focus on software framework for sensor data collection in the cloud.
 
+\subsubsection{Cloud Deployment Models}
+NIST\cite{mell2011nist} provides four types of deployment models in its cloud computing definition: \textbf{private cloud}, \textbf{community cloud}, \textbf{public cloud}, and \textbf{hybrid cloud}.
 
-%It's mentioned in \cite{botta_integration_2016} that cloud computing can receive benefits from large sensor networks by being a viable option for interfacing with sensor networks that have real-world impacts. 
+A private cloud is is a cloud where resources are provisioned to a single organization (or multiple parties within a single organization). In this model the organization may deploy their own cloud hardware or use cloud resources provided by a third party.
+
+In a community cloud, resources are provided to a group of organizations that have similar requirements and may be owned and managed by a single organization, multiple organizations, or third parties.
+
+Public clouds provide computing resources to anyone willing to purchase  said cloud resources. Public clouds can be owned and manged by anyone, a government, or any third-party. Generally all hardware in public clouds are managed by the cloud provider.
+
+Hybrid clouds use and provide a combination of the previously mentioned deployment models and can be configured, split-up, and manged in many ways.
+
+Virtual private clouds as described in Botta et al.\cite{botta_integration_2016} provide aspects from both public and private clouds using virtual private network (VPN) technology to allow users to manage specfific and often times complicated network technologies.
+
+\subsubsection{Issues with Cloud Computing}
+Being a relatively new research field cloud computing is showing quite a few growing pains. 
+
+The biggest issues facing cloud computing deal with security and privacy. Subashini et al.\cite{subashini_survey_2011} go into the specific security and privacy risks associated with the three major cloud deployment models. 
+
+The deployment model that exibits the most risks in the PaaS layer since this model requires that consumers manage their own virtual machines, deployment of cloud applications, and configuration. Within this model, the following items are of conern. 
+
+Data security is a conern on all deployment models, but especially at the PaaS layer where sensitive data will be stored on remote servers not owned by a client. Since clients manage their own servers in the PaaS layer, they are also required to manage their own data security. Data security issues include cross-site scripting, access control weaknesses, injection attacks, cross-site request forgery, cookie manipulation, hidden field manipulation, insecure storage, and insecure configuration.
+
+Network security becomes an issue when sensitive data is transfered from clients to the cloud backend and visa-versa. If encryption is not used, users could be vulnerable to port scans, ip spoofing, man-in-the-middle attacks, packet sniffing, and more. Even if encryption is used, users can still be vulnerable to packet analysis, insecure SSL configurations, session management weaknesses.
+
+Laws and regulations often require that data not leave or enter certain jurisdictions. Users generally do not get to decide where data is stored within a cloud environment.
+
+At some level, comsumers are required to trust that the cloud provider they choose will implement security and privacy best practices within their cloud architecture. This does now however resolve the larger issues of security vulnerablities within cloud software and their communication componenents.
+
+% Something about runaway data costs.... there was an issue once of someones AWS key being found and then their servers got pwned and were used for generating bitcoin or something
+
 
 \subsection{Mobile Cloud Computing}
 Mobile devices such as smartphones make fantastic distributed sensors for temporalspatial data. Not only do they carry a wide array of sensors on-board (microphones, barometers, accelerometers, GPS, compasses, cameras, clocks), but they generally have multiple modes of offloading data (WiFi, bluetooth, cellular, SD cards), and support some pre-processing on-board.

@@ -74,6 +74,12 @@ Sitting in the middle of the traditional cloud service models is the Platform as
 
 At the highest level is the Software as a Service (SaaS) layer. Generally speaking, applications in a SaaS environment are generally provided by the cloud provider. In a SaaS model, users do not have the ability to control their own cloud resources and users do not have the ability to upload their own applications to the cloud. Users do sometimes have the ability to alter the configuration of the software they are interacting with in this model.
 
+Since the original service models were penned, there have been many other types services models introduced. Several of these focus on IoT service layers as noted by Botta et al's\cite{botta_integration_2016}. These include \textbf{Sensing as a Service} (S$^2$aaS), \textbf{Sensing and Actuation as a Service} (SAaaS), \textbf{Sensor Event as a Service} (SEaaS), \textbf{Sensor as a Service} (SenaaS), \textbf{Data Base as a Service} (DBaaS), \textbf{Data as a Service} (DaaS), \textbf{Ethernet as a Service} (EaaS), \textbf{Idendity and Policy Management as a Service} (IPMaaS), and \textbf{Video Surveillance as a Service} (VSaaS).
+
+Some of the above mentioned service models are of particular interest for a survey examining cloud computing and sensor networks.
+
+Sensing as a Service (SaaS or S$^2$aaS) describes ``the process of making the sensor data and event of interests available to the clients respectively over the cloud infrastructure''\cite{dash_survey_2010}. 
+
 This review aims to look at software and architecture somewhere between and including the PaaS and SaaS layers. There are many examples in the literature at optimizing data centers for cloud architecture and the IaaS service level (i.e. \cite{khanghahi_new_2014}, \cite{wang_survey_2015}, \cite{shen_cloudscale_2011}, \cite{qi_sierpinski_2014}, \cite{khethavath_towards_2016}). These discussions are outside of the scope of this review as we want to focus on software framework for sensor data collection in the cloud.
 
 \subsubsection{Cloud Deployment Models}
@@ -98,7 +104,7 @@ The deployment model that exhibits the most risks in the PaaS layer since this m
 
 Data security is a concern on all deployment models, but especially at the PaaS layer where sensitive data will be stored on remote servers not owned by a client. Since clients manage their own servers in the PaaS layer, they are also required to manage their own data security. Data security issues include cross-site scripting, access control weaknesses, injection attacks, cross-site request forgery, cookie manipulation, hidden field manipulation, insecure storage, and insecure configuration.
 
-Network security becomes an issue when sensitive data is transfered from clients to the cloud backed and visa-versa. If encryption is not used, users could be vulnerable to port scans, ip spoofing, man-in-the-middle attacks, packet sniffing, and more. Even if encryption is used, users can still be vulnerable to packet analysis, insecure SSL configurations, session management weaknesses.
+Network security becomes an issue when sensitive data is transferred from clients to the cloud backed and visa-versa. If encryption is not used, users could be vulnerable to port scans, ip spoofing, man-in-the-middle attacks, packet sniffing, and more. Even if encryption is used, users can still be vulnerable to packet analysis, insecure SSL configurations, session management weaknesses.
 
 Laws and regulations often require that data not leave or enter certain jurisdictions giving rise to issues of data locality. Users generally do not get to decide where data is stored within a cloud environment as most of those decisions are handled by the cloud provider.
 

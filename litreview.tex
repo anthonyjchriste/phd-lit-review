@@ -1,4 +1,4 @@
-\documentclass[twocolumn]{article}
+\documentclass[]{article}
 
 \usepackage{graphicx}
 \usepackage{url}
@@ -6,7 +6,8 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{hyperref}
-%\usepackage{microtype}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{microtype}
 
 %opening
 \title{Cloud Based Sensor Big Data Management: A Literature Review}
@@ -35,20 +36,22 @@ The rest of this review is as follows: The rest of chapter 1 will review the con
 \subsection{Big Sensor Data}
 Sensor data is generally different from Big Data in several ways \cite{chen_big_2014}. One of the most common characteristics of sensor data is the amount of noise in the data. Environmental sensing will always include noise because the data is born analog\cite{pcast}. Often sensor networks provide data in a large variety of unstructured formats with missing, partial, or conflicting meta-data. Sensor data can also contain a large amount of data redundancy from multiple sensors in similar locations. The problem very quickly becomes a needle-in-the-haystack problem or more aptly put, finding the signal in the noise.
 
+Perera et al.\cite{perera_sensing_2014} expect with IoT we could see as many as 1 billion sensors online by the year 2020.
+
 \subsection{Cloud Computing}
 NIST\cite{mell2011nist} defines cloud computing as ``Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''.
 
 The major five tenants of cloud computing as defined by NIST are as follows: 
 
-\textbf{On-demand self-service} where the user can provision network, storage, and compute capacity automatically without the need for human intervention. In essence, this becomes a virtual shopping mart where to the consumer it appears that virtually unlimited cloud resources are available to chose from and the user (or algorithm) can increase or decrease the utilization of cloud resources at any time.
+\textit{On-demand self-service} where the user can provision network, storage, and compute capacity automatically without the need for human intervention. In essence, this becomes a virtual shopping mart where to the consumer it appears that virtually unlimited cloud resources are available to chose from and the user (or algorithm) can increase or decrease the utilization of cloud resources at any time.
 
-\textbf{Broad network acess} where computation capabilities are performed over a network and results are delivered to clients such as mobile devices. 
+\textit{Broad network acess} where computation capabilities are performed over a network and results are delivered to clients such as mobile devices. 
 
-\textbf{Resource pooling} where resources within a cloud such as storage, network, or compute capacity are shared among multiple tenants. This allows for efficient utilization of hardware when generally virtual services are provided to clients. Clients don't necessarily know where their physical hardware is located or provisioned. 
+\textit{Resource pooling} where resources within a cloud such as storage, network, or compute capacity are shared among multiple tenants. This allows for efficient utilization of hardware when generally virtual services are provided to clients. Clients don't necessarily know where their physical hardware is located or provisioned. 
 
-\textbf{Rapid elasticity} is the ability to provision or remove cloud resources (i.e. storage, network, or compute resources) at any time from a system as demand on that system either increases or shrinks. Often times a human may not even be involved in making these decisions and this scaling will take place automatically using a set of predefined usage thresholds.
+\textit{Rapid elasticity} is the ability to provision or remove cloud resources (i.e. storage, network, or compute resources) at any time from a system as demand on that system either increases or shrinks. Often times a human may not even be involved in making these decisions and this scaling will take place automatically using a set of predefined usage thresholds.
 
-\textbf{Measure service} where cloud providers provide a means of metering the compute resources that are used by clients. This provides a transparent means of selling cloud computing resources to clients and clients can always know how much capacity they have consumed.
+\textit{Measure service} where cloud providers provide a means of metering the compute resources that are used by clients. This provides a transparent means of selling cloud computing resources to clients and clients can always know how much capacity they have consumed.
 
 Even though the NIST definition is starting to show its age, it's major tenants are still the underlying foundation of cloud software even today. Many additional service and deployment models have been developed since NIST defined cloud computing, but an understanding of the basic underpinnings is required before exploring the rest of this vast filed.
 
@@ -66,7 +69,7 @@ On the technical side, the localization of computing resources provides for a wi
 % maybe a brief forway into fog and jungle computing
 % The cloud as a collection of services
 \subsubsection{Cloud Computing Service Models}
-When discussing cloud computing, it's useful to understand the service models that traditional cloud computing provide. The three major service models as defined by NIST\cite{mell2011nist} are \textbf{Infrastructure as a Service} (IaaS), \textbf{Platform as a Service} (PaaS) and \textbf{Software as a Service} (SaaS).
+When discussing cloud computing, it's useful to understand the service models that traditional cloud computing provide. The three major service models as defined by NIST\cite{mell2011nist} are \textit{Infrastructure as a Service} (IaaS), \textit{Platform as a Service} (PaaS) and \textit{Software as a Service} (SaaS).
 
 At the lowest level is  the Infrastructure as a Service (IaaS) model which provides virtual machines that users have the ability to  deploy and manage. Users can install operating systems on these virtual machines and interact with deployed virtual machines as if they were local servers.  Consumers using IaaS have the ability to manage and provision virtual hardware and network resources, but do not need to worry about the underlying hardware or network infrastructures. Other than providing virtual resources, consuming utilizing IaaS still require a decent amount of systems administration knowledge develop, deploy, and secure applications into the cloud using IaaS.
 
@@ -74,16 +77,36 @@ Sitting in the middle of the traditional cloud service models is the Platform as
 
 At the highest level is the Software as a Service (SaaS) layer. Generally speaking, applications in a SaaS environment are generally provided by the cloud provider. In a SaaS model, users do not have the ability to control their own cloud resources and users do not have the ability to upload their own applications to the cloud. Users do sometimes have the ability to alter the configuration of the software they are interacting with in this model.
 
-Since the original service models were penned, there have been many other types services models introduced. Several of these focus on IoT service layers as noted by Botta et al's\cite{botta_integration_2016}. These include \textbf{Sensing as a Service} (S$^2$aaS), \textbf{Sensing and Actuation as a Service} (SAaaS), \textbf{Sensor Event as a Service} (SEaaS), \textbf{Sensor as a Service} (SenaaS), \textbf{Data Base as a Service} (DBaaS), \textbf{Data as a Service} (DaaS), \textbf{Ethernet as a Service} (EaaS), \textbf{Idendity and Policy Management as a Service} (IPMaaS), and \textbf{Video Surveillance as a Service} (VSaaS).
+Since the original service models were penned, there have been many other types services models introduced. Several of these focus on IoT service layers as noted by Botta et al's\cite{botta_integration_2016}. These include \textit{Sensing as a Service} (S$^2$aaS), \textit{Sensing and Actuation as a Service} (SAaaS), \textit{Sensor Event as a Service} (SEaaS), \textit{Sensor as a Service} (SenaaS), \textit{Data Base as a Service} (DBaaS), \textit{Data as a Service} (DaaS), \textit{Ethernet as a Service} (EaaS), \textit{Idendity and Policy Management as a Service} (IPMaaS), and \textit{Video Surveillance as a Service} (VSaaS).
 
-Some of the above mentioned service models are of particular interest for a survey examining cloud computing and sensor networks.
+Some of the above mentioned service models are of particular interest for a survey examining cloud computing and sensor networks. We will examine these in more detail in sections \ref{sec:saas}.
 
+\subsubsection{Sensing as a Service} \label{sec:saas}
 Sensing as a Service (SaaS or S$^2$aaS) describes ``the process of making the sensor data and event of interests available to the clients respectively over the cloud infrastructure''\cite{dash_survey_2010}. 
 
-This review aims to look at software and architecture somewhere between and including the PaaS and SaaS layers. There are many examples in the literature at optimizing data centers for cloud architecture and the IaaS service level (i.e. \cite{khanghahi_new_2014}, \cite{wang_survey_2015}, \cite{shen_cloudscale_2011}, \cite{qi_sierpinski_2014}, \cite{khethavath_towards_2016}). These discussions are outside of the scope of this review as we want to focus on software framework for sensor data collection in the cloud.
+The sensing as a service model includes 4 layers\cite{perera_sensing_2014}. Figure \ref{fig:sensing-as-a-service} shows these 4 layers in more detail.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/sensing-as-a-service}
+    \caption[Sensing as a service layers.]{Sensing as a service layers.\cite{perera_sensing_2014}}
+    \label{fig:sensing-as-a-service}
+\end{figure}
+
+The \textit{sensor and sensor owners} layer includes physical sensors which can sense an increasingly broad variety of natural phenomena and sensor owners which can be personal, household, private, public, or commercial. Sensor owners have the final say in what data gets to the cloud and who can access the data once it is in the cloud using conditions and restrictions.
+
+The \textit{sensor publishers} (SP) layer manages the detection of online sensors and acts as a middle-man between sensor consumers and sensors and sensor owners. Sensors register with the publisher layer. Sensor data consumers make requests to sensor publishers for specified types of data over specified amounts of time.
+
+The \textit{extended service providers} (ESP) layer builds abstraction on top of sensor publishers. A single ESP can interact with mulitple SPs. ESPs can be used to automatically request data from multiple sensors depending on criteria provided to the ESP. This can be useful if the sensor consumer does not care about the underlying individual sensors but instead queries data at a higher level (i.e. all temperature data within a given polygon).
+
+Rao et al.\cite{rao_cloud_2012} mention several research challenges for SaaS including the need for a standard distributed computing framework for distributed big data as well as a framework for the real-time monitoring of events. Perera et al\cite{perera_sensing_2014} introduce the idea of sensing as a service being an ideal model for smart cities which are supported by IoT sensors.
+
+Finally, the \textit{sensor data consumers} layer consist of data consumer who must register with the ESPs and provide valid digital certificates. Consumers can either deal with SPs directly or deal with ESPs. The benefit to dealing with SPs is reduced cost of communications with the ESP. The benefit of dealing with ESPs is higher level querying to data and the ability to query data across multiple SPs.
+
+%This review aims to look at software and architecture somewhere between and including the PaaS and SaaS layers. There are many examples in the literature at optimizing data centers for cloud architecture and the IaaS service level (i.e. \cite{khanghahi_new_2014}, \cite{wang_survey_2015}, \cite{shen_cloudscale_2011}, \cite{qi_sierpinski_2014}, \cite{khethavath_towards_2016}). These discussions are outside of the scope of this review as we want to focus on software framework for sensor data collection in the cloud.
 
 \subsubsection{Cloud Deployment Models}
-NIST\cite{mell2011nist} provides four types of deployment models in its cloud computing definition: \textbf{private cloud}, \textbf{community cloud}, \textbf{public cloud}, and \textbf{hybrid cloud}.
+NIST\cite{mell2011nist} provides four types of deployment models in its cloud computing definition: \textit{private cloud}, \textit{community cloud}, \textit{public cloud}, and \textit{hybrid cloud}.
 
 A private cloud is is a cloud where resources are provisioned to a single organization (or multiple parties within a single organization). In this model the organization may deploy their own cloud hardware or use cloud resources provided by a third party.
 

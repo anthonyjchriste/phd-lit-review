@@ -4,3 +4,6 @@
 *.lot
 *.synctex.gz
 *.toc
+litreview.bbl
+litreview.blg
+litreview.out

@@ -10,7 +10,7 @@
 \usepackage{microtype}
 
 %opening
-\title{Cloud Based Sensor Big Data Management: A Literature Review}
+\title{Data Management for Distributed Sensor Networks: A Literature Review}
 \author{Anthony J. Christe}
 
 \begin{document}
@@ -19,7 +19,7 @@
 
 
 \begin{abstract}
-    Sensor networks can benefit from the generally ``unlimited resources'' of the cloud, namely processing, storage, and network resources. We believe that by leveraging cloud computing, distributed persistence models, and distributed analytics, its possible to provide a platform that is able to meet the demands of the increasing distributed sensor market and the increasing volume, velocity, variety, and value of data that comes along with that. 
+    Sensor networks can benefit from the generally ``unlimited resources'' of the cloud, namely processing, storage, and network resources. This literature review surveys the major components of distributed data management, namely, cloud computing, distributed persistence models, and distributed analytics.
 \end{abstract}
 
 \pagebreak
@@ -29,34 +29,34 @@
 \pagebreak
 
 \section{Introduction} \label{sec:introduction}
-The exponential increase in volume, variety, velocity, veracity, and value of data has caused us to rethink traditional server architectures when it comes to data acquisition, storage, analysis, quality of data, and governance of data. With the emergence of Internet of Things (IoT) and increasing numbers of ubiquitous mobile sensors such as mobile phones, distributed sensor networks are growing at an unprecedented pace and producing an unprecedented amount of streaming data. It's predicted by the European Commission that IoT devices will number between 50 to 100 billion devices by 2020\cite{6072197}.
+The exponential increase in volume, variety, velocity, veracity, and value of data has caused us to rethink traditional client-server architectures with respect to data acquisition, storage, analysis, quality of data, and governance of data. With the emergence of Internet of Things (IoT) and increasing numbers of ubiquitous mobile sensors such as mobile phones, distributed sensor networks are growing at an unprecedented pace and producing an unprecedented amount of streaming data. It's predicted by the European Commission that IoT devices will number between 50 to 100 billion devices by 2020\cite{6072197}.
 
 The size of sensor networks is quickly growing. BBC Research provides figures that the market share for sensor networks in 2010 was \$56 billion and was predicted to be closer to \$91 billion by the end of 2016 \cite{zaslavsky_sensing_2013}. Data generated from the IoT are surpassing the compute and memory resources of existing IT infrastructures. \cite{chen_big_2014}. Not only is the size of data rapidly exploding, but data is also becoming more complex. Data from sensor networks is often semi-structured on unstructured with data quality issues. 
 
-Sensor networks can benefit from the generally ``unlimited resources'' of the cloud, namely processing, storage, and network resources. We believe that by leveraging cloud computing, distributed persistence models, and distributed analytics, its possible to provide a platform that is able to meet the demands of the increasing distributed sensor market and the increasing volume, velocity, variety, and value of data that comes along with that. 
+Sensor networks can benefit from the generally ``unlimited resources'' of the cloud, namely processing, storage, and network resources. We believe that by leveraging cloud computing, distributed persistence models, and distributed analytics, it's now possible to provide a platform that is able to meet the demands of the increasing distributed sensor market and the increasing volume, velocity, variety, and value of data that comes along with that. 
 
-This review hopes to summarize the current state of the art surrounding distributed sensor networks and the use of cloud computing as a means for big sensor data acquisition and analysis. In particular, we will examine Big Data in the context of sensor networks, review cloud computing and service models related to distributed sensing, discuss modern distributed persistence for Big Data, and modern distributed analytics for Big Data all with an emphasis on acquiring and managing Big Sensor Data.
+This review summarizes the current state of the art surrounding distributed sensor networks and the use of cloud computing as a means for big sensor data acquisition and analysis. In particular, we will define Big Data and review it in the context of sensor networks, review cloud computing and service models related to distributed sensing, discuss modern distributed persistence for Big Data, and modern distributed analytics for Big Data all with an emphasis on acquiring and managing Big Sensor Data.
 
 \subsection{Applications of Distributed Sensor Networks} \label{ssec:applications-of-distributed-sensor-networks}
 Zaslaveky et al. \cite{zaslavsky_sensing_2013} cites several examples of distributed sensor networks in-the-wild including: a real-time greenhouse gas detection network deployed across California, real-time structural monitoring such as the St. Anthony Falls Bridge sensor network in Minneapolis, distributed radiation detection in Fukushima, real-time parking space inventory in San Francisco.
 
 Perera et al. in their paper on sensing as a service\cite{perera_sensing_2014} provide three examples of areas distributed sensor networks would accelerate at. 
 
-First, distributed sensors could be used by cities to optimized waste management which consumes a significant amount of time, money, and labor. Waste management also has many processes including collection, transport, processing, disposal, and monitoring. By collecting and storing sensor data in the cloud from these processes, various interested parties could access sensor data in-order to optimize for the current state of the system. As an example, Perera mentions that city council members could optimize garbage routes and collection rates based on the amount of trash available and recycling centers could forecast what to expect based off of the same sensor data. Basically interested parties at all points of the management process could benefit by analyzing data points from IoT devices in a smart city.
+First, distributed sensors could be used by cities to optimize waste management which consumes a significant amount of time, money, and labor. Waste management also has many processes including collection, transport, processing, disposal, and monitoring. By collecting and storing sensor data in the cloud from these processes, various interested parties could access sensor data in order to optimize for the current state of the system. As an example, Perera mentions that city council members could optimize garbage routes and collection rates based on the amount of trash available and recycling centers could forecast what to expect based off of the same sensor data. Basically interested parties at all points of the management process could benefit by analyzing data points from IoT devices in a smart city.
 
 Second, Perera mentions that smart agriculture can take advantage of distributed sensor networks and cites the  \textit{Phenonet} project as an example of distributed agricultural sensing which has the ability to monitor plant growth, soil composition, air composition, and pests. A major advantage of this system is that it can supplement traditional research by allowing multiple researchers access to the same data in near real-time.
 
 Third, Perera postulates that environmental management could utilize existing distributed environmental sensors upgraded to communicate with the cloud allowing for data sharing and data fusion among interested parties.
 
-Gerla et al.\cite{gerla_internet_2014} propose an internet of vehicles as a means to autonomous vehicles. By treating vehicles as platforms of thousands of sensors each and by creating dynamic distributed clouds, they hope to allow fleets of vehicles to make autonomous decisions. This model use distributed clouds based on proximity and peer-to-peer to technologies rather than sending data to a centralized cloud. The real-time nature and the size and amount of sensors makes this an interesting case study.
+Gerla et al.\cite{gerla_internet_2014} propose an internet of vehicles as a means to autonomous vehicles. By treating vehicles as platforms of thousands of sensors each and by creating dynamic distributed clouds, they hope to allow fleets of vehicles to make autonomous decisions. This model uses distributed clouds based on proximity and peer-to-peer to technologies rather than sending data to a centralized cloud. The real-time nature and the size and amount of sensors makes this an interesting case study.
 
 %% smart grid
 One area that shows a lot of promise for distributed sensor networks with centralized management is smart grids. The smart grid is an collection of technologies aiming to advance the electrical grid into the future with respect to intelligent energy distribution and integration of renewable. Electrical grids can benefit by using a large distributed sensor network to collect power consumption, production, and quality information and use that information to control power production and consumption in real-time. 
 
-Many times, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{otta_integration_2016}.
+In some cases, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{otta_integration_2016}.
 
 \subsection{Rest of this Review} \label{ssec:rest-of-this-review}
-The rest of this review is formatted as follows: We start with an overview of Big Sensor Data\ref{sec:big-sensor-data}. Section \ref{sec:cloud-computing} will focus on cloud computing and how its concepts can be utilized to manage distributed sensor data. Section \ref{sec:big-data-persistence-models} will examine the current state of the art distributed persistence models with an emphasis on how NoSQL and distributed persistence models can aid in managing distributed sensor data. Section \ref{sec:big-data-analytics} will examine the current state of big data analytics options in the cloud and how these can be utilized for performing analytics on distributed sensor data.
+The rest of this review is structured as follows: Section \ref{sec:big-sensor-data} provides an overview of Big Sensor Data\ref{sec:big-sensor-data}. Section \ref{sec:cloud-computing} will focus on cloud computing and how its concepts can be utilized to manage distributed sensor data. Section \ref{sec:big-data-persistence-models} will examine the current state of the art distributed persistence models with an emphasis on how NoSQL and distributed persistence models can aid in managing distributed sensor data. Section \ref{sec:big-data-analytics} will examine the current state of big data analytics options in the cloud and how these can be utilized for performing analytics on distributed sensor data.
 
 \section{Big Sensor Data} \label{sec:big-sensor-data}
 Big Data is generally characterized by ``the four Vs''\cite{hashem_rise_2015}, volume, variety, velocity, and value. Volume is the amount of data flowing into a system at any one time. According to IBM\cite{ibm}, ``90\% of the world's data has been created in the past two years'' and the current data volume is 2.7 zettabytes and is expected to double every two years\cite{uwis}.
@@ -68,7 +68,7 @@ Perera et al.\cite{perera_sensing_2014} expect with IoT we could see as many as 
 TODO: this section needs to be expanded, but the definition of cloud computing has been done over and over again to death. This will continue to focus on the challenges associated with data specifically from distributed sensor networks.
 
 \section{Cloud Computing} \label{sec:cloud-computing}
-NIST\cite{mell2011nist} defines cloud computing as ``Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''.
+NIST\cite{mell2011nist} defines cloud computing as ``a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction''.
 
 The major five tenants of cloud computing as defined by NIST are as follows: 
 
@@ -82,7 +82,7 @@ The major five tenants of cloud computing as defined by NIST are as follows:
 
 \textit{Measure service} where cloud providers provide a means of metering the compute resources that are used by clients. This provides a transparent means of selling cloud computing resources to clients and clients can always know how much capacity they have consumed.
 
-Even though the NIST definition is starting to show its age, it's major tenants are still the underlying foundation of cloud software even today. Many additional service and deployment models have been developed since NIST defined cloud computing, but an understanding of the basic underpinnings is required before exploring the rest of this vast filed.
+Even though the NIST definition is starting to show its age, its major tenants are still the underlying foundation of cloud software even today. Many additional service and deployment models have been developed since NIST defined cloud computing, but an understanding of the basic underpinnings is required before exploring the rest of this vast filed.
 
 Cloud computing frameworks can provide on-demand availability and scaling of virtual computing resources for storage, processing, and analyzing of very large data sets in real-time or near real-time. This model makes it possible to build applications in the cloud for dealing with Big Data sets such as those produced from large distributed sensor networks.
 
@@ -150,7 +150,7 @@ The \textit{Semantic Overlay Layer} is responsible for persisting data either in
 
 The \textit{Service Virtualization Layer} provides an abstraction on top of the semantic overlay layer by performing queries based on the access rights of consumers. This layer transforms the results of queries into something that can be consumed by the clients.
 
-I believe that it would be interesting to see a model that takes the best ideas from sensor as a service and sensing as as service. I believe sensing as a service provides a better may of distributing data and also provides more thought out access controls. On the other hand, sensors as a service provide a model and a standard for describing sensors and sensor events in a semantic way. Both of these models lack details on privacy and actual storage and analytics.
+% I believe that it would be interesting to see a model that takes the best ideas from sensor as a service and sensing as as service. I believe sensing as a service provides a better may of distributing data and also provides more thought out access controls. On the other hand, sensors as a service provide a model and a standard for describing sensors and sensor events in a semantic way. Both of these models lack details on privacy and actual storage and analytics.
 
 
 
@@ -175,8 +175,6 @@ Mobile devices such as smartphones make fantastic distributed sensors for tempor
 TODO: Expand on this more with an emphasis on the broad range of sensors being used by cellular networks..
 
 \subsection{Issues with Cloud Computing} \label{ssec:issues-with-cloud-computing}
-Being a relatively new research field cloud computing is showing quite a few growing pains. 
-
 The biggest issues facing cloud computing deal with security and privacy. Subashini et al.\cite{subashini_survey_2011} go into the specific security and privacy risks associated with the three major cloud deployment models. The following is largely a review of their work. 
 
 The deployment model that exhibits the most risks in the PaaS layer since this model requires that consumers manage their own virtual machines, deployment of cloud applications, and configuration. Within this model, the following items are of concern. 

@@ -9,6 +9,8 @@
 %\usepackage[margin=1.5in]{geometry}
 \usepackage{microtype}
 
+\renewcommand{\familydefault}{phv}
+
 %opening
 \title{Data Management for Distributed Sensor Networks: A Literature Review}
 \author{Anthony J. Christe}
@@ -53,23 +55,40 @@ Gerla et al.\cite{gerla_internet_2014} propose an internet of vehicles as a mean
 %% smart grid
 One area that shows a lot of promise for distributed sensor networks with centralized management is smart grids. The smart grid is an collection of technologies aiming to advance the electrical grid into the future with respect to intelligent energy distribution and integration of renewable. Electrical grids can benefit by using a large distributed sensor network to collect power consumption, production, and quality information and use that information to control power production and consumption in real-time. 
 
-In some cases, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{otta_integration_2016}.
+In some cases, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{botta_integration_2016}.
 
 \subsection{Rest of this Review} \label{ssec:rest-of-this-review}
 The rest of this review is structured as follows: Section \ref{sec:big-sensor-data} provides an overview of Big Sensor Data\ref{sec:big-sensor-data}. Section \ref{sec:cloud-computing} will focus on cloud computing and how its concepts can be utilized to manage distributed sensor data. Section \ref{sec:big-data-persistence-models} will examine the current state of the art distributed persistence models with an emphasis on how NoSQL and distributed persistence models can aid in managing distributed sensor data. Section \ref{sec:big-data-analytics} will examine the current state of big data analytics options in the cloud and how these can be utilized for performing analytics on distributed sensor data.
 
 \section{Big Data} \label{sec:big-sensor-data}
-Big Data can be described using many definitions.
+Big Data is described using many definitions. Cox, in 1997\cite{cox_managing_1997}, provides us with one of the earliest definitions where Big Data is ``too large to be processed by standard algorithms and software on the hardware one has available to them''. He also mentions that sources for big data collections include data from remote sensors and satellite imaging in the fields of atmospheric sciences, geophysics, and healthcare.
 
-Perera et al.\cite{perera_sensing_2014} expect with IoT we could see as many as 1 billion sensors online by the year 2020.
+Cox separates Big Data into big data into two categories; namely, \textit{big data collections} and \textit{big data objects}. 
 
+Big data objects are single, very large data sets such as computational models computed from physical phenomena. Big data objects often do not fit in memory or local disks. Big data objects also have adverse affects on bandwidth and latency. Cox looks to moving computation to the data and more advanced segmentation and paging techniques at the OS level to deal with big data objects.
+
+Big data collections contain many smaller objects or even many big objects. Big data collections present their own set of issues including: distributed data, heterogeneous data formats, no platform independent definition, non-local meta-data, large storage requirements, poor locality, and insufficient network resources. 
+
+Cox provides us a useful definition to build on. He also advocates for the development and advancement of operating system constructs for moving data that is too large for memory in and out of memory using stenciling, segmentation, paging, and application controlled segmentation. It's interesting to note that this was before cloud computing and distributed systems, but we are now facing similar problems at the distributed level rather than a local level.
+
+The Apache Hadoop project, in 2010, defined big data as ``datasets which could not be captured, managed, and processed by general computers within an acceptable scope''\cite{chen_big_2014}.
+
+Manyika et al\cite{manyika} in 2011 define big data as ``the amount of data just beyond technology's capability to store, manage, and process efficiently'' essentially making the definition of big data a moving target that is constantly evolving as technology becomes updated.
+
+Hashem et al.\cite{hashem_rise_2015} build on these previous definition in their 2015 review on Big Data providing the definition by attempting to create a definition that encompasses the spirit of many of the previous definitions. They define big data as ``a set of techniques and technologies that require new forms of integration to uncover large hidden values from large datasets that are diverse, complex, and of a massive scale''.
+
+NIST, in 2015, \cite{nist_big_data_2015} provide multiple definitions relating to big data. NIST defines big data as ``extensive datasets--primarily in the characteristics of volume, variety, velocuty, and/or variability--that require a scalable architecture for efficient storage, manipulation, and analyst. To my knowledge, NIST is the only organization to specify the need of a scalable architecture alongside its definition of big data. NIST next defines the big data paradigm as ``the distribution of data systems across horizontally coupled, independent resources to achieve the scalability needed for the efficient processing of extensive datasets''.
+
+Perhaps one of the most popular definitions of Big Data is characterizing data by ``the four Vs''\cite{hashem_rise_2015}, \textit{volume}, \textit{variety}, \textit{velocity}, and more recently, \textit{value}. 
 
 \subsection{The Four V's}
-Perhaps one of the most popular definitions of Big Data is characterizing data by ``the four Vs''\cite{hashem_rise_2015}, \textit{volume}, \textit{variety}, \textit{velocity}, and more recently, \textit{value}. The first mention of the three V's was in Laney's 2001 article \textit{3-d data management: controlling data volume, velocity, and variety}\cite{laney20013d}. Laney describes the challenges of managing e-commerce data by categorizing the data challenges into three dimensions. First, we will review Laney's definition of the 3 V's and then we will examine updated, expanded, and more modern interpretations of the three V's and also look at the more recent ``fourth V''.
+The first mention of the three V's was in Laney's 2001 article \textit{3-d data management: controlling data volume, velocity, and variety}\cite{laney20013d}. Laney describes the challenges of managing e-commerce data by categorizing the data challenges into three dimensions. First, we will review Laney's definition of the 3 V's and then we will examine updated, expanded, and more modern interpretations of the three V's and also look at the more recent ``fourth V''.
 
 Volume is the amount of data flowing into a system at any one time. Laney argues that the increased availability of the internet to anyone as an e-commerce platform greatly increases the amount of transactional data stored on server backends. Since data is a tangible asset, organizations may be reluctant to discard the data. At the same time, as the amount of data increases, each individual data point becomes less important. Laney mentions that if organizations are not willing to simply buy more online storage, that they can take the following steps to limit volume growth: implement tiered storage systems, limit data collected to only data required for current organization processes, limit analytics to statistically sampled data, eliminate redundancy in data sources, offload ``cold spots'' to cheaper storage (i.e. tape), and outsorce data management.
 
-Velocity is defined by Laney as ``increased point-of-interaction (POI) speed and, consequently, the pace data used to support interactions and generated by interactions'', or more generally, the pace of data arriving and how long it takes to analyze, store, and act on that data. Laney offers several solutions to data velocity in using operational data stored that prioritize production data, front-end caching, point-to-point data routing protocols, architecting software in such a way that balances data analysis latency with stated real-time requirements.
+Velocity is defined by Laney as ``increased point-of-interaction (POI) speed and, consequently, the pace data used to support interactions and generated by interactions'', or more generally, the pace of data arriving and how long it takes to analyze, store, and act on that data. Laney offers several solutions to data velocity in using operational data stored that prioritizes production data, front-end caching, point-to-point data routing protocols, and architecting software in such a way that balances data analysis latency with stated real-time requirements.
+
+Laney describes data variety as data that is in ``incompatible formats, non-aligned data structures, and inconsistent data semantics''. Laney's proposed solutions to variety include profiling data to find inconsistencies, a standardized XML data format, interprocess application communication, middlewares on top of ``dumb data'' to provide meaning and intelligent, metadata management, and more advanced indexing techniques.
 
 The definition of the 4 V's have been updated over the years in the following ways. The volume is data is expanding faster than ever before. According to IBM\cite{ibm}, ``90\% of the world's data has been created in the past two years'' and the current data volume is 2.7 zettabytes and is expected to double every two years\cite{uwis}.
 
@@ -80,6 +99,8 @@ The definition of the 4 V's have been updated over the years in the following wa
 \subsection{Sensor Data}
 
 Sensor data is generally different from Big Data in several ways \cite{chen_big_2014}. One of the most common characteristics of sensor data is the amount of noise in the data. Environmental sensing will always include noise because the data is born analog\cite{pcast}. Often sensor networks provide data in a large variety of unstructured formats with missing, partial, or conflicting meta-data. Sensor data can also contain a large amount of data redundancy from multiple sensors in similar locations. The problem very quickly becomes a needle-in-the-haystack problem or more aptly put, finding the signal in the noise.
+
+Perera et al.\cite{perera_sensing_2014} expect with IoT we could see as many as 1 billion sensors online by the year 2020.
 
 TODO: this section needs to be expanded, but the definition of cloud computing has been done over and over again to death. This will continue to focus on the challenges associated with data specifically from distributed sensor networks.
 

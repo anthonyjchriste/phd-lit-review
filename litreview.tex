@@ -238,9 +238,17 @@ Hybrid clouds use and provide a combination of the previously mentioned deployme
 Virtual private clouds as described in Botta et al.\cite{botta_integration_2016} provide aspects from both public and private clouds using virtual private network (VPN) technology to allow users to manage specific and often times complicated network technologies.
 
 \subsection{Mobile Cloud Computing} \label{ssec:mobile-cloud-computing}
-Mobile devices such as smartphones make fantastic distributed sensors for temporalspatial data. Not only do they carry a wide array of sensors on-board (microphones, barometers, accelerometers, GPS, compasses, cameras, clocks), but they generally have multiple modes of offloading data (WiFi, bluetooth, cellular, SD cards), and support some pre-processing on-board.
+Mobile cloud computing (MCC) combines mobile computing, cloud computing, and data analytics\cite{wang_mobile_survey_2015}. Mobile devices such as smartphones make fantastic distributed sensors for temporalspatial data. Not only do they carry a wide array of sensors on-board (microphones, barometers, accelerometers, GPS, compasses, cameras, clocks), but they generally have multiple modes of offloading data (WiFi, bluetooth, cellular, SD cards), and support some pre-processing on the device. Advances and expansion of wireless technologies make it increasingly feasible to connect wireless devices to the network and offload computation and analytics to a scalable and distributed backend\cite{barbera_offload_2013}.
 
-TODO: Expand on this more with an emphasis on the broad range of sensors being used by cellular networks..
+Mobile devices, which are power, compute, and memory constrained can take advantage of uploading data to the cloud for persistence and analysis. Once data is in the cloud, analytics can take advantage of the fact that the cloud can integrate data from many sensors (and other data sources), creating a real-time global view of the network.
+
+Existing MCC application domains include mobile commerce, mobile sensing, mobile banking, crowdsourcing, mobile healthcare, and augmented/virtual reality.
+
+Crowdsourced data capture was an early application of MC\cite{campbell_rise_2008} and continues to be a main driver of MCC. One example of this is an application, that during amber alerts, allows users to upload pictures to the cloud where thousands of photographs can be analyzed in parallel, helping to track down missing children\cite{satyanarayanan_mobile_2010}.
+
+Collective sensing and location based services are other major drivers of MCC. Collective sensing takes advantage of the sensors on mobile devices to get a global view of some physical phenomenon. Common sensors that are used in mobile sensing includes microphones, barometers, WiFi chipsets, GPS, and others. Examples of mobile sensing include distributed weather gathering, acoustic classification like Lu et al.'s\cite{lu_soundsense:_2009} SouneSense framework which uses distributed Apple iPhones to classify audio events. There has been a surge of research relating to predicting and analyzing real time traffic congestion \cite{thiagarajan_vtrack:_2009}, \cite{herring_using_2010}, \cite{hunter_scaling_2011}. 
+
+
 
 \subsection{Issues with Cloud Computing} \label{ssec:issues-with-cloud-computing}
 The biggest issues facing cloud computing deal with security and privacy. Subashini et al.\cite{subashini_survey_2011} go into the specific security and privacy risks associated with the three major cloud deployment models. The following is largely a review of their work. 

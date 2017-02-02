@@ -278,9 +278,9 @@ At some level, consumers are required to trust that the cloud provider they choo
 \section{Big Data Persistence Models} \label{sec:big-data-persistence-models}
 Traditional storage methods for meta-data and related products has traditionally made use of the filesystem and relational database systems (RDMS).
 
-Big Sensor Data by its nature can be structured, unstructured, large, diverse, noisy, etc. Many of the properties of BSD do not fit nicely into the structured world of traditional RDMSs.
+Big data by its nature can be structured, unstructured, large, diverse, noisy, etc. Many of the properties of big data do not fit nicely into the structured world of traditional RDMSs.
 
-In-order to meet the needs of Big Sensor Data and distributed sensor networks, we look to the ever growing field of NoSQL (not only SQL) and related Big Data storage models. There are multiple types of data models with different use cases. We will review the current players in this field and with a focus on how these technologies could aid in managing Big Sensor Data in the cloud.
+In-order to meet the needs of big data and distributed sensor networks, we look to the ever growing field of NoSQL (not only SQL) and related Big Data storage models. There are multiple types of data models with different use cases.
 
 According to Song et al.\cite{5980904} an ideal NoSQL data model strives for ``high concurrency, low latency, efficient storage, high scalability, high availability, reduced management and operation costs.'' The challenges of realizing an ideal NoSQL data model however lie in three main areas\cite{chen_big_2014}: consistency, availability, and partition tolerance. 
 
@@ -302,6 +302,16 @@ We also believe, ease of use, maturity of the product, and community (or commerc
 With the above factors in mind, we can begin categorizing and analyzing several major Big Data model solutions.
 
 \subsection{Data Models} \label{ssec:data-models}
+\subsubsection{Distributed File Systems}
+
+\subsubsection{Key-Value}
+
+\subsubsection{Column}
+
+\subsubsection{Document}
+
+\subsubsection{Graph}
+
 \subsubsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
 
@@ -309,7 +319,7 @@ Keys in KV systems are the unit parallelism that provide the main means of concu
 
 If the major advantages are simplicity and query response time\cite{chen_big_2014}, the major disadvantage to KV stores is the fact that they lack advanced query capabilities. The only way to query a database is by its unique key. Range based queries, secondary, and tertiary indexes are only supported by a third party systems.
 
-Popular KV based solutions include Dynamo, Riak, Voldemort, Redis, MemcacheDB, Ignite  and others.
+Popular KV based solutions include Dynamo, Riak, Voldemort, Redis, MemcacheDB, Ignite and others.
 
 Key-Value stores can be useful tools for simple distributed sensor networks that keep track of a handful of non-complex data such as current temperature, current voltage, etc. Issues arise when you want to start recording timestamped data. If timestamped data arrives at irregular intervals, KV stores to not provide range based queries to query on timestamps. Thus, KV stores may be poorly suited for time based sensor data. Finally, KV stores do not provide queries for location based sensor data making it potentially a poor choice for geo-spatial data.
 
@@ -323,15 +333,6 @@ Document based data stores often present less of an impedance mismatch between d
 An advantage that document based stores have over KV stores is that its possible to create more complex queries. Not only can you query on the primary key, but its possible to create queries over any keys in the document including in sub-documents. Indexes can be created on key and sub-keys. Many document based stores provide range and geospatial based queries. This advantage alone makes document based stores a decent choice for distributed sensor data.
 
 Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, SimpleDB, 
-
-\subsubsection{Graph}
-\subsubsection{Wide Column Store}
-
-\subsection{Data Guarentees}
-\subsubsection{title}
-
-\subsection{Indexing}
-
 
 % Provide a small forray into TSDBs
 

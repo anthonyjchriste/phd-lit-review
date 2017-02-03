@@ -303,6 +303,7 @@ With the above factors in mind, we can begin categorizing and analyzing several 
 
 
 \subsection{Distributed File Systems}
+TODO.
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
@@ -342,11 +343,29 @@ Dynamo is used to power many of Amazon's backend services and has also been prom
 
 Riak\cite{Klophaus:2010:RCB:1900160.1900176} is an open source implementation of Amazon's Dynamo and was built using DeCandia's paper.
 
+\subsubsection{LinkedIn's Voldemort}
+In 2012, Sumbaly and others from LinkedIn released their paper \textit{Serving Large-scale Batch Computed Data with Project Voldemort}\cite{Sumbaly:2012:SLB:2208461.2208479}. TODO.
+
 \subsection{Column}
+TODO: General introduction of column stores
 
-\subsection{Document}
+\subsubsection{Google's Bigtable}
+2008 saw the release of Chang et al's paper \textit{Bigtable: A Distributed Storage System for Structured Data}, which describes a system developed at Google for storing structured data that has the ability to scale to petabytes across thousands of low cost commodity servers and data centers. Bigtable's stated goals are wide applicability, scalability, high performance, and high availability. Bigtable is more complex than simple KV stores and in many ways it can resemble traditional relational database management systems. Similar to the other data stores we've discussed so far, Bigtable's distrubted nature means that it can not guarantee ACID-like transactions and Bigtable relaxes its views on consistency. Bigtable is also unique in that it allows its clients to determine data locality through schema creation and whether data is persisted to memory or backed by disk. These properties allow Bigtable to provide wide applicability to a a very wide range of applications both internal to google and external through Google's cloud computing infrastructure.
 
-\subsection{Graph}
+Bigtable's structure can be described as ``a sparse, distributed, persistent multi-dimensional sorted map'' comprised of rows, columns, and column families. Data is indexed ny a combination of row key, column key, and 64-bit timestamp. Values in Bigtable are simple binary blobs encoded as strings forcing client side applications to make their own serialization and deserialization decisions. 
+
+Rows are indexed by strings and reads/writes to individual rows are atomic. Ranges of rows in a table are called \textit{tablets}. Tablets are the main unit of parallelism and load balancing within Bigtable. In this structure, reads to rows can be made more efficient by keeping row ranges small and returning a small number of tablets (which generally come from a small amount of co-located machines). Each row can contain a small number of column families (on the order of hundreds), and each column family can contain arbitrarily unlimited columns. This type of data model flips the traditional row-column model of RDMSs on its head, using columns as the main means of expansion rather than rows.
+
+Column keys are grouped into column families. Data stored in the same column family are generally related. For instance, temperature measurements could be a column family and each column inside the family is an individual measurement. Access control and memory management are performed at the column family level.
+
+Individual stored values can have multiple versions which are sorted in timestamp order which makes tracking of updates possible. Bigtable also provides built-in mechanisms for only storing the last $N$ versions of data or to only keep data received in the last $N$ amount of time.
+
+Bigtable's API allows for storing, querying, and deleting of data. The API allows for meta-data manipulation for access control. It's also possible to run client side scripts on the server to manipulate and filter the data similar to Redis.
+
+Bigtable utilizes Google's distributed file system \textit{Google File System}(GFS) for log and data storage. Data is initially stored in memory, but as it grows, it will be frozen, compacted, optionally compressed, and then written to disk. Once it is on disk, it is immutable and can take advantage of gains in parallelism due to this. Bigtable provides high-availability using a distributed lock service called Chubby\cite{burrows2006chubby}. Chubby manages 5 active replicas of which one is elected to serve requests. Chubby manages consistency between replicas using the Paxos algorithm\cite{chandra2007paxos}, which is an algorithm for forming group consensus in the presence of failure. A master server is used to determine routing to and from tablet servers. However, data does not run through the master server, but directly to the tablet servers once routing has been established.  The master server is also responsible for monitoring and managing the health of tablet servers and performing maintenance of creating new tablets in the presence of scale or failure. A B+ tree is used to index into tablets.
+
+Although very successful at Google, Chang does mention that using highly distributed systems provides for many failures including memory and network corruption, unresponsive machines, clock skew, distributed file system quotas, and hardware issues. Next we look at several advances which aim to improve on some of these flaws.
+
 
 \subsection{Document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
@@ -359,15 +378,15 @@ An advantage that document based stores have over KV stores is that its possible
 
 Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, SimpleDB, 
 
+\subsection{Graph}
+TODO.
+
 % Provide a small forray into TSDBs
 
 \section{Big Data Analytics} \label{sec:big-data-analytics}
+TODO.
 
-%\section{Privacy}
-
-%\section{Reference Implementations}
-
-%\section{Open Research Question}
+\section{Conclusion}
 
 \bibliography{litreview}
 \bibliographystyle{plain}

@@ -301,18 +301,10 @@ We also believe, ease of use, maturity of the product, and community (or commerc
 
 With the above factors in mind, we can begin categorizing and analyzing several major Big Data model solutions.
 
-\subsection{Data Models} \label{ssec:data-models}
-\subsubsection{Distributed File Systems}
 
-\subsubsection{Key-Value}
+\subsection{Distributed File Systems}
 
-\subsubsection{Column}
-
-\subsubsection{Document}
-
-\subsubsection{Graph}
-
-\subsubsection{Key-Value}
+\subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
 
 Keys in KV systems are the unit parallelism that provide the main means of concurrency. If you want to guarantee transactions, then keys can be naively sharded across servers. This does now however provide safety of data loss in which case a system will strive to provide replication at the cost if ACID compliance. Stores and requests can usually be achieved in $O(1)$ even in distributed systems\cite{ravendb}.
@@ -323,7 +315,35 @@ Popular KV based solutions include Dynamo, Riak, Voldemort, Redis, MemcacheDB, I
 
 Key-Value stores can be useful tools for simple distributed sensor networks that keep track of a handful of non-complex data such as current temperature, current voltage, etc. Issues arise when you want to start recording timestamped data. If timestamped data arrives at irregular intervals, KV stores to not provide range based queries to query on timestamps. Thus, KV stores may be poorly suited for time based sensor data. Finally, KV stores do not provide queries for location based sensor data making it potentially a poor choice for geo-spatial data.
 
-\subsubsection{Document}
+\subsubsection{Memcached}
+One of the earliest examples of a distributed KV store is memcached\cite{fitzpatrick_distributed_2004} which was created in part to power the dynamic content of 70 distributed LiveJournal servers. The developer, Fitzpatrick, believed that scaling out on many tiny machines rather than up was the appropriate response for increased data loads. Even though they had SQL database clusters, they could not provide caching on those machines in front of the database due to limitations in address space (32-bit). Fitzpatrick realized that there is a lot of spare memory on the network, even if in small chunks, so the dream of a distributed KV store as a cache was born. Memcached had no persistence guarantees. If a server went down (hardware or software), the data would simply be deleted and any requests to that data would result in a cache miss. Since memcached is used for caching, this is not a huge concern. The real benefit of distribution is that if one server goes down, not all data is lost. It also allows users to take advantage of memory from multiple servers, which wasn't easily possible before.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/memcached}
+    \caption[Mecached architecture.]{Mecached architecture. \cite{fitzpatrick_distributed_2004}}
+    \label{fig:memcached}
+\end{figure}
+
+Memcached is architected as a 2-way hash-table as show in figure \ref{fig:memcached}. The first layer of hashing takes place in the client library. When a client receives a lookup request for a key, that key could live on any of the memcached server instances. The client hashes the key to determine which server the data is actually on. The request if forwarded to the appropriate server, and the server performs a hash lookup on the provided key and either returns a result or creates a cache miss. This system generalizes to a distributed hash table and provided $O(1)$ lookups and stores. Memory is allocated using slab allocator which used a free list to keep track of free chunks inside of slabs. The protocol allows for fetching multiples keys at one time. 
+
+\subsubsection{Amazon's Dynamo}
+In 2007, DeCandia and others working at Amazon, released their paper \textit{Dynamo: Amazon's Highly Available Key-Valye Store}\cite{decandia_dynamo:_2007}. Decandia et al. describe Dynamo as ``a highly available key-value storage system that some of Amazon's core services use to provide an 'always-on' experience''. Dynamo prioritizes availability over consistency. In order to achieve those goals, Dynamo makes extensive use of object versioning and application-assisted conflict resolution which we will look at in greater detail in the next couple of paragraphs.
+
+As a KV store, Dynamo only provides get and put operations against a unique key and is intended to be used with small values (< 1 MB). Amazon, citing experience, mentions that ``data stores that provide ACID guarantees tend to have poor availability''. Since Amazon's goal for this data store was primarily availability, Amazon decided to use a weaker consistency model which implies that updates will eventually propagate to all peers, at some time in the future. Other guiding requirements for the design of Dynamo include: symmetry where each Dynamo process has the same set of responsibilities as all others, incremental scalability where scaling out has minimal impact on the system or its users, decentralization to avoid single points of failure, and heterogeneity where each process is tuned to the individual hardware of the server it runs on. With these design goals in mind, we next discuss how Dynamo implements these technologies.
+
+Large distributed systems are prone to network, software, and hardware failure. To ensure high availability, Dynamo utilizes optimistic replication, where updates are propagated to $N$ peer nodes in an eventually consistent manner. All nodes in Dynamo's distributed network form a logical ring. Key's are hashed to determine a coordinator node within the ring to initially store the key value pair. The coordinator node stores the key value locally as well as on $N-1$ successor nodes going in a clockwise direction. The list of nodes that end up storing a key are called a preference list. Every node in the ring is capable of determining the preference list for any given key. Dynamo allows for reads on any node in a preference list. Because of this, situations can arise where there are conflicting copies of data when an update hasn't persisted to all nodes in its preference list yet. Dynamo versions all data with a timestamps to allow multiple versions of data to exist in the data store. Using semantic reconciliation, the network is usually able to determine the authoritative version. In certain failure situations where data can not be semantically reconciled, it is left up to the application to determine which value is correct.
+
+One of Dynamo's stated goals is to provide incremental scalability. When a new server comes online (or others go down), data must be partitioned across the new nodes. Dynamic partitioning is achieved using consistent hashing techniques as described in \cite{karger_consistent_1997}.
+
+
+\subsection{Column}
+
+\subsection{Document}
+
+\subsection{Graph}
+
+\subsection{Document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
 
 Even though documents are restricted to their underlying structure (i.e. JSON, YAML, etc), document databases do not impose a schema like traditional RDMS databases. This allows for painless transitions of data storage when the underlying data change\cite{sharma_extended_2015}.  This is of special concern with heterogeneous sensor networks which can produce large varieties of data in different and changing formats.

@@ -332,12 +332,23 @@ Similar to other distributed systems, GFS can not make full ACID guarantees and 
 
 GFS provides almost instantaneous snapshot capabilities which can be used to create copies, divergent branches of data, or create data checkpoints. Snapshots are created using copy-on-write techniques where if data is not changed, copies can simply point to the original data source, but anytime the original copy changes, a new copy is created. Hence, copies are deferred to first write. 
 
+TODO: Find a good way to summarize the results of the paper here.
 
-\subsubsection{Colossus}
+In an interview with Sean Quinlan\cite{mckusick_gfs:_2010} (2010), one of the lead architects of GFS, Quinlan discusses how GFS has changed in the 7 years since its conception. 
+
+The biggest change they made to GFS was the creation of a distributed master system rather than a single master. This change came about when data volumes grew initially from tens of terabytes to tens of petabytes in the span of a couple of years. The overhead of meta-data became too great for a single massive master server to handle. Even though clients rarely interact with the master server, something as simple as creating a file could end up in a queue with thousands of other client requests as well. Google decided to build a distributed master server network initially by placing a master server per data center and later multiple master servers per data center. Each master can index 100 million files in memory and there are hundreds of masters.
+
+A major issue that Google ran into internally with GFS was bottle necks due to the volume of small files some projects used. Each file in GFS has meta-data associated with its namespace and the locations of its chunks. The overhead of meta-data caused by many small files was so substantial that Google mandated that applications must find a way to store there information in larger chunks of data and put a quota on the number of files an individual client can create.
+
+As applications changed at Google from batch processing jobs that could take hours to run to a need for more real-time data for user applications, it was clear that Google's previous focus on optimizing for throughput rather than latency needed to change. One solution to this at the GFS level is to leverage parallel writes and perform merges later. In this scenario, if a single write hangs or fails, one of the N parallel writes may succeed. By leveraging parallelism, applications utilizing GFS can give the impression of low latency. Distributed masters also help with latency when performing operations on the file system.
+
+Quinlan concedes that the initial design of relaxed consistency did cause many issues with some of there users down the road and that if he could redesign GFS he push to serialize writes from multiple clients that can ensure replicas remain consistent.
+
 
 \subsubsection{Hadoop Distributed File System (HDFS)}
 
 \subsubsection{Haystack}
+Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}.
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
@@ -359,6 +370,8 @@ One of the earliest examples of a distributed KV store is memcached\cite{fitzpat
 \end{figure}
 
 Memcached is architected as a 2-way hash-table as show in figure \ref{fig:memcached}. The first layer of hashing takes place in the client library. When a client receives a lookup request for a key, that key could live on any of the memcached server instances. The client hashes the key to determine which server the data is actually on. The request if forwarded to the appropriate server, and the server performs a hash lookup on the provided key and either returns a result or creates a cache miss. This system generalizes to a distributed hash table and provided $O(1)$ lookups and stores. Memory is allocated using slab allocator which used a free list to keep track of free chunks inside of slabs. The protocol allows for fetching multiples keys at one time. 
+
+TODO: Review Scaling Memcache at Facebook
 
 \subsubsection{Amazon's Dynamo}
 In 2007, DeCandia and others working at Amazon, released their paper \textit{Dynamo: Amazon's Highly Available Key-Valye Store}\cite{decandia_dynamo:_2007}. Decandia et al. describe Dynamo as ``a highly available key-value storage system that some of Amazon's core services use to provide an 'always-on' experience''. Dynamo prioritizes availability over consistency. In order to achieve those goals, Dynamo makes extensive use of object versioning and application-assisted conflict resolution which we will look at in greater detail in the next couple of paragraphs.

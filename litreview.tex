@@ -326,7 +326,12 @@ A GFS system consists of a single master node and multiple chunk servers. Files 
 
 The master node keeps track of three types of metadata: file and chunk name spaces, mapping from files to chunks, and locations of chunk replicas. All metadata is stored in memory so that access and manipulation is efficient. The master's metadata transformations are written to an operations log and stored locally as well as remotely and allows for replacing the master in the event of a failure.
 
-Similar to other distributed systems, GFS can not make full ACID guarantees and uses a relaxed consistency model. 
+The master has several other responsibilities as well. The master is in charge of optimizing replica placement by considering reliability, availability, bandwidth utilization. The master also takes into account the health of the servers that chunks are on including disk utilization. The master can re-replicate chunks when other chunks fail and also rebalance chunks in order to optimize reliability, availability, bandwidth utilization. Files are not immediately deleted. They are marked deleted, but their contents are cleaned up at a later time during a garbage collection phase coordinated by the master.
+
+Similar to other distributed systems, GFS can not make full ACID guarantees and uses a relaxed consistency model. The master node handles namespace mutations (i.e. file creation) and locking so that these operations are atomic. Mutations to files from multiple clients can cause consistency issues when overwriting or inserting into a file. Appends to a file can be made to be atomic if the client does not specify an offset and instead allows GFS to perform the append. Replicas are updated in the same order on all machines so that in general they should all have the same state at the same time. There are instances during failure or when clients cache chunk locations and read from a stale replica where they may retrieve old or inconsistent data. 
+
+GFS provides almost instantaneous snapshot capabilities which can be used to create copies, divergent branches of data, or create data checkpoints. Snapshots are created using copy-on-write techniques where if data is not changed, copies can simply point to the original data source, but anytime the original copy changes, a new copy is created. Hence, copies are deferred to first write. 
+
 
 \subsubsection{Colossus}
 

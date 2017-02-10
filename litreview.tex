@@ -303,7 +303,7 @@ With the above factors in mind, we can begin categorizing and analyzing several 
 
 
 \subsection{Distributed File Systems}
-TODO.
+Before we look at specific big data storage systems, we will first examine how to store big data using file systems as file systems provide the base storage backend for distributed storage systems.
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
@@ -363,7 +363,11 @@ Much of LinkedIn's data can be efficiently computed offline, such as the people 
 
 Voldemort usages a storage format that memory maps indexes directly into the operating system's address space instead of creating a custom heap based data structure. Voldemort does this to allow the OS to handle caching and page caches which tend to be more efficient than custom data structures. When data is fetched from Voldemort, it is chunked and stored across HDFS in such a way that the file sizes do not become to small which Hadoop does not handle efficiently. Index files contain the upper 8 bytes of the MD5 of the key and then a 4 byte offset to the associated value in the data file. MD5 is used to provide a uniform hash space. Voldemort only uses the top 8 bytes of the MD5 to reduce the overall index size while still providing for a low amount of collisions ($\sim$.0004\%). The main advantage of this approach is that it is much more cache friendly. The downside to this approach is that there is increased complexity for dealing with collisions when they do happen.
 
+Voldemort generates its data chunks with a single Hadoop job. The Hadoop job uses number of chunks, cluster topology, store definition, and input location on HDFS. The mapper phase of the Hadoop job partitions data based on the provided routing strategy. A three tuple of generated chunk set id, partition id, and replication factor determine how data is routed to the correct reducer. The reducer phase of the Hadoop job writes data to a single partitioned chunk set. By tuning the number of chunk sets, build phase parallelism can be configured and exploited.
 
+Voldemort makes extensive use of data versioning. Symbolic links point to the most recent version of data on a directory. This feature makes it possible to quickly role back versions of data in failure conditions and also makes it possible to quickly updates indexes from offline data set computations.
+
+LinkedIn continues to use Voldemort to power their people you may know data set as well as their collaborative filtering datasets. They found a 10x improvement in throughput against traditional MySQL solutions at scale. Voldemort also has smaller read latencies than MySQL. The biggest improvement comes from building data sets using MapReduce which scales linearly where the MySQL approach does not scale at all.
 
 
 

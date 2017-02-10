@@ -303,7 +303,36 @@ With the above factors in mind, we can begin categorizing and analyzing several 
 
 
 \subsection{Distributed File Systems}
-Before we look at specific big data storage systems, we will first examine how to store big data using file systems as file systems provide the base storage backend for distributed storage systems.
+Before we look at specific big data storage systems, we will first examine how to store big data using file systems as file systems provide the base storage backend for distributed storage applications. Distributed file systems are not a new idea. Howard et al.\cite{howard_scale_1988} describe the scale and performance issues associated with Carnegie Mellon's distributed Unix based \textit{Andrew File System} in 1988. 
+
+Generally, distributed file systems were developed as a means of data sharing. Big data however, with the characteristic of large volume, often doesn't fit on a single disk, or a single machine, or a  single data center for that matter, required new techniques for storage of very massive data sets. The Google File System (GFS) was one of the first attempts at storing big data using a distributed file system. For that reason, this review will focus on technologies from GFS and onwards. 
+
+\subsubsection{Google File System (GFS)}
+Ghemawat et al. at Google introduce \textit{The Google File System}\cite{ghemawat_google_2003} in 2003. Google wanted to design a distributed file system that not only provided scalability, availability, reliability, and performance, which is something that previous distributed file systems could do, but to design it in such a way that it meets the needs of a big data world. 
+
+The authors note that in large distributed systems comprised of commodity hardware, failure is the norm rather than the exception. GFS is designed in a way to provide monitoring, error detection, fault tolerance, and automatic recovery of distributed data. 
+
+Google noticed that files were becoming much larger and multi-gigabyte sized files were becoming common and should be prioritized. The volume of small files also continued to increase into datasets terabytes in size consisting of billions of small files. GFS examines traditional I/O patterns and block sizes.
+
+The authors stated that there were common read/write patterns among services in their cluster. Reads generally consisted of large streaming reads of small random reads. Writes generally consist of large sequential writes. Once written, files are often not written to again. Small writs are supported, but not prioritized. 
+
+GFS prioritizes the ability for multiple clients to append to the same file concurrently in an efficient with minimal synchronization overhead.
+
+Finally, GFS should prioritize high bandwidth over low latency with the assumption that most use cases require processing bulk data at a high rate.
+
+GFS provides a non-POSIX but familiar interface utilizing a directory/file hierarchy and supports creating, deleting, opening, closing, reading, and writing of files.
+
+A GFS system consists of a single master node and multiple chunk servers. Files stored on GFS are divided into fixed-size 64 megabytes chunks and replicated a configurable amount of times on multiple chunk servers. The single master node coordinates locations of chunks in the systems, but only provides routing information. The master node hands off clients to chunk servers to read and write to directly. A chunk block size of 64 MB provides the benefits of less routing requests to the master node and reduces the amount of meta data stored on the master.
+
+The master node keeps track of three types of metadata: file and chunk name spaces, mapping from files to chunks, and locations of chunk replicas. All metadata is stored in memory so that access and manipulation is efficient. The master's metadata transformations are written to an operations log and stored locally as well as remotely and allows for replacing the master in the event of a failure.
+
+Similar to other distributed systems, GFS can not make full ACID guarantees and uses a relaxed consistency model. 
+
+\subsubsection{Colossus}
+
+\subsubsection{Hadoop Distributed File System (HDFS)}
+
+\subsubsection{Haystack}
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.

@@ -348,7 +348,9 @@ Quinlan concedes that the initial design of relaxed consistency did cause many i
 \subsubsection{Hadoop Distributed File System (HDFS)}
 
 \subsubsection{Haystack}
-Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}.
+Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}. As of 2010, Facebook had stored over 260 billion images.
+
+Haystack was designed to provide high throughput rather low latency and allow CDNs to deal with caching and latency issues. Similar to the other distributed file systems, Haystack also wants to provide fault tolerance with the statistical likelihood of software and hardware failures. Another requirement for Haystack is that it is cost-effective along the dimensions of cost per terabyte and normalized read rate. Haystack claims cost per terabyte are 28\% less than a similar NFS solution  and provides 4x more reads per seconds than a similar NFS based approach.
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.

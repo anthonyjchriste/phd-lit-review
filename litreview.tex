@@ -346,11 +346,35 @@ Quinlan concedes that the initial design of relaxed consistency did cause many i
 
 
 \subsubsection{Hadoop Distributed File System (HDFS)}
+The Hadoop Distributed File System (HDFS), described by Shvachko et al in their 2010 paper, \textit{The Hadoop Distributed File System}\cite{shvachko_hadoop_2010},  
 
 \subsubsection{Haystack}
 Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}. As of 2010, Facebook had stored over 260 billion images.
 
-Haystack was designed to provide high throughput rather low latency and allow CDNs to deal with caching and latency issues. Similar to the other distributed file systems, Haystack also wants to provide fault tolerance with the statistical likelihood of software and hardware failures. Another requirement for Haystack is that it is cost-effective along the dimensions of cost per terabyte and normalized read rate. Haystack claims cost per terabyte are 28\% less than a similar NFS solution  and provides 4x more reads per seconds than a similar NFS based approach.
+Haystack was designed to provide high throughput rather low latency and allow Content Delivery Networks (CDNs) to deal with caching and latency issues. Similar to the other distributed file systems, Haystack also wants to provide fault tolerance with the statistical likelihood of software and hardware failures. Another requirement for Haystack is that it is cost-effective along the dimensions of cost per terabyte and normalized read rate. Haystack claims cost per terabyte are 28\% less than a similar NFS solution and provides 4x more reads per seconds than a similar NFS based approach.
+
+CDNs are able to cache the most recently accessed photos, but Facebook noticed a pattern where older photos are also accessed frequently. This resulted in a large amount of cache misses on Facebook's CDNs. Cache misses originally resulted in making requests to NFS shares where each directly contained thousands of photos. The number of seeks required to find a single photo started to become a bottleneck. Taking inspiration from GFS, Facebook created Haystack as a distributed object store focuses on storing and managing its billions of photographs.
+
+Haystack is split into three components. The \textit{Haystack Store}, \textit{Haystack Cache}, and \textit{Haystack Directory}.
+
+The Haystack Store is the main improvement Haystack brings to the table compared to the NFS approach is that Haystack stores individual photos and metadata, called ``Needles" into a large (on the order of 100 GB each) continuous files (see figure \ref{fig:haystack}). By using large files instead of many individual files, they can reduce the amount of disk accesses required to find and load individual photographs. 10 TB servers are split into 100 physical volumes of 100 gigabytes each. Each physical volume resides on a single machine, but logical volumes can span multiple machines and multiple physical volumes. When a photo is written to the store, it is stored in a single logical volume, but duplicated multiple times over physical volumes to provide availability. The backing filesystem is XFS which provides small enough blockmaps that they can be stored in physical memory as well as efficient file preallocation. The store also keeps an index file that allows the in-memory mappings to be recreated on failures or server restarts without having to read through the entire file system.
+
+A service called Pitchfork is used to continuously monitor, detect, and repair services in Haystack. In the event of failures, new servers can be brought online and data can be synchronized from the replicas.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\linewidth]{img/haystack}
+	\caption[Haystack individual file layout.]{Layout of Haystack Needle within a physical volume.\cite{beaver_finding_2010}}
+	\label{fig:haystack}
+\end{figure}
+
+The Cache component provides an intermediate layer of photo caching between CDNs and the Haystack Store. Requests for photos contain three URLs. The first URL is a lookup key for the data in the CDN. If the CDN does not have the image cached, the CDN URL is stripped and the photo request is forwarded to the Haystack cache. Again, if the photo is not found in the cache, the Haystack URL is stripped and the request is forwarded to the Haystack Store. These requests are made over HTTP and the format of the requests are as follows: $http://<CDN>/<Cache>/<Machine Id>/<Locaical Volume, Photo>$.
+
+The Haystack Directory servers provide mappings from logical volumes to physical volumes. They are also in charge of determining whether a read photo should be stored in the Haystack Cache or in a CDN cache. Finally, Haystack Directory servers provide load balancing for writing across logical volumes and reading across physical volumes.
+
+On-top of these three services, Haystack provides a small set of other improvements including compaction which reclaims space of deleted photos and custom binary encoding of indexes to improve space efficiency. In the end, Facebook was able to improve on their photo storage and management by showing performance and efficiency gains over their previous NFS based approach.
+
+TODO: Find a way to summarize
 
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.

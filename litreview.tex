@@ -346,7 +346,23 @@ Quinlan concedes that the initial design of relaxed consistency did cause many i
 
 
 \subsubsection{Hadoop Distributed File System (HDFS)}
-The Hadoop Distributed File System (HDFS), described by Shvachko et al in their 2010 paper, \textit{The Hadoop Distributed File System}\cite{shvachko_hadoop_2010}, is a file system designed for storing big data across a distributed set of servers. HDFS was heavily influenced by GFS and aims to provide an open source alternative to GFS. HDFS acts as the backbone for a myriad of big data persistence and big data analytics frameworks including Spark, MapReduce, HBase, Pig, Hive, ZooKeeper, Avro, Chukwa, and others. A full list of software that integrates with HDFS is maintained at \url{https://hadoopecosystemtable.github.io/}. 
+The Hadoop Distributed File System (HDFS), described by Shvachko et al in their 2010 paper, \textit{The Hadoop Distributed File System}\cite{shvachko_hadoop_2010}, is a file system designed for storing big data across a distributed set of servers. HDFS was heavily influenced by GFS and aims to provide an open source alternative to GFS. HDFS acts as the backbone for a myriad of big data persistence and big data analytics frameworks including Spark, MapReduce, HBase, Pig, Hive, ZooKeeper, Avro, Chukwa, and others. A full list of software that integrates with HDFS is maintained at \url{https://hadoopecosystemtable.github.io/}\cite{hadoop-ecosystem}. 
+
+As mentioned previously, HDFS is heavily influenced by GFS. Therefor, this review of HDFS will look at the main comparisons between the two distributed file systems, drawing comparisons from Vijayakumari's 2014 comparison paper\cite{vijayakumari_comparative_2014}. The design goals of HDFS and GFS are largely the same. Support for management of large files as part of large data sets, support for batch computing and big data analytics, and high data availability.
+
+HDFS refers to its meta-data servers as \textit{name nodes} and it data servers as \textit{data nodes} compared to GFS's \textit{master nodes} and \textit{block nodes}.
+
+GFS and HDFS both store data using a hierarchy of files and directories. However, the API to these file systems are not POSIX compliant and require third part APIs for accessing the file systems. HDFS further supports integration with other distributed file systems such as CloudStore or Amazon's Simple Storage Service while GFS is proprietary to Google.
+
+Both GFS and HDFS scale using distributed clusters. Replication of data for providing availability is largely the same.
+
+HDFS uses a permission model that is similar to the POSIX model where files and directories can have separate permissions for owners, groups, and other members. GFS uses a proprietary permission model within its organization that is not based off of POSIX permissions.
+
+GFS and HDFS alike store data in chunk sizes of 64 MB where this value can be configurable. GFS makes use of the Linux kernel's buffer cache to keep frequently accesses data in memory while HDFS uses a combination of a public and private distributed cache. A key difference between the two is that the GFS master node provides clients with the location of blocks where HDFS exposes block locations to allow application to schedule tasks bases on where content is within the distributed system.
+
+GFS uses TCP to communicate between servers and HDFS uses an RPC protocol on top of TCP.
+
+Both of these file systems server similar roles, but HDFS has a much larger impact on the academic realm due the the sheer number of other applications and frameworks that build on top of it.
 
 \subsubsection{Haystack}
 Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}. As of 2010, Facebook had stored over 260 billion images.

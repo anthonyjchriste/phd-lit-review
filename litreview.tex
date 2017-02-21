@@ -332,8 +332,6 @@ Similar to other distributed systems, GFS can not make full ACID guarantees and 
 
 GFS provides almost instantaneous snapshot capabilities which can be used to create copies, divergent branches of data, or create data checkpoints. Snapshots are created using copy-on-write techniques where if data is not changed, copies can simply point to the original data source, but anytime the original copy changes, a new copy is created. Hence, copies are deferred to first write. 
 
-TODO: Find a good way to summarize the results of the paper here.
-
 In an interview with Sean Quinlan\cite{mckusick_gfs:_2010} (2010), one of the lead architects of GFS, Quinlan discusses how GFS has changed in the 7 years since its conception. 
 
 The biggest change they made to GFS was the creation of a distributed master system rather than a single master. This change came about when data volumes grew initially from tens of terabytes to tens of petabytes in the span of a couple of years. The overhead of meta-data became too great for a single massive master server to handle. Even though clients rarely interact with the master server, something as simple as creating a file could end up in a queue with thousands of other client requests as well. Google decided to build a distributed master server network initially by placing a master server per data center and later multiple master servers per data center. Each master can index 100 million files in memory and there are hundreds of masters.
@@ -495,7 +493,22 @@ Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, Simple
 \subsection{Graph}
 TODO.
 
-% Provide a small forray into TSDBs
+\subsection{Misc.}
+\subsubsection{Megastore}
+
+\subsubsection{Google's Spanner}
+Spanner is a unique distributed database that doesn't really fit in any of the previous categories. Spanner was developed by Google as a globally distributed database that provides transaction support and ACID grantees by means of highly synchronized servers using GPS clocks. The system is described in Corbet et al.'s paper \textit{Spanner: Google's Globablly Distributed Database}\cite{corbett_spanner:_2013}.
+
+Spanner was designed to provide a globally distributed database that provides replication for global availability, geographic locality, automatic client failover between replicas, automatic resharding of data across machines as number of machine change, automatic migration of data for load balancing, all with the ability to scale to millions of machines across hundreds of data centers.
+
+Google realized that even though most internal applications make use of Bigtable, there are projects where complex evolving schemas or strong consistency in the presence of wide-area replication are required and Bigtable can not provide those options. Google also noticed that many applications were also making use of Megastore for its semi-relational data model and its support for synchronous replication. From these requirements, Spanner was born.
+
+Data in Spanner is stored in semirelational tables similar to those in traditional SQL systems. All data is versioned by timestamps and old versions of data can be configured to be garbage collected. Spanner also provides an SQL-based query language.
+
+Spanner allows applications to provide constraints on read/write latency, durability, and availability and the system will dynamically determine which data centers will be used for the storage of the data for that particular application.
+
+
+
 
 \section{Big Data Analytics} \label{sec:big-data-analytics}
 TODO.

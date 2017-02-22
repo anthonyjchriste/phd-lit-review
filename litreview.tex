@@ -459,7 +459,9 @@ LinkedIn continues to use Voldemort to power their people you may know data set 
 
 
 \subsection{Column}
-TODO: General introduction of column stores
+Wide-column stores at first glance appear to be a regular SQL-like table turned on its side where each table contains a ``small'' amount of rows, but each row can contain a huge number of dynamic columns. Column stores are schemaless and support dynamically named columns. Generally, rows are the unit of parallelism in a column store and also the main means of distribution. 
+
+This section will review Google's Bigtable first as most column oriented databases are inspired by Bigtable.
 
 \subsubsection{Google's Bigtable}
 2008 saw the release of Chang et al's paper \textit{Bigtable: A Distributed Storage System for Structured Data}, which describes a system developed at Google for storing structured data that has the ability to scale to petabytes across thousands of low cost commodity servers and data centers. Bigtable's stated goals are wide applicability, scalability, high performance, and high availability. Bigtable is more complex than simple KV stores and in many ways it can resemble traditional relational database management systems. Similar to the other data stores we've discussed so far, Bigtable's distrubted nature means that it can not guarantee ACID-like transactions and Bigtable relaxes its views on consistency. Bigtable is also unique in that it allows its clients to determine data locality through schema creation and whether data is persisted to memory or backed by disk. These properties allow Bigtable to provide wide applicability to a a very wide range of applications both internal to google and external through Google's cloud computing infrastructure.
@@ -478,6 +480,25 @@ Bigtable utilizes Google's distributed file system \textit{Google File System}(G
 
 Although very successful at Google, Chang does mention that using highly distributed systems provides for many failures including memory and network corruption, unresponsive machines, clock skew, distributed file system quotas, and hardware issues. Next we look at several advances which aim to improve on some of these flaws.
 
+\subsubsection{Cassandra}
+Cassandra was designed at Facebook and is described in Lakshman et al's 2010 paper \textit{Cassandra: A Decentralized Structured Storage System}\cite{lakshman_cassandra:_2010}.
+
+Cassandra has many of the same goals as Bigtable including managing large amount of structured data spread out across many servers with an emphasis on availability in the face of errors. Cassandra also mimics Amazon's Dynamo by integrating its distributed system technologies\cite{chen_big_2014}. 
+
+Partitioning data across a cluster is done using consistent hashing where multiple nodes in a ring are responsible for overlapping data.
+
+Cassandra stores data using the same column store data schema as Bigtable, however Cassandra provides an extra level of abstraction called the \textit{super column family} which can contain multiple related column families providing more flexible data structures. 
+
+In the same vain, replication is performed on up to $N$ configurable servers. Replication strategies are managed using Apache Zookeeper which manages distributed logs.
+
+A gossip based protocol is used to determine membership within a Cassandra cluster. For determining failed nodes, the Accrual Failure Detector\cite{hayashibara2004spl} is used which provided a dynamic value for each node in a system that represents a combination of software/hardware failures as well as network congestion and load. In this way, failed node information is more than just an up or down, but instead provides a more nuanced view of the cluster. As new nodes are added to the cluster, they are added into the ring in such a way that they can immediately relieve other highly congested nodes.
+
+Cassandra nodes use a gossip based protocol so that each node is able to route any request to the proper node within the cluster.
+
+\subsubsection{HBase}
+HBase is an open source Apache project that was designed to provide Bigtable like storage\cite{khetrapal_hbase_2006}. 
+
+\subsubsection{Hypertable}
 
 \subsection{Document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
@@ -507,7 +528,9 @@ Data in Spanner is stored in semirelational tables similar to those in tradition
 
 Spanner allows applications to provide constraints on read/write latency, durability, and availability and the system will dynamically determine which data centers will be used for the storage of the data for that particular application.
 
+Spanner further supports externally consistent reads and writes and globally consistent reads across the entire database as a specific timestamp which allows for consistent MapReduce pipelines, consistent backups, atomic schema updates. These features are normally not present in a distributed storage system, but Spanner is able to provide them by assigning globally meaningful timestamps to transactions. Spanner guarantees the absolute ordering of timestamps at a global scale.
 
+Spanner is able to provide absolute timestamps on a global scale by making use of their \textit{TrueTime API} which not only exposes clock timestamps, but also exposes clock uncertainty. Google uses a distributed network of atomic clocks and GPS receivers to maintain global synchronization. In the presence of uncertainty, Spanner can dynamically change its execution speed to match timestamp uncertainty. In the end, Spanner provides for uncertainty that is less than 10ms.
 
 
 \section{Big Data Analytics} \label{sec:big-data-analytics}

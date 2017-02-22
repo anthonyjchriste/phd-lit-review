@@ -483,7 +483,7 @@ Although very successful at Google, Chang does mention that using highly distrib
 \subsubsection{Cassandra}
 Cassandra was designed at Facebook and is described in Lakshman et al's 2010 paper \textit{Cassandra: A Decentralized Structured Storage System}\cite{lakshman_cassandra:_2010}.
 
-Cassandra has many of the same goals as Bigtable including managing large amount of structured data spread out across many servers with an emphasis on availability in the face of errors. Cassandra also mimics Amazon's Dynamo by integrating its distributed system technologies\cite{chen_big_2014}. 
+Cassandra has many of the same goals as Bigtable including managing large amount of structured data spread out across many servers with an emphasis on availability in the face of errors. Cassandra also mimics Amazon's Dynamo by integrating its distributed system technologies\cite{chen_big_2014}. Cassandra is weakly consistent during concurrent operations.
 
 Partitioning data across a cluster is done using consistent hashing where multiple nodes in a ring are responsible for overlapping data.
 
@@ -496,9 +496,26 @@ A gossip based protocol is used to determine membership within a Cassandra clust
 Cassandra nodes use a gossip based protocol so that each node is able to route any request to the proper node within the cluster.
 
 \subsubsection{HBase}
-HBase is an open source Apache project that was designed to provide Bigtable like storage\cite{khetrapal_hbase_2006}. 
+HBase is an open source Apache project that was designed to provide Bigtable like storage\cite{khetrapal_hbase_2006}. HBase makes use of HDFS for data storage as opposed to GFS. Unlike Bigtable, HBase provides row-level locking and trascation processing that can be turned off for performance reasons for large scale data sets\cite{chen_big_2014}.
+
+The HBase equivelent to Bigtables services are the HBaseMaster, HRedgionServer, and HBaseClient.
+
+The HBaseMaster assign reads/writes to region servers, monitor the health of region servers, and perform administrative tasks such as schema changes or adding and removing of column families.
+
+The HBaseRegion servers act as data nodes and actually perform writing and reading of data.
+
+The HBaseClient communicated with the master server in-order to determine which HBaseRegion servers contain the data that needs to be read or written. Once determined, the HBaseClient can communication with the HBaseRegion servers directly.
+
+HBase provides strong consistency using locks and log records.
 
 \subsubsection{Hypertable}
+Hypertable is another open source Bigtable clone\cite{khetrapal_hbase_2006}. What sets Hypertable apart from the other Bigtable clones is its ability to store data using multiple third party filesystems. For example, Hypertable can make use of HDFS, CloudStore, or be ran on top of a normal file system.
+
+The above can be achieved because Hypertable introduces the idea of a \textit{DFSBroker} which provides a middleware API for interacting with different file systems.
+
+Hypertable is equipped with a distributed lock manager which provides slightly stronger consistency than Bigtable at the cost of locking\cite{chen_big_2014}.
+
+Hypertable also provides its own query language, HQL, which allows users to create, remove, modify, and query the underlying hypertable cluster.
 
 \subsection{Document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.

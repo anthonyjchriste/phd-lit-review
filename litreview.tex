@@ -529,27 +529,36 @@ An advantage that document based stores have over KV stores is that its possible
 Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, SimpleDB, 
 
 \subsubsection{MongoDB}
-MongoDB is a distributed document based database. The name mongo comes from hu\textbf{mongo}us as it was designed to work with humongous data sets. 
+MongoDB is a highly popular, distributed document-based database\cite{mongo_arch_2016}. The name mongo comes from hu\textbf{mongo}us as it was designed to work with humongous data sets. 
 
 As a document database, MongoDB stores data in data structures that resemble JSON documents. Internally, these documents are serialized into a format called \textit{BSON} which essentially provides a binary encoding over top of JSON data structures. Documents in MongoDB can contain one or more fields where each field can store strings, ints, longs, dates, floating point numbers, booleans, and 128-bit decimals. Fields can also be arrays of data, binary data, and embedded documents. This structure is very flexible and allows great customization when designing data models. Unlike relational databases, MongoDB documents tend to store all required information in a single document, a form of de-normalization.
 
+Applications must use a specific driver developed for their programming language to interact with a MongoDB\cite{chen_big_2014}.
+
 MongoDB has a very rich query model and provides support for the following types of queries. Key-value queries similar to those in key-value stores, range queries based on inequalities (less than, greater than, equal to), geospatial queries working with points, lines, circles, and polygons such as nearest neighbor or point-in-polygon, textual search queries, aggregation queries (i.e. min, max, average, etc), left-outer joins, basic graph traversal queries, and MapReduce based queires where JavaScript is moved to the data and computed at the data.
 
-A special type of query that MongoDB supports is called \textit{covered queries} which are queries taht return results containing only indexed fields. These types of queries are very efficient as Mongo aggressively stores indexes in memory.
+A special type of query that MongoDB supports is called \textit{covered queries} which are queries taht return results containing only indexed fields. These types of queries are very efficient as MongoDB aggressively stores indexes in memory.
 
-MongoDB also supports a wide range of index types. Partial indexes apply a filter at document creation time and only index documents that meet the filter criteria. Sparse indexes only index documents that contain a specified field (which they may not since Mongo does not enforce schemas). Text search indexes provide advanced linguistic rules for stemming, tokenization, case sensitivity, and stop words. MongoDB provides several secondary index types that can be used on any field in a document. These include unique indexes that are used to reject newly created documented that have the same value. compound indexes which group several predicates together to index on, array indexes which will index each element in an array, TTL indexes which allow users to define how long a document lives in the database, and geospatial indexes which provide the special geospatial querying capabilities mentioned above.
+MongoDB also supports a wide range of index types. Partial indexes apply a filter at document creation time and only index documents that meet the filter criteria. Sparse indexes only index documents that contain a specified field (which they may not since MongoDB does not enforce schemas). Text search indexes provide advanced linguistic rules for stemming, tokenization, case sensitivity, and stop words. MongoDB provides several secondary index types that can be used on any field in a document. These include unique indexes that are used to reject newly created documented that have the same value. compound indexes which group several predicates together to index on, array indexes which will index each element in an array, TTL indexes which allow users to define how long a document lives in the database, and geospatial indexes which provide the special geospatial querying capabilities mentioned above.
 
-For scalability, Mongo provides automatic sharding. As the size of a cluster increases or decreases, MongoDB automatically balances data across the available nodes. MongoDB provides three types of sharding. Range based sharding is used when applications need to optimize for range based queries. Hash based sharding is used to provide a uniform distribution of data across nodes in a cluster. Zone sharding gives the application developers complete control of where and how their data is sharded.
+For scalability, MongoDB provides automatic sharding. As the size of a cluster increases or decreases, MongoDB automatically balances data across the available nodes. MongoDB provides three types of sharding. Range based sharding is used when applications need to optimize for range based queries. Hash based sharding is used to provide a uniform distribution of data across nodes in a cluster. Zone sharding gives the application developers complete control of where and how their data is sharded.
 
 MongoDB is ACID compliant at the level of a document. Fields and subdocuments can be written to in-parallel and and errors or consistency issues can be rolled back. Data is replicated in \textit{replica sets} that are self-healing. Replicas will automatically failover in the face of failure. MongoDB is strongly consistent by default and all reads and writes happen at a single master server. If that master fails, then a new master server is elected using the Raft consensus algorithm.  Data is replicated from the master server to secondary servers using something called the \textit{oplog}. The master replica set writes a the oplog, and all secondary servers replay the oplog to replicate the data.
 
-Mongo can store data using multiple backends including an in-memory storage solution, a disk based storage solution, or a hybrid based solution. 
+MongoDB can store data using multiple backends including an in-memory storage solution, a disk based storage solution, or a hybrid based solution. 
 
 Read consistency is configurable and clients can configure to read from replica sets which which may be eventually consistent.
 
 MongoDB supports various security techniques including authentication and authorization, auditing, and encryption. 
 
+\subsubsection{CouchDB}
+CouchDB is a moderately popular document based database that stores data uses JSON and all communication with the database is performed over a REST interface\cite{sharma_extended_2015}. CouchDB is an open source project originally developed at IBM and now part of the Apache Software Foundation. and is described in great detail in Anderson et al's book \textit{CouchDB: The Definitive Guide}\cite{anderson2010couchdb}.
 
+Interacting with the database is performed over a RESTful interface using HTTP methods passing JSON back and forth. Javascript is used as the query language of CouchDB.
+
+\subsubsection{SimpleDB}
+
+\subsubsection{RavenDB}
 
 
 \subsection{Graph}

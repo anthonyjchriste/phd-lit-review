@@ -506,7 +506,9 @@ The HBaseRegion servers act as data nodes and actually perform writing and readi
 
 The HBaseClient communicated with the master server in-order to determine which HBaseRegion servers contain the data that needs to be read or written. Once determined, the HBaseClient can communication with the HBaseRegion servers directly.
 
-HBase provides strong consistency using locks and log records.
+HBase provides strong consistency using locks and log records. Data is written to the end of a log and compaction is performed to save space\cite{cattell_scalable_2011}. Operations performed on rows are atomic.
+
+Operations in HBase can be distributed using MapReduce.
 
 \subsubsection{Hypertable}
 Hypertable is another open source Bigtable clone\cite{khetrapal_hbase_2006}. What sets Hypertable apart from the other Bigtable clones is its ability to store data using multiple third party filesystems. For example, Hypertable can make use of HDFS, CloudStore, or be ran on top of a normal file system.
@@ -543,7 +545,7 @@ MongoDB also supports a wide range of index types. Partial indexes apply a filte
 
 For scalability, MongoDB provides automatic sharding. As the size of a cluster increases or decreases, MongoDB automatically balances data across the available nodes. MongoDB provides three types of sharding. Range based sharding is used when applications need to optimize for range based queries. Hash based sharding is used to provide a uniform distribution of data across nodes in a cluster. Zone sharding gives the application developers complete control of where and how their data is sharded.
 
-MongoDB is ACID compliant at the level of a document. Fields and subdocuments can be written to in-parallel and and errors or consistency issues can be rolled back. Data is replicated in \textit{replica sets} that are self-healing. Replicas will automatically failover in the face of failure. MongoDB is strongly consistent by default and all reads and writes happen at a single master server. If that master fails, then a new master server is elected using the Raft consensus algorithm.  Data is replicated from the master server to secondary servers using something called the \textit{oplog}. The master replica set writes a the oplog, and all secondary servers replay the oplog to replicate the data.
+MongoDB is ACID compliant at the level of a document. Fields and sub-documents can be written to in-parallel and and errors or consistency issues can be rolled back. Data is replicated in \textit{replica sets} that are self-healing. Replicas will automatically failover in the face of failure. MongoDB is strongly consistent by default and all reads and writes happen at a single master server. If that master fails, then a new master server is elected using the Raft consensus algorithm.  Data is replicated from the master server to secondary servers using something called the \textit{oplog}. The master replica set writes a the oplog, and all secondary servers replay the oplog to replicate the data. Whereas other document stores provide versioning of values, MongoDB provides atomic updates of fields\cite{cattell_scalable_2011}.
 
 MongoDB can store data using multiple backends including an in-memory storage solution, a disk based storage solution, or a hybrid based solution. 
 
@@ -556,18 +558,24 @@ CouchDB is a moderately popular document based database that stores data uses JS
 
 Interacting with the database is performed over a RESTful interface using HTTP methods passing JSON back and forth. Javascript is used as the query language of CouchDB.
 
-CouchDB is build on top of a B-tree. Also accesses, puts, and gets of documents in the database take $O(log N)$ time. Because of this, CouchDB's query model can only perform lookups by key or by range as both query types are well supported by B-tree data structures. This was done for speed and efficiency reasons. 
+CouchDB is build on top of a B-tree. Also accesses, puts, and gets of documents in the database take $O(log N)$ time. Because of this, CouchDB's query model can only perform lookups by key or by range as both query types are well supported by B-tree data structures. This was done for speed and efficiency reasons. Queries in CouchDB are called \textit{views} and are defined using JavaScript\cite{cattell_scalable_2011}.
 
 CouchDB handles the velocity of big data by providing lock free access to documents. Instead, CouchDB used Multi-Version Concurrency Control (MVCC), In other words, documents are versioned, so instead of locking the database to perform updates or insert new documents, new values are created with an increased version number. Versions also allow for the easy creation of snapshots.
 
-CouchDB provides strong consistency on a single machine and eventual consistency over a cluster. CouchDB uses a process called \textit{incremental replication} where changes are periodically copied between servers. CouchDB spreads data out in what it calls a \textit{shard nothing} configuration. In this type of configuration, each node is independent and self-sufficient so there can not be a single point of failure anywhere in the cluster. In situations where data is updated for the same item on two different servers, CouchDB provides automatic conflict resolution and will pick the most recent version. It's up to developers to change the version if this type of conflict resolution does not meet their application's requirements.
+CouchDB provides strong consistency on a single machine and eventual consistency over a cluster. CouchDB uses a process called \textit{incremental replication} where changes are periodically copied between servers. CouchDB spreads data out in what it calls a \textit{shard nothing} configuration. In this type of configuration, each node is independent and self-sufficient so there can not be a single point of failure anywhere in the cluster. This is opposed to sharding where data is spread out over a cluster. In situations where data is updated for the same item on two different servers, CouchDB provides automatic conflict resolution and will pick the most recent version. It's up to developers to change the version if this type of conflict resolution does not meet their application's requirements.
 
 Chen et al\cite{chen_big_2014}. add that updates to documents in CouchDB require downloading and re-uploading entire documents. That is, updates on individual fields are not possible. It's also possible to tune the replication mechanism to create any custom replication topology, one area that's quite different than the other members in the document database space.
 
 \subsubsection{SimpleDB}
+SimpleDB\cite{cattell_scalable_2011} is a distributed document database developed by Amazon and provided as a database as a service. It is built on top of Amazon's cloud architecture. 
 
-\subsubsection{RavenDB}
+SimpleDB is one or the older (2007) and simpler document databases. SimpleDB does not support nested documents like MongoDB. The only operations supported by SimpleDB are \textit{select}, \textit{delete}, \textit{getAtrributes}, and \textit{putAttributes}.
 
+SimpleDB supports eventual consistency, but does not provide a way for alerting clients when conflicts arise This is due do the fact that SimpleDB does not use sharding, but instead uses asynchronous replication, similar to CouchDB. The difference betweem SimpleDB and CouchDB is that CouchDB maintains multiple versions od values where SimpleDB does not have a similar mechanism.
+
+SimpleDB does not provide any manual index control. Instead, you can define multiple \textit{domains} per document. Domains can contain different constraints. This method allows data to be queried in multiple ways, using different constraints, using different domains and provides some facility for mimicking indexes.
+
+Even though SimpleDB provides a rather \textit{simple} data model, it's provided as a service build on top of Amazon's cloud architecture. This allows you to scale as needed and only pay for what you use. 
 
 \subsection{Graph}
 TODO.

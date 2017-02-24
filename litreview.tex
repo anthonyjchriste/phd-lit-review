@@ -556,6 +556,14 @@ CouchDB is a moderately popular document based database that stores data uses JS
 
 Interacting with the database is performed over a RESTful interface using HTTP methods passing JSON back and forth. Javascript is used as the query language of CouchDB.
 
+CouchDB is build on top of a B-tree. Also accesses, puts, and gets of documents in the database take $O(log N)$ time. Because of this, CouchDB's query model can only perform lookups by key or by range as both query types are well supported by B-tree data structures. This was done for speed and efficiency reasons. 
+
+CouchDB handles the velocity of big data by providing lock free access to documents. Instead, CouchDB used Multi-Version Concurrency Control (MVCC), In other words, documents are versioned, so instead of locking the database to perform updates or insert new documents, new values are created with an increased version number. Versions also allow for the easy creation of snapshots.
+
+CouchDB provides strong consistency on a single machine and eventual consistency over a cluster. CouchDB uses a process called \textit{incremental replication} where changes are periodically copied between servers. CouchDB spreads data out in what it calls a \textit{shard nothing} configuration. In this type of configuration, each node is independent and self-sufficient so there can not be a single point of failure anywhere in the cluster. In situations where data is updated for the same item on two different servers, CouchDB provides automatic conflict resolution and will pick the most recent version. It's up to developers to change the version if this type of conflict resolution does not meet their application's requirements.
+
+Chen et al\cite{chen_big_2014}. add that updates to documents in CouchDB require downloading and re-uploading entire documents. That is, updates on individual fields are not possible. It's also possible to tune the replication mechanism to create any custom replication topology, one area that's quite different than the other members in the document database space.
+
 \subsubsection{SimpleDB}
 
 \subsubsection{RavenDB}

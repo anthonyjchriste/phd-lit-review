@@ -584,6 +584,24 @@ Data in graph databases are related along node, edges, and properties of a graph
 
 Graph databases are an integral part of big data, especially in social relations. Social networks such and Twitter and Facebook store massive amount of social interactions using graph databases. This data can be used in cluster analysis or other forms to learn about the interactions and communities within a platform. Graph databases are also used in location based services for path finding or recommendation systems\cite{cattell_scalable_2011}.
 
+\subsubsection{Neo4J}
+Neo4J is perhaps the most popular graph database. Neubauer describes Neo4J works in his article \textit{Graph Databases, NOSQL and Neo4j}\cite{neubauer_2010} as an open source project written in Java that has been optimized for graph algorithms and traversal. Neo4J is fully ACID compliant on individual machines.
+
+Neo4J provides a native Java API and also has bindings for many third party programming languages.
+
+According to a white paper released by Neo4J, \textit{Understanding Neo4j Scalability}\cite{montag2013understanding} data is written to a master node and then the master replicated the data in parallel to all nodes in the cluster at one time. Reads can then be performed on any of the slave nodes and receive a fully consistent view of the data. This provides high availability as each node contains the entire view of a graph. In the result of a master failure, a quorum is performed and a new master is elected. Neo4J does not offer sharding because portioning a graph across a set of servers has been shown to be NP complete.
+
+A single server in a Neo4J database can contain 34 billion nodes, 34 billion edges, and 68 billion properties. It's noted that as of 2013, only Google has been able to push the limits of Neo4J and that for most big data uses cases, these limitations are currently fine.
+
+An important feature of Neo4J is the ability to manage big data sets. Neo4J achieves this by utilizing the index-free adjacency property. That is, each node has pointers only to its direct neighbors. When navigating or working with the graph structure, Neo4J only needs to consider its current node and its neighbors. As the size of data increases, the amount of time it takes navigate and process the data remains constant. 
+
+This provides high performance up to a limit. With enough data, you start to hit the physical constraints of the system including RAM and cache misses. Neo4J implements cache based sharding where a cache is sharded across servers in such a way that caches on an individual server will contain mappings to data that has high locality in the graph. This allows reads to be performed across the cluster in a cached way provided effective load balancing. 
+
+Neo4J was not built with high write loads in mind and therefor does not handle velocity well in practice. This limitation tends to be acceptable as most work loads on graph databases tend to be read intensive, which Neo4J is optimized for. 
+
+Neo4J is schemaless and the nature of the data structure can be updated dynamically\cite{sharma_extended_2015}. Neo4J provides querying capabilities using a build-in query language called \textit{Cypher} which makes heavy use of pattern matching to query mine the graph data structure.
+
+
 \subsection{Misc.}
 \subsubsection{Megastore}
 

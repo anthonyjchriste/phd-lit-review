@@ -595,16 +595,29 @@ A single server in a Neo4J database can contain 34 billion nodes, 34 billion edg
 
 An important feature of Neo4J is the ability to manage big data sets. Neo4J achieves this by utilizing the index-free adjacency property. That is, each node has pointers only to its direct neighbors. When navigating or working with the graph structure, Neo4J only needs to consider its current node and its neighbors. As the size of data increases, the amount of time it takes navigate and process the data remains constant. 
 
-This provides high performance up to a limit. With enough data, you start to hit the physical constraints of the system including RAM and cache misses. Neo4J implements cache based sharding where a cache is sharded across servers in such a way that caches on an individual server will contain mappings to data that has high locality in the graph. This allows reads to be performed across the cluster in a cached way provided effective load balancing. 
+This provides high performance up to a limit. With enough data, you start to hit the physical constraints of the system including RAM and cache misses. Neo4J implements cache based sharding where a cache is sharded across servers in such a way that caches on an individual server will contain mappings to data that has high locality in the graph. This allows reads to be performed across the cluster in a cached way provided effective load balancing. It should be noted that Neo4J does also provide some basic indexing on nodes for things such as text search.
 
 Neo4J was not built with high write loads in mind and therefor does not handle velocity well in practice. This limitation tends to be acceptable as most work loads on graph databases tend to be read intensive, which Neo4J is optimized for. 
 
 Neo4J is schemaless and the nature of the data structure can be updated dynamically\cite{sharma_extended_2015}. Neo4J provides querying capabilities using a build-in query language called \textit{Cypher} which makes heavy use of pattern matching to query mine the graph data structure.
 
+\subsubsection{Misc. Graph}
+FlockDB is a specialized graph database created for managing relationship data at Twitter. There is not a ton of accedemic information of whitepapers, but it is described by Hecht and Jablonksi in literature\cite{hecht_nosql_2011} and you can also find some information on their github \url{https://github.com/twitter/flockdb}.
+
+FlockDB was optimized for working with very large adjacency lists with an emphasis on velocity: fast reads, writes, updates, and deletes. FlockDB also provides the ability to build complex queries, paging through millions of results in a single page. FlockDB can restore archived edges and provide for easy replication and scaling. 
+
+FlockDB was not designed for graph-walking queries or automatic sharding.
+
+OrientDB, as described by Sharma et al.\cite{sharma_extended_2015} is another open source Java based graph database. The feature that OrientDB adds on top of something like Neo4J is that it blends traditional graph databases with a document database. OrientDB makes it possible to store documents as nodes in the graph data structure.
+
+OrientDB can provide schemaless, semi-scheeless, or full schema data models providing a lot of flexible to clients at the cost of higher complexity.
+
+OrientDB is fully distributed and used a MVRB-tree build on top or red-black trees to provide full system indexing.
+
+An SQL like query language is used to query OrientDB.
+
 
 \subsection{Misc.}
-\subsubsection{Megastore}
-
 \subsubsection{Google's Spanner}
 Spanner is a unique distributed database that doesn't really fit in any of the previous categories. Spanner was developed by Google as a globally distributed database that provides transaction support and ACID grantees by means of highly synchronized servers using GPS clocks. The system is described in Corbet et al.'s paper \textit{Spanner: Google's Globablly Distributed Database}\cite{corbett_spanner:_2013}.
 
@@ -612,7 +625,7 @@ Spanner was designed to provide a globally distributed database that provides re
 
 Google realized that even though most internal applications make use of Bigtable, there are projects where complex evolving schemas or strong consistency in the presence of wide-area replication are required and Bigtable can not provide those options. Google also noticed that many applications were also making use of Megastore for its semi-relational data model and its support for synchronous replication. From these requirements, Spanner was born.
 
-Data in Spanner is stored in semirelational tables similar to those in traditional SQL systems. All data is versioned by timestamps and old versions of data can be configured to be garbage collected. Spanner also provides an SQL-based query language.
+Data in Spanner is stored in semi-relational tables similar to those in traditional SQL systems. All data is versioned by timestamps and old versions of data can be configured to be garbage collected. Spanner also provides an SQL-based query language.
 
 Spanner allows applications to provide constraints on read/write latency, durability, and availability and the system will dynamically determine which data centers will be used for the storage of the data for that particular application.
 

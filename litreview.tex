@@ -635,7 +635,51 @@ Spanner is able to provide absolute timestamps on a global scale by making use o
 
 
 \section{Big Data Analytics} \label{sec:big-data-analytics}
+As we saw in the previous section, big data is generally stored on distributed systems. Data can be spread out across hundreds or thousands of servers. These systems may be heterogeneous and due to their distributed nature, are not great candidates for technologies such as Message Passing Interface (MPI) or Open Multi-Procressing (OpenMP)\cite{chen_big_2014}. 
+
+With a large volume of data, it's not possible to download  entire data sets to a single server for analysis. Therefore, we need technologies that can distribute computation over many server. Because of the wide variety of data to process, we need technologies that learn about data sets and extract signals from a a large volume of noise.Because of the velocity of data, we require technologies that perform analytics on real-time streaming data.
+
+This section reviews distributed computing platforms that are able to in one way or others meet the demands of processing distributed big data.
+
 \subsection{MapReduce}
+We start by reviewing MapReduce, which is instrumental in influencing the designs of many of the distributed computation frameworks that we will discuss is future sections. 
+
+MapReduce was designed at Google by Jeffrey Dean and Sanjay Chemawat and is described in their 2008 paper \textit{MapReduce: Simplified Data Processing on Large Clusters}\cite{dean2008mapreduce}.
+
+MapReduce's stated goal is to provide ``a simple and powerful interface that enables automatic parallelization and distribution of large-scale computations, combined with an implementation of this interface that achieves high performance on large clusters of commodity PCs''. 
+
+The authors and others at Google noticed that individual teams at Google were writing custom algorithms for dealing with large amounts of distributed data on GFS. These computations included web crawling, log analysis, inverted indices, different views on graph structures, aggregate summaries, query statistics, and others. Engineers notices that a common pattern among many of the custom algorithms was transforming every item of a collection, and then grouping results by a key. The abstraction of this idea produced MapReduce. 
+
+The name MapReduce was chosen as a homage to the map and reduce functions of LISP programming languages. The authors point out that by taking a functional approach to distributed computation, you get parallelism for free.
+
+MapReduce is split into two phases, a map phase, and a reduce phase. Key value pairs are used as both the input and the output format for MapReduce computations. 
+
+In the map phase, key value pairs are transformed using a user provided function into intermediate key pair values. The intermediate values are grouped by key and passed to the reduce function.
+
+The reduce phase takes as input a list of intermediate key value pairs, and for each key, uses a user defined reduction function where to reduce the list of values associated with that key to a smaller set of values, usually 0 or 1. The actual types of the map and reduce functions are given as $map(k1, v1)\longrightarrow list(k2,v2)$ and $reduce(k2, list(v2))\longleftarrow list(v2)$.
+
+The paper provides a simple example to explain MapReduce in terms of a word URL access frequency (word count) example. Imagine you have many logs URLs accesses stored on a large array of servers and you want to get a mapping of URL to the number of times that URL has been visited. This can be accomplished in MapReduce in the following way. The map phase maps each URL to an intermediate pair of $<URL, 1>$. The reduce phase will group by key (URL), and then reduce the values by addition. The end result of this is a set of pairs that contain an individual URL and the number of times its been accessed.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/mr-execution}
+    \caption[MapReduce execution overview.]{MapReduce execution overview. \cite{dean2008mapreduce}}
+    \label{fig:mr-execution}
+\end{figure}
+
+The actual architecture of splitting up the work is described in great detail in Dean's paper. We provide a brief overview of it here though. A MapReduce job is initiated by a user library which defines the input data, map task, and reduce task. This job is replicated on many nodes in a cluster. One of the nodes is elected the mater node who assigns $M$ map tasks and $R$ reduce tasks over idle workers. Worker nodes with assigned map tasks transforms their input data with the user defined function and buffers intermediate pairs in memory and sometimes to disk. Worker nodes that were assigned reduce are provided the locations of intermediate data , groups together pairs with the same key, and reduces the values based on the user provided function. The results are these reductions are stored in $R$ files that have to be then managed by the user application. This process is shown in figure \ref{fig:mr-execution}.
+
+The elected master node has several other duties including storing the state of each map and reduce task and also storing the locations of the intermediate pairs produced by the map task.
+
+MapReduce was designed to work in situations of large scale failure. Maps tasks that fail can simple be re-ran. If a worker node goes down, that worker's tasks are assigned to another worker and the computations are re-ran. The only failure condition is in the event of a master failure. In such a case, the entire job will need to be re-submitted to a new master.
+
+As data is distributed, MapReduce attempts to schedule tasks on machines that are close to the data (on GFS) that they wish to access. This is still a hot topic in academia today with ongoing research in scheduling and mapping MapReduce tasks to increase data locality.
+
+Google introduced several refinements on top of the basic MapReduce architecture. These include the ability provide custom partition functions to reduce tasks to control where results are written, ordering guarantees of intermediate keys within a given partition, an intermediate combiner function to combine repetitive date before reduction, auxiliary files as side-effects from tasks, black listing of bad data, local execution for debugging purposes, status information of HTTP, and counters for performance metrics.
+
+Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
+
+\subsection{Hadoop}
 
 \subsection{Apache Spark}
 

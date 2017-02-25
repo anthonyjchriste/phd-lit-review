@@ -698,6 +698,13 @@ A publish-subscribe architecture is used for all communication and data transfer
 
 Twister provides fault tolerance by allowing the ability to save application state between iterations. Similar to MapReduce, Twister does not provide fault tolerance in the case of a master server failure.
 
+\subsubsection{Pig}
+Pig\cite{olston2008pig} is an Apache project that uses a custom language, \textit{Pig Latin}, which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries as Pig Latin compiles directly to MapReduce jobs.
+
+Pig Latin claims to make parallel programming easier as it's a language designed to exploit data parallelism. Since Pig is in charge of interpreting Pig Latin and generating MapReduce jobs, the Pig interpreter can utilize optimizations that the developer may not have thought of using MapReduce directly.
+
+Pig interprets commands issued in Pig Latin. These commands are then use to dynamically form MapReduce jobs that can be triggered from the Pig interpreter.
+
 \subsubsection{YARN}
 YARN, or Yet Another Resource Negotiator\cite{vavilapalli2013apache}, was designed to be the next evolution of Hadoop, sometimes referred to as Hadoop 2. YARN adds several benefits to the initial Hadoop MapReduce framework that we will discuss in this section.
 
@@ -713,14 +720,41 @@ The other half of YARN is the application master whose job it is to coordinate t
 
 YARN is completely backwards compatible and existing MapReduce jobs will run on top of YARN.
 
+\subsubsection{Spark}
+Apache Spark, described by Zaharia et al. in their paper \textit{Spark: Cluster Computing with Working Sets}\cite{zaharia_spark:_2010}, is described as ``a fast and general engine for large-scale data processing''.
 
+Spark builds on Hadoop by optimizing in-memory operations and storing intermediate results for use in iterative applications. Spark also provides the concept of a new data type, the \textit{resilient distributed datasets (RDDs)}.
 
+The authors mention that MapReduce fails in two major areas. The first area is iterative jobs which frameworks like MapReduce do not support. It's possible to emulate iterative jobs by running multiple jobs, but each job must reload all data from disk. Spark provides a means to store intermediate results between runs. The second issue with tradional MapReduce systems is the latency involved with running interactive analytics on top of Hadoop. The authors note that Pig and Hive can make these ad-hoc queries easier, but there is still a large latency between queries as each query is its own MapReduce job.
 
+The main abstraction that Spark provides is the RDD. RDDs contain collection of read-only objected that are automatically partitioned across machines in a cluster. RDDs can be automatically rebuilt in the event that partition or node is lost. 
 
-\subsubsection{Pig}
-Pig\cite{olston2008pig} is an Apache project that uses a custom language \textit{Pig Latin} which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries. Pig runs on top of the MapReduce clone, Hadoop.
+RDDs can be created from the filesystem (HDFS), loaded from a data store such as Cassanda, HBase, or S3, by parallelizing a collection of Java, Scala, Python, or R objects, by transforming an existing RDD, or by changing the persistence of an RDD. 
 
-\subsubsection{Apache Spark}
+Once data is represented as an RDD, there are many parallel operations that can be performed on the data including reduction, collection, filtering, mapping, and grouping. Each action performed on an RDD creates a new RDD with the applied transformation. Thus the state between any transformation is maintained by the RDD as they are immutable.
+
+The Spark API mostly contains functional transformations and reductions that are familiar to many programmers. This aids in the development of distributed computation of massive data sets by delegating the scheduling, data management, and computational pipeline to Spark. Programmers can focus on the algorithm and not worry about the details of distributed computation as they might need to working directly with MapReduce.
+
+\subsubsection{Spark Streaming}
+
+\subsubsection{GraphX}
+GraphX\cite{xin_graphx:_2013} is a graph processing framework built on top of Apache Spark. GraphX aims to provide the advantages of data-parallel and graph-parallel systems into a single framework.
+
+GraphX extends on Spark's concept of an RDD by adding a resilient distributed graph (RDG). An RDG is immutable and transformations on one RDG result in the creation of a new RDG. Similar to Spark, this allows the state to me maintained between different versions of RDGs.
+
+GraphX uses edge cutting and vertex cutting heuristics to achieve efficient partitioning of data within a graph to maintain high locality within nodes of a cluster.
+
+By taking a data-parallel approach to graph processing GraphX provides the following parallel operations on RDGs, retrieve lists of vertices and edges, filter vertices and edges by predicate, create subgraphs from predicate, map transformations on vertices and edges, and aggregate date about neighbors.
+
+GraphX also provides a graph parallel approach to processing by showing that data-parallel transformations can be mapped to graph-parallel operations. GraphX proves this by implementing the entirety of both Pregel and PowerGraph usinng RDGs in less than 20 lines of code each.
+
+The authors mention that future work will involve creating a declarative language ontop of GraphX for constructing and working with RDGs.
+
+\subsubsection{MLlib}
+MLlib is a machine learning libray designed to work on top of Spark. It is described by Meng et al. in their 2016 paper \textit{MLlib: Machine Learning in Apache Spark}\cite{meng2016mllib}.
+
+\subsubsection{Shark}
+
 
 \subsubsection{Tez}
 Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.
@@ -738,14 +772,16 @@ Graphs can be constructed and described using C++. Once constructed, it's possib
 
 Because the structure of computation is a DAG, if any vertex in the DAG fails, it's possible to re-run the failed vertex (on a new machine if needed). If there is a failure of an edge (file corruption, network error, etc), the previous vertex can re-run its execution to recreate that edge. The job manager keeps track of the state of each edge and vertex and is in charge or recognizing and reacting to failures.
 
-\subsection{GraphX}
 
-\subsection{Shark}
+
+
 
 \subsection{Pregel}
 Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al.
 
 Pregel was designed as a computational model to compute results on large graph data structures (trillions of edges) using a vertex centered approach where vertices can send and receive messages to other vertices and modify state based on contents of incoming and outgoing messages. 
+
+\subsection{PowerGraph}
 
 \subsection{Storm}
 
@@ -760,7 +796,7 @@ Apache Flink\cite{carbone2015apache} is an open source stream and batch processi
 
 
 
-\subsection{PowerGraph}
+
 
 \subsection{MapReduce/Hadoop and Other Related Technologies}
 In this section, we briefly look at several higher level abstractions and technologies that work directly with distributed computation frameworks. As this is not the main focus of this review, we only provide brief descriptions of these technologies. However, we did want to include them for completeness.

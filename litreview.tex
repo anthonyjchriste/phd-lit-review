@@ -736,6 +736,17 @@ Once data is represented as an RDD, there are many parallel operations that can 
 The Spark API mostly contains functional transformations and reductions that are familiar to many programmers. This aids in the development of distributed computation of massive data sets by delegating the scheduling, data management, and computational pipeline to Spark. Programmers can focus on the algorithm and not worry about the details of distributed computation as they might need to working directly with MapReduce.
 
 \subsubsection{Spark Streaming}
+Spark Streaming is an extension to Spark which allows for the computation and windowing of real-time streaming data. This extension is described in detail in Zaharia et al.'s 2012 paper \textit{Discretized Streams: An Efficient and Fault-Tolerant Model for Stream Processing on Large Clusters}\cite{zaharia2012discretized}.
+
+The stated goals of Spark Streaming are to provide scalability to hundred of nodes, low replication overhead, second-scale latency, and second-scale recovery from faults of stragglers.
+
+Spark Streaming introduces a new stream processing model build on a data type called discretized streams (D-Streams). D-Streams are broken up into time windows. D-Streams avoid the problems of traditional stream processing by structuring computations ``as a set of short, stateless, deterministic tasks instead of continuous, stateful operations''.
+
+D-Streams store state in memory using RDDs which can be recomputed in parallel in the case of node failure. 
+
+Each D-Stream contains a series of values inside of a small time window. These values are submitted to Spark and processed using parallel operations in a batch processing manner. The small window sizes give us the impression the data is being processing in real-time.
+
+The hybrid batch real-time processing notion of Spark Streaming works well for algorithms that require sliding window computations over a set of data, as each batch can be configured to be one view over that sliding window.
 
 \subsubsection{GraphX}
 GraphX\cite{xin_graphx:_2013} is a graph processing framework built on top of Apache Spark. GraphX aims to provide the advantages of data-parallel and graph-parallel systems into a single framework.
@@ -761,7 +772,8 @@ MLlib not only provides a wide range of algorithms on top of Spark, but also int
 
 MLlib also provides utilities for defining ML workflows and pipelines. MLlib specifically provides support for feature transformations, model evaluation, parameter tuning, and persisting models to and from the ML pipeline.
 
-\subsubsection{Shark}
+\subsubsection{Spark SQL}
+Spark SQL provides for relation processing capabilities in Spark\cite{armbrust2015spark}.
 
 
 \subsubsection{Tez}

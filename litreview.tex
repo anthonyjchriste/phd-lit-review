@@ -678,16 +678,52 @@ Google introduced several refinements on top of the basic MapReduce architecture
 
 Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
 
-\subsubsection{Hadoop}
-Hadoop was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections.
-
-\subsubitem{YARN}
+\subsubsection{Hadoop MapReduce}
+Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections.
 
 \subsubsection{Twister}
-Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems.
+Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems. 
 
+The authors of Twister note that general MapReduce works for a single problem and produces a single result. Their are many iterative algorithms that can be described using MapReduce including k-means, pagerank, deterministic annealing clustering, and others. Twister aims to provide a framework for performing iterative MapReduce.
+
+Twister adds a configure phase to both the map and reduce tasks which allow it to read static data before it performs one of its tasks. Twister defines static data as data that doesn't change between iterations and variable data as data that gets passed between iterations. These two types of data are common in iterative processes.
+
+Twister provides the idea of long running tasks that last for the duration of a job which hold static data as it's inefficient to load static data every time a task is queued and performed.
+
+Twister aggressively decreases granularity fo intermediate data to reduce volume on the network. Map tasks in Twister support partial reduction during mapping to achieve this. Hadoop and MapReduce use a combiner after the mapped task to achieve something similar.
+
+Twister's runtime aims to load all data into main memory to increase efficiency.
+
+A publish-subscribe architecture is used for all communication and data transfers.
+
+Twister provides fault tolerance by allowing the ability to save application state between iterations. Similar to MapReduce, Twister does not provide fault tolerance in the case of a master server failure.
+
+\subsubsection{YARN}
+YARN, or Yet Another Resource Negotiator\cite{vavilapalli2013apache}, was designed to be the next evolution of Hadoop, sometimes referred to as Hadoop 2. YARN adds several benefits to the initial Hadoop MapReduce framework that we will discuss in this section.
+
+Several of the limitations YARN improves upon over the initial version Hadoop MapReduce include scaling resource and task management, providing higher availability without the single point of failure of a JobTracker node, dynamic resource utilization, capability to perform real-time analysis, message passing semantics, and ad-hoc queries.
+
+YARN provides pluggable support for more computation engines other than just MapReduce. Now MapReduce is just one of many computation engines available to run within the Hadoop ecosystem.
+
+YARN provides for multi-tenancy within Hadoop. This means multiple distributed computation engines can be running at the same time on the same Hadoop cluster, where before it was only possible to run one job at a time.
+
+YARN at its core is a resource manager which tracks, enforces allocation, and arbitrates contention among tenants in the system. The resource manager provides other services including monitoring of workloads, security, managing availability, and providing plugable computation frameworks. YARN is designed to provide cluster resource management and scale to thousands of servers. YARN is further designed to handle dynamic scaling of clusters.
+
+The other half of YARN is the application master whose job it is to coordinate the logical plan of a single job by requesting resources from the resource manager.
+
+YARN is completely backwards compatible and existing MapReduce jobs will run on top of YARN.
+
+
+
+
+
+\subsubsection{Pig}
+Pig\cite{olston2008pig} is an Apache project that uses a custom language \textit{Pig Latin} which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries. Pig runs on top of the MapReduce clone, Hadoop.
 
 \subsubsection{Apache Spark}
+
+\subsubsection{Tez}
+Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.
 
 \subsection{Dryad}
 Dryad is a distributed execution engine developed at Microsoft Research by Isard et al. and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
@@ -720,8 +756,7 @@ Apache Flink\cite{carbone2015apache} is an open source stream and batch processi
 
 
 
-\subsection{Tez}
-Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.
+
 
 
 
@@ -732,7 +767,7 @@ In this section, we briefly look at several higher level abstractions and techno
 
 SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
 
-Pig\cite{olston2008pig} is an Apache project that uses a custom language \textit{Pig Latin} which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries. Pig runs on top of the MapReduce clone, Hadoop.
+
 
 Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 

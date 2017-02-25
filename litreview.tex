@@ -751,7 +751,15 @@ GraphX also provides a graph parallel approach to processing by showing that dat
 The authors mention that future work will involve creating a declarative language ontop of GraphX for constructing and working with RDGs.
 
 \subsubsection{MLlib}
-MLlib is a machine learning libray designed to work on top of Spark. It is described by Meng et al. in their 2016 paper \textit{MLlib: Machine Learning in Apache Spark}\cite{meng2016mllib}.
+MLlib is a machine learning libray designed to work on top of Spark. It is described by Meng et al. in their 2016 paper \textit{MLlib: Machine Learning in Apache Spark}\cite{meng2016mllib}. MLlib was designed to provide machine learning capabilities to very large data sets taking advantage of machine learning algorithms that exploit data or model parallelism.
+
+Spark provides great support for distributed iterative algorithms by efficiently storing intermediate results in memory to be used in future iterations. By building MLlib on top of Spark, any improvements to efficiency in Spark will get passed on to the ML algorithms.
+
+MLlib supports the following types of ML algorithms in parallel: logistic regression, naive Bayes, linear regression, survival regression, decision trees, random forests, alternating least squares, K-Means clustering, latent Dirichlet allocation, sequential pattern mining, and many variations on these.
+
+MLlib not only provides a wide range of algorithms on top of Spark, but also integrates closely with Spark. Data can be imported and exported from MLlib using any of the methods that Spark already supports. MLlib also works closely with other technologies in the Spark ecosystem. MLlib can interface with Spark SQL for rich data querying. Interfacing with Spark Streaming allows for real-time learning. It's also possible to analyze GraphX data structures using ML algorithms.
+
+MLlib also provides utilities for defining ML workflows and pipelines. MLlib specifically provides support for feature transformations, model evaluation, parameter tuning, and persisting models to and from the ML pipeline.
 
 \subsubsection{Shark}
 

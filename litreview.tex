@@ -388,8 +388,6 @@ The Haystack Directory servers provide mappings from logical volumes to physical
 
 On-top of these three services, Haystack provides a small set of other improvements including compaction which reclaims space of deleted photos and custom binary encoding of indexes to improve space efficiency. In the end, Facebook was able to improve on their photo storage and management by showing performance and efficiency gains over their previous NFS based approach.
 
-TODO: Find a way to summarize
-
 \subsection{Key-Value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
 
@@ -410,8 +408,6 @@ One of the earliest examples of a distributed KV store is memcached\cite{fitzpat
 \end{figure}
 
 Memcached is architected as a 2-way hash-table as show in figure \ref{fig:memcached}. The first layer of hashing takes place in the client library. When a client receives a lookup request for a key, that key could live on any of the memcached server instances. The client hashes the key to determine which server the data is actually on. The request if forwarded to the appropriate server, and the server performs a hash lookup on the provided key and either returns a result or creates a cache miss. This system generalizes to a distributed hash table and provided $O(1)$ lookups and stores. Memory is allocated using slab allocator which used a free list to keep track of free chunks inside of slabs. The protocol allows for fetching multiples keys at one time. 
-
-TODO: Review Scaling Memcache at Facebook
 
 \subsubsection{Amazon's Dynamo}
 In 2007, DeCandia and others working at Amazon, released their paper \textit{Dynamo: Amazon's Highly Available Key-Valye Store}\cite{decandia_dynamo:_2007}. Decandia et al. describe Dynamo as ``a highly available key-value storage system that some of Amazon's core services use to provide an 'always-on' experience''. Dynamo prioritizes availability over consistency. In order to achieve those goals, Dynamo makes extensive use of object versioning and application-assisted conflict resolution which we will look at in greater detail in the next couple of paragraphs.
@@ -641,7 +637,9 @@ With a large volume of data, it's not possible to download  entire data sets to 
 
 This section reviews distributed computing platforms that are able to in one way or others meet the demands of processing distributed big data.
 
-\subsection{MapReduce, Hadoop, and Friends}
+\subsection{MapReduce and Friends}
+This section contains distributed processing technologies that are related in the fact that they were inspired or somehow work with the MapReduce framework.
+
 \subsubsection{MapReduce}
 We start by reviewing MapReduce, which is instrumental in influencing the designs of many of the distributed computation frameworks that we will discuss is future sections. 
 
@@ -681,6 +679,9 @@ Google introduced several refinements on top of the basic MapReduce architecture
 Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
 
 \subsubsection{Hadoop}
+Hadoop was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections.
+
+\subsubitem{YARN}
 
 \subsubsection{Twister}
 Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems.
@@ -693,12 +694,15 @@ Dryad is a distributed execution engine developed at Microsoft Research by Isard
 
 Dryad is described as a ``general-purpose distributed execution engine for coarse-grain data-parallel applications''.
 
-Distributed computations in Dryad are modeled using a directed acyclic graph (DAG) data structure where each node in the graph represents a computation and edges represent data transport (files, TCP, etc).
+Distributed computations in Dryad are modeled using a directed acyclic graph (DAG) data structure where each node in the graph represents a computation and edges represent data transport (files, TCP, etc). This allows an approach that is much more akin to a computational pipeline rather than a single MapReduce operation or iterative MapReduce operations. Applications can define what computations happen at each vertex and control the flow of data to other vertices using conditional logic. Dryad further distances itself from MapReduce by allowing any number of inputs and outputs at each node, rather than a single value. These differences can make it easy to model problems over distributed systems as compared to MapReduce.
 
+A Dryad cluster uses a name server to enumerate all servers in the cluster. The name server also has meta-data detailing the position of each server which allows Dryad to create graphs using efficient topologies based on the hardware configuration. Each worker node has a daemon process that creates other processes on behalf of the job manager. Vertices get sent to worker nodes based on the topology reported by the name node.
+
+Graphs can be constructed and described using C++. Once constructed, it's possible to modify the graph by adding vertices, edges, or merging two graphs together
+
+Because the structure of computation is a DAG, if any vertex in the DAG fails, it's possible to re-run the failed vertex (on a new machine if needed). If there is a failure of an edge (file corruption, network error, etc), the previous vertex can re-run its execution to recreate that edge. The job manager keeps track of the state of each edge and vertex and is in charge or recognizing and reacting to failures.
 
 \subsection{GraphX}
-
-
 
 \subsection{Shark}
 
@@ -709,7 +713,17 @@ Pregel was designed as a computational model to compute results on large graph d
 
 \subsection{Storm}
 
+\subsection{Impala}
+
+\subsection{Flink}
+Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine.
+
+
+
 \subsection{Tez}
+Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.
+
+
 
 \subsection{PowerGraph}
 

@@ -779,6 +779,8 @@ Many abstractions have been built on top of MapReduce that make it easier for ap
 
 What Spark SQL provides that previous system didn't, is the ability to provide a declarative language that can be optimized while also tying in very closely with Spark's big data tools and libraries. This effectively allows programmers to query data and perform Extract, Transform, Load (ETL) operations using a declarative language while at the same time providing the ability to run large scale graph processing jobs and machine learning algorithms over those queried data sets. 
 
+Spark SQL provides automatic support for semi-structured data sets such as JSON. Spark can read JSON records and automatically infer the schema based on the records that have been fed into it.
+
 The main stated goals for this project include supporting relational processing within Spark programs and on external data sources, provide high performance using established DBMS techniques, support new data structures including semi-structured data and external databases, and to enable extension with advanced analytics algorithms such as graph processing and machine learning. Spark SQL accomplishes these goals by adding two major components to the Spark ecosystem. A \textit{DataFrame} API and an extensible query optimizer called \textit{Catalyst}.
 
 The DataFrame API is similar to RDDs in Spark with the key difference that they keep track of their own schema and support relational operations not supported by RDDs. DataFrames are a distributed collection of rows with a homogeneous schema. DataFrames can be constructed from many data sources including RDDs, the file system, or other distributed data stores such as HBase. 
@@ -800,8 +802,7 @@ The main job of the Catalyst optimizer is to take queries constructed using Data
 
 Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations and applies a combination of rule and cost based optimization transformations on that tree. The tree is then used to to formulate a set of physical plans. Cost analysis optmizations are applied to the physical plans, and a single physical plan is selected. Spark SQL creates and optimizes RDDs and their transformations across Spark to execute the job and produce a result. This process is visualized in figure \ref{fig:sparksql}.
 
-\subsubsection{Tez}
-Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.
+Catalyst and Spark SQL were designed with extension in mind. Developers can add external data sources with varying degrees of optimization and allow those data sources to be queries using the DataFrame API. As of the time of this paper, this technique was already utilized to create data source adapters to CSV files, Avro files, Parquet files, and JDBC data sources such as RDBMS.
 
 \subsection{Dryad}
 Dryad is a distributed execution engine developed at Microsoft Research by Isard et al. and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
@@ -817,13 +818,27 @@ Graphs can be constructed and described using C++. Once constructed, it's possib
 Because the structure of computation is a DAG, if any vertex in the DAG fails, it's possible to re-run the failed vertex (on a new machine if needed). If there is a failure of an edge (file corruption, network error, etc), the previous vertex can re-run its execution to recreate that edge. The job manager keeps track of the state of each edge and vertex and is in charge or recognizing and reacting to failures.
 
 
-
-
-
 \subsection{Pregel}
-Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al.
+Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al. 
 
 Pregel was designed as a computational model to compute results on large graph data structures (trillions of edges) using a vertex centered approach where vertices can send and receive messages to other vertices and modify state based on contents of incoming and outgoing messages. 
+
+Unlike other graph processing engines, Pregel was not designed to create MapReduce jobs in the background. Pregel is it's own distributed computation model. This was done for performance reasons and Pregal keeps vertices and edges within machines in such a way to maintain high locality. Further the MapReduce model forces the entire state of the graph to be loaded for each iteration, where Pregal can be used to perform updates locally on the graph.
+
+Pregel models distributed computations using a DAG data structure. Each node contains user defined values and each edge also contains user defined values. At any point, each vertex can send and receive messages to other vertices. These steps are broken up into discreet pieces of time. Pregel calls these \textit{supersteps}, but you can think of the graph as existing within a large state machine.
+
+For each superstep $S$, Pregel maps a user defined function over each vertex in the graph in parallel. The function at each vertex can read messages send to that vertex during the $S-1$ superstep and also send messages to other vertices that will be received during the $S+1$ superstep. This data model provides developers with a flexible way of representing large scale distributed problems that can be solved using graph transformations. 
+
+One optimization that Pregel provides that we saw similarly in MapReduce is the use of an intermediate combiner function. Vertices have the ability to perform message passing to other vertices, but it's possible that other vertices could be on other machine or even in other data centers. In cases where messages can be combined, users can implement combiners to reduce network overheard.
+
+A typical Pregel run involves initializing the DAG to an initial state, applying a number of iterative supersteps (with synchronization points being saved between supersteps), and then halting once all vertices are in the \textit{done} state. The output of a Pregel job is a list of values, one for each vertex in the graph. In between each superstep, vertices have the capability to change the state of the graph by message passing and by psychically adding, removing, or updating edges and other vertices.
+
+A physical Pregel cluster contains many worker nodes who contain copies of an individual job. One of the worker nodes is elected as a master. The master has the job of coordinating worker activity, assigns partitions of the graphs to machines in the cluster, divides input data among machines in the cluster, and informs vertices when to perform their superstep.
+
+Fault-tolerance in Pregel is achieved through checkpointing between supersteps. In the event of a failure, all nodes, vertices, and edges reload their data from the most recent checkpoint which can be reconstructed due to the fact that data is checkpointed on GFS. 
+
+Google showed that Pregel can be used for large scale distributed computations by applying the framework to several distributed graph problems including PageRank, shortest path calculations, bipartite matching, and semi-clustering.
+
 
 \subsection{PowerGraph}
 
@@ -848,7 +863,6 @@ Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files s
 
 Mahout\cite{owen2012mahout} is a machine learning framework capable of collective filtering, categorization, clustering, and parallel frequent pattern mining using a distributed cluster and producing MapReduce jobs.
 
-Yarn\cite{vavilapalli2013apache}
 
 
 \section{Conclusion}

@@ -781,6 +781,13 @@ What Spark SQL provides that previous system didn't, is the ability to provide a
 
 The main stated goals for this project include supporting relational processing within Spark programs and on external data sources, provide high performance using established DBMS techniques, support new data structures including semi-structured data and external databases, and to enable extension with advanced analytics algorithms such as graph processing and machine learning. Spark SQL accomplishes these goals by adding two major components to the Spark ecosystem. A \textit{DataFrame} API and an extensible query optimizer called \textit{Catalyst}.
 
+The DataFrame API is similar to RDDs in Spark with the key difference that they keep track of their own schema and support relational operations not supported by RDDs. DataFrames are a distributed collection of rows with a homogeneous schema. DataFrames can be constructed from many data sources including RDDs, the file system, or other distributed data stores such as HBase. 
+
+DataFrames are created using the programming language API into Spark. This differs from other languages on top of Spark such as Pig where instead of creating an entirely new programming language, the DataFrame API is simply added the Spark Framework and provides a DSL on top of the programming language the developer is already using. In this way, developers do not need to learn a new programming language to enjoy the benefits of using Spark SQL.
+
+DataFrames support most common relational operations including \textit{select}, \textit{where}, \textit{join}, and aggregations like \textit{groupBy}.
+
+DataFrames are lazy by default. That is, when applications define DataFrames, only a logical plan is formulated to query the data and transform the data, but no operations take place until a terminal action is called. The logical planning is part of the Catalyst optimizer, Spark SQL's second major contribution.
 
 
 

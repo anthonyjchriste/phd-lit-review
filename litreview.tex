@@ -641,7 +641,8 @@ With a large volume of data, it's not possible to download  entire data sets to 
 
 This section reviews distributed computing platforms that are able to in one way or others meet the demands of processing distributed big data.
 
-\subsection{MapReduce}
+\subsection{MapReduce, Hadoop, and Friends}
+\subsubsection{MapReduce}
 We start by reviewing MapReduce, which is instrumental in influencing the designs of many of the distributed computation frameworks that we will discuss is future sections. 
 
 MapReduce was designed at Google by Jeffrey Dean and Sanjay Chemawat and is described in their 2008 paper \textit{MapReduce: Simplified Data Processing on Large Clusters}\cite{dean2008mapreduce}.
@@ -679,17 +680,54 @@ Google introduced several refinements on top of the basic MapReduce architecture
 
 Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
 
-\subsection{Hadoop}
+\subsubsection{Hadoop}
 
-\subsection{Apache Spark}
+\subsubsection{Twister}
+Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems.
+
+
+\subsubsection{Apache Spark}
+
+\subsection{Dryad}
+Dryad is a distributed execution engine developed at Microsoft Research by Isard et al. and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
+
+Dryad is described as a ``general-purpose distributed execution engine for coarse-grain data-parallel applications''.
+
+Distributed computations in Dryad are modeled using a directed acyclic graph (DAG) data structure where each node in the graph represents a computation and edges represent data transport (files, TCP, etc).
+
 
 \subsection{GraphX}
 
-\subsection{Dryad}
+
 
 \subsection{Shark}
 
 \subsection{Pregel}
+Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al.
+
+Pregel was designed as a computational model to compute results on large graph data structures (trillions of edges) using a vertex centered approach where vertices can send and receive messages to other vertices and modify state based on contents of incoming and outgoing messages. 
+
+\subsection{Storm}
+
+\subsection{Tez}
+
+\subsection{PowerGraph}
+
+\subsection{MapReduce/Hadoop and Other Related Technologies}
+In this section, we briefly look at several higher level abstractions and technologies that work directly with distributed computation frameworks. As this is not the main focus of this review, we only provide brief descriptions of these technologies. However, we did want to include them for completeness.
+
+SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
+
+Pig\cite{olston2008pig} is an Apache project that uses a custom language \textit{Pig Latin} which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries. Pig runs on top of the MapReduce clone, Hadoop.
+
+Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
+
+Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files stored on HDFS and processing that data using MapReduce.
+
+Mahout\cite{owen2012mahout} is a machine learning framework capable of collective filtering, categorization, clustering, and parallel frequent pattern mining using a distributed cluster and producing MapReduce jobs.
+
+Yarn\cite{vavilapalli2013apache}
+
 
 \section{Conclusion}
 

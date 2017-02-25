@@ -789,7 +789,16 @@ DataFrames support most common relational operations including \textit{select}, 
 
 DataFrames are lazy by default. That is, when applications define DataFrames, only a logical plan is formulated to query the data and transform the data, but no operations take place until a terminal action is called. The logical planning is part of the Catalyst optimizer, Spark SQL's second major contribution.
 
+The main job of the Catalyst optimizer is to take queries constructed using DataFrames, and to create logical and physical plans of execution that get passed and ran on Spark using RDDs behind the scenes.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/sparksql}
+    \caption[Phases of query planning in Spark SQL.]{Phases of query planning in Spark SQL. Rounded rectangles represent Catalyst trees. \cite{armbrust2015spark}}
+    \label{fig:sparksql}
+\end{figure}
+
+Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations and applies a combination of rule and cost based optimization transformations on that tree. The tree is then used to to formulate a set of physical plans. Cost analysis optmizations are applied to the physical plans, and a single physical plan is selected. Spark SQL creates and optimizes RDDs and their transformations across Spark to execute the job and produce a result. This process is visualized in figure \ref{fig:sparksql}.
 
 \subsubsection{Tez}
 Tez, as described in the paper \textit{Apache Tez: A Unifying Framework for Modeling and Building Data Processing Applications}\cite{saha2015apache}, is ``an open-source framework designed to build data-flow driven processing runtimes''.

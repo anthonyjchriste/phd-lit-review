@@ -773,7 +773,15 @@ MLlib not only provides a wide range of algorithms on top of Spark, but also int
 MLlib also provides utilities for defining ML workflows and pipelines. MLlib specifically provides support for feature transformations, model evaluation, parameter tuning, and persisting models to and from the ML pipeline.
 
 \subsubsection{Spark SQL}
-Spark SQL provides relational processing capabilities in Spark\cite{armbrust2015spark}.
+Spark SQL as described by Armbrust et al.\cite{armbrust2015spark} in 2015 attempts to mix the declarative queries and optimizations of SQL with Spark's functional parallel programming API.
+
+Many abstractions have been built on top of MapReduce that make it easier for application developers to create MapReduce jobs and work and query distributed data sets. These include systems such as Pig or Hive, some offering declarative languages on top that compile to MapReduce jobs. Having a compiler allows for optimizations to be built into the MapReduce jobs without the programmer having to explicitly add them.
+
+What Spark SQL provides that previous system didn't, is the ability to provide a declarative language that can be optimized while also tying in very closely with Spark's big data tools and libraries. This effectively allows programmers to query data and perform Extract, Transform, Load (ETL) operations using a declarative language while at the same time providing the ability to run large scale graph processing jobs and machine learning algorithms over those queried data sets. 
+
+The main stated goals for this project include supporting relational processing within Spark programs and on external data sources, provide high performance using established DBMS techniques, support new data structures including semi-structured data and external databases, and to enable extension with advanced analytics algorithms such as graph processing and machine learning. Spark SQL accomplishes these goals by adding two major components to the Spark ecosystem. A \textit{DataFrame} API and an extensible query optimizer called \textit{Catalyst}.
+
+
 
 
 \subsubsection{Tez}

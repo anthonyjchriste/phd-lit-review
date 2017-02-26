@@ -681,10 +681,6 @@ Google successfully uses MapReduce at Google for many different purposes includi
 \subsubsection{Hadoop MapReduce}
 Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections. 
 
-\subsubsection{Chukwa}
-Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files stored on HDFS and processing that data using MapReduce.
-
-
 \subsubsection{Twister}
 Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems. 
 
@@ -863,8 +859,6 @@ GraphLab using distributed locking techniques to provide consistency when deploy
 
 Fault tolerance is provided using a distributed checkpointing mechanism similar to Pregel.
 
-\subsection{PowerGraph}
-
 \subsection{Storm}
 
 \subsection{Impala}
@@ -875,22 +869,18 @@ Apache Flink\cite{carbone2015apache} is an open source stream and batch processi
 \subsection{SawZall}
 SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
 
-
-
-
 \subsection{Hive}
 Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
-
 
 \subsection{Mahout}
 Mahout\cite{owen2012mahout} is a machine learning framework capable of collective filtering, categorization, clustering, and parallel frequent pattern mining using a distributed cluster and producing MapReduce jobs.
 
+% Things I ultimately left out
+%\subsubsection{Chukwa}
+%Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files stored on HDFS and processing that data using MapReduce. Not super relateable.
 
-
-
-
-
-
+%\subsection{PowerGraph}
+% Too damn complicated
 
 
 \section{Conclusion}

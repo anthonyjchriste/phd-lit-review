@@ -860,6 +860,25 @@ GraphLab using distributed locking techniques to provide consistency when deploy
 Fault tolerance is provided using a distributed checkpointing mechanism similar to Pregel.
 
 \subsection{Storm}
+Apache Storm\cite{storm}\cite{ballou2014}\cite{scott2016} is another stream processing engine aiming at analyzing real-time big data streams. Apache Storm fills a similar role as Spark Streaming, but takes several different approaches in the way that it handles and processes data.
+
+Unlike Spark, Storm processes individual items in a Stream while Spark processes small batches of items in a user configurable window.
+
+Unlike Storm, Spark streaming provides a much richer set of integration libraries such as graph processing, machine learning, and SQL like access on top of streams. 
+
+Storm uses the concept of a \textit{Spout} which conceptually is simply a data source. By default, Storm has a wide array of Spouts that it can accept data from. These include queues such as Kestrel, RabbitMQ, Kafka, KMS, and Amazon Kinesis. Storm also provides Spouts for log files, distributed logs, API calls, and distributed filesystems such as HDFS and others.
+
+Computations in Storm are performed using an abstraction called a \textit{Bolt}. Bolts take as input a stream(s) of data tuples and output a new stream(s) of data tuples. Bolts can be thought of as individual units of computation. Bolts are often used to perform functions such as mapping, filtering, streaming joins, streaming aggregations, communicating with databases or files, etc. Bolts run as tasks inside of a JVM on each worker node. 
+
+Bolts are mixed together to form a DAG which Storm refers to as \textit{topologies}. Distributed computations are performed by creating and laying out topologies so that input streams are constantly transformed into intermediate streams and eventually to final output stream. Once a topology is deployed, it continuously runs and acts on any input streams supplied to its spouts.
+
+Storm provides multiple flexible partitioning techniques to distribute computation over a cluster. It is up to the application developer to decide on what technique best fits their computation model. Shuffle partitioning uses a randomizing approach to evenly split data tuples across bolts. Fields partitioning will hash on a subset of attributes in the tuple grouping similar data. All partitioning replicates the same streams to all consumers. Global partitioning sends all data to a single bolt. Local partitioning sends data to bolts on the machine in which the data originated\cite{toshniwal2014storm}. 
+
+Storm is highly fault tolerant. If worker bolts die they are restarted. If an entire node goes down, bolts are restarted on other nodes. 
+
+Storm provides two daemons \textit{Nimbus} and \textit{Supervisors} which monitor nodes in a cluster and manage the resources within a cluster. These daemons are stateless and meant to fail-fast and restart fast. Failure of the daemons will cause a restart on a new machine without any downtime.
+
+Storm topologies can be defined using Thrift, an open source protocol specification language. Storm can be interacted with directly using languages that reside on the JVM and can be interacted with from any programming language over a JSON based protocol.
 
 \subsection{Impala}
 

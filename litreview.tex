@@ -705,6 +705,19 @@ Pig Latin claims to make parallel programming easier as it's a language designed
 
 Pig interprets commands issued in Pig Latin. These commands are then use to dynamically form MapReduce jobs that can be triggered from the Pig interpreter.
 
+\subsubsection{Impala}
+Impala\cite{impala} is currently an incubating Apache project with similar goals to Pig. The system is described in Kornacker et al's paper \textit{Impala: A Modern, Open-Source SQL Engine for Hadoop}\cite{kornacker2015impala}.
+
+Impala was designed to be ran on top of the Hadoop ecosystem and can work with HDFS, HBase, YARN, and other components from the ecosystem. Impala is able to naively read many of the Hadoop serialization formats including Parquet, Avro, and RCFiles.
+
+Impala does not use the MapReduce model directly, and instead uses distributed daemons spread across to cluster to access data on the distributed file systems on the distributed nodes. Impala aims to provide low latency and high concurrent reads to distributed data and does not support update or delete operations. 
+
+The front end of Impala compiles SQL into executable plans to be ran on Impala's backend. Query planning involves breaking down an SQL query by features using semantic analysis and then generating a distributed execution plan using cost estimation and other partitioning algorithms.
+
+On the backend, Impala makes use of runtime code generation using the LLVM compiler. This approach allows Impala to make use of the large number of optimizations already built into LLVM.
+
+Impala works along side YARN using a service called \textit{Llama}. Using YARN and Llama together, Impala is able to optimize the resource management needed to access data and efficiently query the cluster.
+
 \subsubsection{YARN}
 YARN, or Yet Another Resource Negotiator\cite{vavilapalli2013apache}, was designed to be the next evolution of Hadoop, sometimes referred to as Hadoop 2. YARN adds several benefits to the initial Hadoop MapReduce framework that we will discuss in this section.
 
@@ -880,7 +893,7 @@ Storm provides two daemons \textit{Nimbus} and \textit{Supervisors} which monito
 
 Storm topologies can be defined using Thrift, an open source protocol specification language. Storm can be interacted with directly using languages that reside on the JVM and can be interacted with from any programming language over a JSON based protocol.
 
-\subsection{Impala}
+
 
 \subsection{Flink}
 Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine.

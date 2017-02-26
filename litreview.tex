@@ -679,7 +679,11 @@ Google introduced several refinements on top of the basic MapReduce architecture
 Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
 
 \subsubsection{Hadoop MapReduce}
-Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections.
+Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections. 
+
+\subsubsection{Chukwa}
+Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files stored on HDFS and processing that data using MapReduce.
+
 
 \subsubsection{Twister}
 Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems. 
@@ -817,7 +821,6 @@ Graphs can be constructed and described using C++. Once constructed, it's possib
 
 Because the structure of computation is a DAG, if any vertex in the DAG fails, it's possible to re-run the failed vertex (on a new machine if needed). If there is a failure of an edge (file corruption, network error, etc), the previous vertex can re-run its execution to recreate that edge. The job manager keeps track of the state of each edge and vertex and is in charge or recognizing and reacting to failures.
 
-
 \subsection{Pregel}
 Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al. 
 
@@ -837,8 +840,28 @@ A physical Pregel cluster contains many worker nodes who contain copies of an in
 
 Fault-tolerance in Pregel is achieved through checkpointing between supersteps. In the event of a failure, all nodes, vertices, and edges reload their data from the most recent checkpoint which can be reconstructed due to the fact that data is checkpointed on GFS. 
 
+Pregel has an aggregation system where each vertex can store and lookup aggregate statistics during their superstep. Common statistics in this system include counts, mins, maxes, and so on.
+
 Google showed that Pregel can be used for large scale distributed computations by applying the framework to several distributed graph problems including PageRank, shortest path calculations, bipartite matching, and semi-clustering.
 
+\subsection{GraphLab}
+GraphLab, presented by Low et al.\cite{low2012distributed} was developed to provide a distributed computation engine for machine learning algorithms by exploiting the sparse structure and common patterns of machine learning algorithms. 
+
+GraphLab's stated contributions are a graph=based data model which represents both data and dependencies, a set of concurrent access models, modular scheduling mechanism, and aggregation framework to manage global state.
+
+GraphLab's data model consists of a direction data graph and a shared data table. Each node and edge in the graph can contain user defined data. State is shared via the shared data table. This allows all edges and nodes in the graph to read the global state at any time. This is different than the way Pregel defined state using message passing between supersteps.
+
+Computation in GraphLab is performed by an user defined update function which updates data locally or through a synch mechanism which performs global aggregation. Update is similar to map in Map reduce, but can access overlapping contexts within the graph. Updates can also trigger other vertices to run their updates as well. 
+
+GraphLab provides several consistency models since overlapping updates could potentially cause race conditions if different updates were applied to part of the graph at the same time. The consistency models provide protection against race conditions, but decrease parallelism. Full consistency will ensure atomic access to nodes, but parallelism can only be achieved on vertices that do not share common neighbors. Edge consistency is weaker, protects against some race conditions, but provides for parallelism on non-adjacent vertices. Vertex consistency is the weakest, but allows for full parallelism and the application should ensure that race conditions do not occur.
+
+GraphLab's sync mechanism will aggregate data across all vertices using fold and reduce techniques. 
+
+GraphLab programs can contain multiple update functions and the scheduler is required to determine which functions to run, when to run them, and if they are able to be ran in parallel. GraphLab does include a synchronous scheduler which ensure that all vertices are updated at the same time, similar to Pregel's approach, but GraphLab also provides schedulers for updating vertices at different times using different techniques such as task schedulers, round-robin schedulers, FIFO schedulers, and priority schedulers.
+
+GraphLab using distributed locking techniques to provide consistency when deployed on a cluster.
+
+Fault tolerance is provided using a distributed checkpointing mechanism similar to Pregel.
 
 \subsection{PowerGraph}
 
@@ -849,19 +872,24 @@ Google showed that Pregel can be used for large scale distributed computations b
 \subsection{Flink}
 Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine.
 
-
-\subsection{MapReduce/Hadoop and Other Related Technologies}
-In this section, we briefly look at several higher level abstractions and technologies that work directly with distributed computation frameworks. As this is not the main focus of this review, we only provide brief descriptions of these technologies. However, we did want to include them for completeness.
-
+\subsection{SawZall}
 SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
 
 
 
+
+\subsection{Hive}
 Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
-Chukwa\cite{rabkin2010chukwa} is a system for collecting distributed log files stored on HDFS and processing that data using MapReduce.
 
+\subsection{Mahout}
 Mahout\cite{owen2012mahout} is a machine learning framework capable of collective filtering, categorization, clustering, and parallel frequent pattern mining using a distributed cluster and producing MapReduce jobs.
+
+
+
+
+
+
 
 
 

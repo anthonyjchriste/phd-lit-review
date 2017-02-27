@@ -25,6 +25,12 @@
 \end{abstract}
 
 \pagebreak
+\vspace*{\fill}
+\begin{center}
+    \textit{To my adviser Philip.\\Thanks for the patience.}
+\end{center}
+\vspace*{\fill}
+\pagebreak
 
 \tableofcontents
 \listoffigures
@@ -58,7 +64,7 @@ One area that shows a lot of promise for distributed sensor networks with centra
 In some cases, the sensor nodes in smart grids lack powerful local computation abilities, but generally have network connections and sensing capabilities. This makes the cloud a perfect sink of information for analyzing complex power trends from a large scale distributed sensor network for smart grids\cite{botta_integration_2016}.
 
 \subsection{Rest of this Review} \label{ssec:rest-of-this-review}
-The rest of this review is structured as follows: Section \ref{sec:big-sensor-data} provides an overview of Big Sensor Data\ref{sec:big-sensor-data}. Section \ref{sec:cloud-computing} will focus on cloud computing and how its concepts can be utilized to manage distributed sensor data. Section \ref{sec:big-data-persistence-models} will examine the current state of the art distributed persistence models with an emphasis on how NoSQL and distributed persistence models can aid in managing distributed sensor data. Section \ref{sec:big-data-analytics} will examine the current state of big data analytics options in the cloud and how these can be utilized for performing analytics on distributed sensor data.
+The rest of this review is structured as follows: Section \ref{sec:big-sensor-data} provides an overview of Big Sensor Data\ref{sec:big-sensor-data}. Section \ref{sec:cloud-computing} will focus on cloud computing and how its concepts can be utilized to manage distributed sensor data. Section \ref{sec:big-data-persistence-models} will examine the current state of the art in distributed persistence models with an emphasis on how NoSQL and distributed persistence models can aid in managing distributed sensor data. Section \ref{sec:big-data-analytics} will examine the current state of big data analytics options in the cloud and how these can be utilized for performing analytics on distributed sensor data.
 
 \section{Big Data} \label{sec:big-sensor-data}
 Big Data is described using many definitions. Cox, in 1997\cite{cox_managing_1997}, provides us with one of the earliest definitions where Big Data is ``too large to be processed by standard algorithms and software on the hardware one has available to them''. He also mentions that sources for big data collections include data from remote sensors and satellite imaging in the fields of atmospheric sciences, geophysics, and healthcare.
@@ -83,10 +89,12 @@ NIST, in 2015, \cite{nist_big_data_2015} provide multiple definitions relating t
 
 Perhaps one of the most popular definitions of Big Data is characterizing data by ``the four Vs''\cite{hashem_rise_2015}, \textit{volume}, \textit{variety}, \textit{velocity}, and more recently, \textit{value}. 
 
-\subsection{The Three (Four and Five) ``V's"}
+The rest of this section will look at the V's of big data in section \ref{ssec:four-vs}, features of big data in section \ref{ssec:features-of-big-data}, and examples of big data in section \ref{ssec:examples-of-big-data}.
+
+\subsection{The Three (Four and Five) ``V's"}\label{ssec:four-vs}
 The first mention of the three V's was in Laney's 2001 article \textit{3-d data management: controlling data volume, velocity, and variety}\cite{laney20013d}. Laney describes the challenges of managing e-commerce data by categorizing the data challenges into three dimensions. First, we will review Laney's definition of the 3 V's and then we will examine updated, expanded, and more modern interpretations of the three V's and also look at the more recent ``fourth V''.
 
-Volume is the amount of data flowing into a system at any one time. Laney argues that the increased availability of the internet to anyone as an e-commerce platform greatly increases the amount of transactional data stored on server backends. Since data is a tangible asset, organizations may be reluctant to discard the data. At the same time, as the amount of data increases, each individual data point becomes less important. Laney mentions that if organizations are not willing to simply buy more online storage, that they can take the following steps to limit volume growth: implement tiered storage systems, limit data collected to only data required for current organization processes, limit analytics to statistically sampled data, eliminate redundancy in data sources, offload ``cold spots'' to cheaper storage (i.e. tape), and outsorce data management. 
+Volume is the amount of data flowing into a system at any one time. Laney argues that the increased availability of the internet to anyone as an e-commerce platform greatly increases the amount of transactional data stored on server backends. Since data is a tangible asset, organizations may be reluctant to discard the data. At the same time, as the amount of data increases, each individual data point becomes less important. Laney mentions that if organizations are not willing to simply buy more online storage, that they can take the following steps to limit volume growth: implement tiered storage systems, limit data collected to only data required for current organization processes, limit analytics to statistically sampled data, eliminate redundancy in data sources, offload ``cold spots'' to cheaper storage (i.e. tape), and outsource data management. 
 
 In terms of the increase in data volume, we can look at several statistics starting from the year 2011 and working onwards. According to Gantz et al.\cite{gantz_extracting_2011}, the world wide accumulation of data in 2011  was around 1.8 zettabytes. Then in 2013, during the D11 conference, Meeker presented that this figure had risen to 5 zettabytes across the globe. In 2014, more than 500 million photos were uploaded every day and more than 200 hours of video per minute\cite{pcast}. Tweets generate 12 terabytes of data per day\cite{sharma_extended_2015}.  Perera et al.\cite{perera_sensing_2014} expect with IoT, we could see as many as 1 billion sensors online and generating data by the year 2020. Power meters generate upwards of 350 billion readings annually\cite{sharma_extended_2015}. According to IBM\cite{ibm}, ``90\% of the world's data has been created in the past two years''. 
 
@@ -98,8 +106,8 @@ Value is often added as a fourth "V" and represents the value that can only be g
 
 Finally, veracity has been mentioned alongside the other V's\cite{sharma_extended_2015}. As data volume, variety, and velocity increase, there is a fear that the quality of the data may be hard to ascertain or quantify. Thus, veracity is a measure of the trustworthiness of the data.
 
-\subsection{Features of Big Data}
-NIST\cite{nist_big_data_2015} provides us with a list common features of big data. One common feature of big data is associated metadata. Metadata is data about data that includes information about how/when/where the data was collected and processed. Metadata describing the history of data provides for data provenance. This becomes more important as data is transfered between many processes with multiple transformations. Provenance provides a means to track how data was transferred and how it was transformed. Semantic metadata is an attempt at providing metadata with the ability of describing itself. Examples of semantic metadata include the Semantic Web\cite{berners-lee_semantic_2001} and NIST's Big Data Paradigm. 
+\subsection{Features of Big Data}\label{ssec:features-of-big-data}
+NIST\cite{nist_big_data_2015} provides us with a list common features of big data. One common feature of big data is associated metadata. Metadata is data about data that includes information about how/when/where the data was collected and processed. Metadata describing the history of data provides for data provenance. This becomes more important as data is transferred between many processes with multiple transformations. Provenance provides a means to track how data was transferred and how it was transformed. Semantic metadata is an attempt at providing metadata with the ability of describing itself. Examples of semantic metadata include the Semantic Web\cite{berners-lee_semantic_2001} and NIST's Big Data Paradigm. 
 
 Another common feature of big data is that it can often be unstructured, semi-structured, or non-relational data. Examples of these types of data include unstructured text, audio, video, and other natural phenomenon that create digitized signals from physical samples. We will review in great detail the big data persistence models in section \ref{sec:big-data-persistence-models} and big data analytical models in section \ref{sec:big-data-analytics} which will examine storage and analysis of unstructured and non-relational data. 
 
@@ -120,7 +128,7 @@ Sensor data is a type of big data that has its own defining features which futur
 
 Chen shows other examples of big data in figure \ref{fig:big-data}.
 
-\subsection{Examples of Big Data}
+\subsection{Examples of Big Data}\label{ssec:examples-of-big-data}
 Industrial equipment and engines are making use of distributed sensors that generate automated alerts when maintenance is needed\cite{destiche}.
 
 Medicare and Medicaid are using big data predictive analytics to flag fraud before claims are paid to individuals. This has saved over \$115 million dollars a year in fraudulent payout\cite{medicaid}.
@@ -133,11 +141,11 @@ In a review on smart cities and big data authored by Hashem et al.\cite{hashem_r
 
 Smart grids can improve energy generation efficiency by monitoring environmental data, analyzing the power habits of users, and measuring consumption from smart meters\cite{lai2015big}. Smart grids can also make use of big data to perform forecasting of future load generation\cite{al2015applications}. 
 
-Healthcare is another sector that can gain insights on the back of big data. One healthcare project monitored and cross correlated sensors in a neo-natal intensive care unit in order to identify factors that could lead to an infection or early warning signs of infections. Data that was collected included temperatures and heatrates. Analysis allowed doctors to make diagnosis that they would have missed otherwise without big data analytics\cite{ibm_healthcare}.  Analytics of big data in healthcare using big data mining techniques can be used for diagnosing patients, predicting illnesses, and predicting epidemics\cite{roy2007middleware}.
+Healthcare is another sector that can gain insights on the back of big data. One healthcare project monitored and cross correlated sensors in a neo-natal intensive care unit in order to identify factors that could lead to an infection or early warning signs of infections. Data that was collected included temperatures and heartrates. Analysis allowed doctors to make diagnosis that they would have missed otherwise without big data analytics\cite{ibm_healthcare}.  Analytics of big data in healthcare using big data mining techniques can be used for diagnosing patients, predicting illnesses, and predicting epidemics\cite{roy2007middleware}.
 
 Smart cities can make use of big data to decrease traffic congestion and better plan freight management by analyzing real time traffic sensors and using predictive analysis to determine traffic routes ahead of time\cite{ADMA}. Of course, Google and other companies already do this by analyzing mobile devices to determine and predict traffic congestion.
 
-Hashem et al.\cite{hashem_role_2016} cite several examples of succesful smart city projects in Stockholm, Helsinki, and Copenhagen.
+Hashem et al.\cite{hashem_role_2016} cite several examples of successful smart city projects in Stockholm, Helsinki, and Copenhagen.
 
 
 \section{Cloud Computing} \label{sec:cloud-computing}
@@ -166,6 +174,8 @@ Cloud computing includes both technical and economical advantages as discussed i
 On the economical side, computing resources are pay-per-use. Businesses can dynamically increase or decrease the computing resources they are currently leasing. This makes it possible to utilize massive amounts of computing power for short amounts of time and then scale back resources when demand isn't at its peak. Before cloud computing these same businesses would be required to manage and maintain their own hardware for peak load without the ability to dynamically scale their hardware if the peak load were to increase.
 
 On the technical side, the localization of computing resources provides for a wide variety of benefits including energy efficiency, hardware optimizations, software optimizations, and performance isolation. 
+
+The rest of this section will dive deeper into cloud computing. In section \ref{ssec:sensing-as-a-service} we look at sensing-as-a-service. In section \ref{ssec:sensor-as-a-service} we look at sensors-as-a-service. Then we example cloud deployment models in section \ref{ssec:cloud-deployment-models}. Mobile cloud computing is briefly discussed in section \ref{ssec:mobile-cloud-computing}. Finally, section \ref{ssec:issues-with-cloud-computing} will look at several issue relating to cloud computing
 
 % Other advantages of cloud computing for mobile devices and data
 % maybe a brief forway into fog and jungle computing
@@ -199,7 +209,7 @@ The \textit{sensor and sensor owners} layer includes physical sensors which can 
 
 The \textit{sensor publishers} (SP) layer manages the detection of online sensors and acts as a middle-man between sensor consumers and sensors and sensor owners. Sensors register with the publisher layer. Sensor data consumers make requests to sensor publishers for specified types of data over specified amounts of time.
 
-The \textit{extended service providers} (ESP) layer builds abstraction on top of sensor publishers. A single ESP can interact with mulitple SPs. ESPs can be used to automatically request data from multiple sensors depending on criteria provided to the ESP. This can be useful if the sensor consumer does not care about the underlying individual sensors but instead queries data at a higher level (i.e. all temperature data within a given polygon).
+The \textit{extended service providers} (ESP) layer builds abstraction on top of sensor publishers. A single ESP can interact with multiple SPs. ESPs can be used to automatically request data from multiple sensors depending on criteria provided to the ESP. This can be useful if the sensor consumer does not care about the underlying individual sensors but instead queries data at a higher level (i.e. all temperature data within a given polygon).
 
 Finally, the \textit{sensor data consumers} layer consist of data consumers who must register with the ESPs and provide valid digital certificates. Consumers can either deal with SPs directly or deal with ESPs. The benefit to dealing with SPs is reduced cost of communications with the ESP. The benefit of dealing with ESPs is higher level querying to data and the ability to query data across multiple SPs.
 
@@ -248,8 +258,6 @@ Crowdsourced data capture was an early application of MC\cite{campbell_rise_2008
 
 Collective sensing and location based services are other major drivers of MCC. Collective sensing takes advantage of the sensors on mobile devices to get a global view of some physical phenomenon. Common sensors that are used in mobile sensing includes microphones, barometers, WiFi chipsets, GPS, and others. Examples of mobile sensing include distributed weather gathering, acoustic classification like Lu et al.'s\cite{lu_soundsense:_2009} SouneSense framework which uses distributed Apple iPhones to classify audio events. There has been a surge of research relating to predicting and analyzing real time traffic congestion \cite{thiagarajan_vtrack:_2009}, \cite{herring_using_2010}, \cite{hunter_scaling_2011}. 
 
-
-
 \subsection{Issues with Cloud Computing} \label{ssec:issues-with-cloud-computing}
 The biggest issues facing cloud computing deal with security and privacy. Subashini et al.\cite{subashini_survey_2011} go into the specific security and privacy risks associated with the three major cloud deployment models. The following is largely a review of their work. 
 
@@ -267,12 +275,9 @@ Data segregation issues occur with multiple virtual resources sharing the same p
 
 Large organizations with multiple employees having access to the cloud can create data access issues. Clear policies must be defined, enforced, and updated as to which virtual resources employees have access to. 
 
-
-
 At some level, consumers are required to trust that the cloud provider they choose will implement security and privacy best practices within their cloud architecture. This does now however resolve the larger issues of security vulnerabilities within cloud software and their communication components.
 
 % Something about runaway data costs.... there was an issue once of someones AWS key being found and then their servers got pwned and were used for generating bitcoin or something
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Big Data Persistence Models} \label{sec:big-data-persistence-models}
@@ -301,13 +306,16 @@ We also believe, ease of use, maturity of the product, and community (or commerc
 
 With the above factors in mind, we can begin categorizing and analyzing several major Big Data model solutions.
 
+The rest of this section is organized as follows. We examine distributed file systems in \ref{ssec:distributed-file-systems}, distributed key-value systems in \ref{ssec:key-value}, distributed column stores in \ref{ssec:column}, distributed document data stores in \ref{ssec:document}, graph based storage solutions in section \ref{ssec:graph}, and finally look at some miscellaneous storage solutions in \ref{ssec:misc}.
 
-\subsection{Distributed File Systems}
+\subsection{Distributed File Systems}\label{ssec:distributed-file-systems}
 Before we look at specific big data storage systems, we will first examine how to store big data using file systems as file systems provide the base storage backend for distributed storage applications. Distributed file systems are not a new idea. Howard et al.\cite{howard_scale_1988} describe the scale and performance issues associated with Carnegie Mellon's distributed Unix based \textit{Andrew File System} in 1988. 
 
 Generally, distributed file systems were developed as a means of data sharing. Big data however, with the characteristic of large volume, often doesn't fit on a single disk, or a single machine, or a  single data center for that matter, required new techniques for storage of very massive data sets. The Google File System (GFS) was one of the first attempts at storing big data using a distributed file system. For that reason, this review will focus on technologies from GFS and onwards. 
 
-\subsubsection{Google File System (GFS)}
+We will review the Google File System (GFS) \ref{sssec:google-file-system}, Hadoop Distributed File System (HDFS) \ref{sssec:hadoop-distributed-file-system}, and Haystack filesystem \ref{sssec:haystack}.
+
+\subsubsection{Google File System (GFS)}\label{sssec:google-file-system}
 Ghemawat et al. at Google introduce \textit{The Google File System}\cite{ghemawat_google_2003} in 2003. Google wanted to design a distributed file system that not only provided scalability, availability, reliability, and performance, which is something that previous distributed file systems could do, but to design it in such a way that it meets the needs of a big data world. 
 
 The authors note that in large distributed systems comprised of commodity hardware, failure is the norm rather than the exception. GFS is designed in a way to provide monitoring, error detection, fault tolerance, and automatic recovery of distributed data. 
@@ -342,8 +350,7 @@ As applications changed at Google from batch processing jobs that could take hou
 
 Quinlan concedes that the initial design of relaxed consistency did cause many issues with some of there users down the road and that if he could redesign GFS he push to serialize writes from multiple clients that can ensure replicas remain consistent.
 
-
-\subsubsection{Hadoop Distributed File System (HDFS)}
+\subsubsection{Hadoop Distributed File System (HDFS)}\label{sssec:hadoop-distributed-file-system}
 The Hadoop Distributed File System (HDFS), described by Shvachko et al in their 2010 paper, \textit{The Hadoop Distributed File System}\cite{shvachko_hadoop_2010}, is a file system designed for storing big data across a distributed set of servers. HDFS was heavily influenced by GFS and aims to provide an open source alternative to GFS. HDFS acts as the backbone for a myriad of big data persistence and big data analytics frameworks including Spark, MapReduce, HBase, Pig, Hive, ZooKeeper, Avro, Chukwa, and others. A full list of software that integrates with HDFS is maintained at \url{https://hadoopecosystemtable.github.io/}\cite{hadoop-ecosystem}. 
 
 As mentioned previously, HDFS is heavily influenced by GFS. Therefor, this review of HDFS will look at the main comparisons between the two distributed file systems, drawing comparisons from Vijayakumari's 2014 comparison paper\cite{vijayakumari_comparative_2014}. The design goals of HDFS and GFS are largely the same. Support for management of large files as part of large data sets, support for batch computing and big data analytics, and high data availability.
@@ -362,7 +369,7 @@ GFS uses TCP to communicate between servers and HDFS uses an RPC protocol on top
 
 Both of these file systems server similar roles, but HDFS has a much larger impact on the academic realm due the the sheer number of other applications and frameworks that build on top of it.
 
-\subsubsection{Haystack}
+\subsubsection{Haystack}\label{sssec:haystack}
 Beaver et al. at Facebook describe a distributed object storage system for storing petabytes of photographs in their 2010 paper \textit{Finding a Needle in Haystack: Facebook's photo storage}\cite{beaver_finding_2010}. As of 2010, Facebook had stored over 260 billion images.
 
 Haystack was designed to provide high throughput rather low latency and allow Content Delivery Networks (CDNs) to deal with caching and latency issues. Similar to the other distributed file systems, Haystack also wants to provide fault tolerance with the statistical likelihood of software and hardware failures. Another requirement for Haystack is that it is cost-effective along the dimensions of cost per terabyte and normalized read rate. Haystack claims cost per terabyte are 28\% less than a similar NFS solution and provides 4x more reads per seconds than a similar NFS based approach.
@@ -388,16 +395,16 @@ The Haystack Directory servers provide mappings from logical volumes to physical
 
 On-top of these three services, Haystack provides a small set of other improvements including compaction which reclaims space of deleted photos and custom binary encoding of indexes to improve space efficiency. In the end, Facebook was able to improve on their photo storage and management by showing performance and efficiency gains over their previous NFS based approach.
 
-\subsection{Key-Value}
+\subsection{Key-Value}\label{ssec:key-value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
 
 Keys in KV systems are the unit parallelism that provide the main means of concurrency. If you want to guarantee transactions, then keys can be naively sharded across servers. This does now however provide safety of data loss in which case a system will strive to provide replication at the cost if ACID compliance. Stores and requests can usually be achieved in $O(1)$ even in distributed systems\cite{ravendb}.
 
 If the major advantages are simplicity and query response time\cite{chen_big_2014}, the major disadvantage to KV stores is the fact that they lack advanced query capabilities. The only way to query a database is by its unique key. Range based queries, secondary, and tertiary indexes are only supported by a third party systems or application code. Joins can only be performed in application code\cite{design-voldemort}.
 
-Popular KV based solutions include Dynamo, Riak, Voldemort, Redis, MemcacheDB, Ignite and others.
+This section will review Memcached \ref{sssec:memcached}, Dynamo \ref{sssec:amazons-dynamo}, and Voldemort \ref{sssec:linkedins-voldemort}.
 
-\subsubsection{Memcached}
+\subsubsection{Memcached}\label{sssec:memcached}
 One of the earliest examples of a distributed KV store is memcached\cite{fitzpatrick_distributed_2004} which was created in part to power the dynamic content of 70 distributed LiveJournal servers. The developer, Fitzpatrick, believed that scaling out on many tiny machines rather than up was the appropriate response for increased data loads. Even though they had SQL database clusters, they could not provide caching on those machines in front of the database due to limitations in address space (32-bit). Fitzpatrick realized that there is a lot of spare memory on the network, even if in small chunks, so the dream of a distributed KV store as a cache was born. Memcached had no persistence guarantees. If a server went down (hardware or software), the data would simply be deleted and any requests to that data would result in a cache miss. Since memcached is used for caching, this is not a huge concern. The real benefit of distribution is that if one server goes down, not all data is lost. It also allows users to take advantage of memory from multiple servers, which wasn't easily possible before.
 
 \begin{figure}
@@ -409,7 +416,7 @@ One of the earliest examples of a distributed KV store is memcached\cite{fitzpat
 
 Memcached is architected as a 2-way hash-table as show in figure \ref{fig:memcached}. The first layer of hashing takes place in the client library. When a client receives a lookup request for a key, that key could live on any of the memcached server instances. The client hashes the key to determine which server the data is actually on. The request if forwarded to the appropriate server, and the server performs a hash lookup on the provided key and either returns a result or creates a cache miss. This system generalizes to a distributed hash table and provided $O(1)$ lookups and stores. Memory is allocated using slab allocator which used a free list to keep track of free chunks inside of slabs. The protocol allows for fetching multiples keys at one time. 
 
-\subsubsection{Amazon's Dynamo}
+\subsubsection{Amazon's Dynamo}\label{sssec:amazons-dynamo}
 In 2007, DeCandia and others working at Amazon, released their paper \textit{Dynamo: Amazon's Highly Available Key-Valye Store}\cite{decandia_dynamo:_2007}. Decandia et al. describe Dynamo as ``a highly available key-value storage system that some of Amazon's core services use to provide an 'always-on' experience''. Dynamo prioritizes availability over consistency. In order to achieve those goals, Dynamo makes extensive use of object versioning and application-assisted conflict resolution which we will look at in greater detail in the next couple of paragraphs.
 
 As a KV store, Dynamo only provides get and put operations against a unique key and is intended to be used with small values (< 1 MB). Amazon, citing experience, mentions that ``data stores that provide ACID guarantees tend to have poor availability''. Since Amazon's goal for this data store was primarily availability, Amazon decided to use a weaker consistency model which implies that updates will eventually propagate to all peers, at some time in the future. Other guiding requirements for the design of Dynamo include: symmetry where each Dynamo process has the same set of responsibilities as all others, incremental scalability where scaling out has minimal impact on the system or its users, decentralization to avoid single points of failure, and heterogeneity where each process is tuned to the individual hardware of the server it runs on. With these design goals in mind, we next discuss how Dynamo implements these technologies.
@@ -424,7 +431,7 @@ Dynamo is used to power many of Amazon's backend services and has also been prom
 
 Riak\cite{Klophaus:2010:RCB:1900160.1900176} is an open source implementation of Amazon's Dynamo and was built using DeCandia's paper.
 
-\subsubsection{LinkedIn's Voldemort}
+\subsubsection{LinkedIn's Voldemort}\label{sssec:linkedins-voldemort}
 In 2012, Sumbaly and others from LinkedIn released their paper \textit{Serving Large-scale Batch Computed Data with Project Voldemort}\cite{Sumbaly:2012:SLB:2208461.2208479}. Voldemort has a similar design to Dynamo in that it utilizes consistent hashing to achieve data partitioning and replication. Clusters form logical rings, and depending on the provided replication factor, consistent hashing is used to select a subset of a cluster to replicate data on.
 
 Unlike Dynamo, Voldemort provides (de)serialization out of the box to/from multiple formats including JSON, strings, Java byte-code, Protobuf, Thrif, Avro, and raw byte streams. Voldemort also supports tuple based compression.
@@ -452,15 +459,13 @@ Voldemort makes extensive use of data versioning. Symbolic links point to the mo
 
 LinkedIn continues to use Voldemort to power their people you may know data set as well as their collaborative filtering datasets. They found a 10x improvement in throughput against traditional MySQL solutions at scale. Voldemort also has smaller read latencies than MySQL. The biggest improvement comes from building data sets using MapReduce which scales linearly where the MySQL approach does not scale at all.
 
-
-
-\subsection{Column}
+\subsection{Column}\label{ssec:column}
 Wide-column stores at first glance appear to be a regular SQL-like table turned on its side where each table contains a ``small'' amount of rows, but each row can contain a huge number of dynamic columns. Column stores are schemaless and support dynamically named columns. Generally, rows are the unit of parallelism in a column store and also the main means of distribution. 
 
-This section will review Google's Bigtable first as most column oriented databases are inspired by Bigtable.
+This section will review Google's Bigtable \ref{sssec:googles-bigtable} first as most column oriented databases are inspired by Bigtable. Then we will review Cassandra \ref{sssec:cassandra}, HBase \ref{sssec:hbase}, and Hypertable \ref{sssec:hypertable}.
 
-\subsubsection{Google's Bigtable}
-2008 saw the release of Chang et al's paper \textit{Bigtable: A Distributed Storage System for Structured Data}, which describes a system developed at Google for storing structured data that has the ability to scale to petabytes across thousands of low cost commodity servers and data centers. Bigtable's stated goals are wide applicability, scalability, high performance, and high availability. Bigtable is more complex than simple KV stores and in many ways it can resemble traditional relational database management systems. Similar to the other data stores we've discussed so far, Bigtable's distrubted nature means that it can not guarantee ACID-like transactions and Bigtable relaxes its views on consistency. Bigtable is also unique in that it allows its clients to determine data locality through schema creation and whether data is persisted to memory or backed by disk. These properties allow Bigtable to provide wide applicability to a a very wide range of applications both internal to google and external through Google's cloud computing infrastructure.
+\subsubsection{Google's Bigtable}\label{sssec:googles-bigtable}
+2008 saw the release of Chang et al's paper \textit{Bigtable: A Distributed Storage System for Structured Data}, which describes a system developed at Google for storing structured data that has the ability to scale to petabytes across thousands of low cost commodity servers and data centers. Bigtable's stated goals are wide applicability, scalability, high performance, and high availability. Bigtable is more complex than simple KV stores and in many ways it can resemble traditional relational database management systems. Similar to the other data stores we've discussed so far, Bigtable's distributed nature means that it can not guarantee ACID-like transactions and Bigtable relaxes its views on consistency. Bigtable is also unique in that it allows its clients to determine data locality through schema creation and whether data is persisted to memory or backed by disk. These properties allow Bigtable to provide wide applicability to a a very wide range of applications both internal to google and external through Google's cloud computing infrastructure.
 
 Bigtable's structure can be described as ``a sparse, distributed, persistent multi-dimensional sorted map'' comprised of rows, columns, and column families. Data is indexed ny a combination of row key, column key, and 64-bit timestamp. Values in Bigtable are simple binary blobs encoded as strings forcing client side applications to make their own serialization and deserialization decisions. 
 
@@ -476,7 +481,7 @@ Bigtable utilizes Google's distributed file system \textit{Google File System}(G
 
 Although very successful at Google, Chang does mention that using highly distributed systems provides for many failures including memory and network corruption, unresponsive machines, clock skew, distributed file system quotas, and hardware issues. Next we look at several advances which aim to improve on some of these flaws.
 
-\subsubsection{Cassandra}
+\subsubsection{Cassandra}\label{sssec:cassandra}
 Cassandra was designed at Facebook and is described in Lakshman et al's 2010 paper \textit{Cassandra: A Decentralized Structured Storage System}\cite{lakshman_cassandra:_2010}.
 
 Cassandra has many of the same goals as Bigtable including managing large amount of structured data spread out across many servers with an emphasis on availability in the face of errors. Cassandra also mimics Amazon's Dynamo by integrating its distributed system technologies\cite{chen_big_2014}. Cassandra is weakly consistent during concurrent operations.
@@ -491,10 +496,10 @@ A gossip based protocol is used to determine membership within a Cassandra clust
 
 Cassandra nodes use a gossip based protocol so that each node is able to route any request to the proper node within the cluster.
 
-\subsubsection{HBase}
-HBase is an open source Apache project that was designed to provide Bigtable like storage\cite{khetrapal_hbase_2006}. HBase makes use of HDFS for data storage as opposed to GFS. Unlike Bigtable, HBase provides row-level locking and trascation processing that can be turned off for performance reasons for large scale data sets\cite{chen_big_2014}.
+\subsubsection{HBase}\label{sssec:hbase}
+HBase is an open source Apache project that was designed to provide Bigtable like storage\cite{khetrapal_hbase_2006}. HBase makes use of HDFS for data storage as opposed to GFS. Unlike Bigtable, HBase provides row-level locking and transaction processing that can be turned off for performance reasons for large scale data sets\cite{chen_big_2014}.
 
-The HBase equivelent to Bigtables services are the HBaseMaster, HRedgionServer, and HBaseClient.
+The HBase equivalent to Bigtables services are the HBaseMaster, HRedgionServer, and HBaseClient.
 
 The HBaseMaster assign reads/writes to region servers, monitor the health of region servers, and perform administrative tasks such as schema changes or adding and removing of column families.
 
@@ -506,7 +511,7 @@ HBase provides strong consistency using locks and log records. Data is written t
 
 Operations in HBase can be distributed using MapReduce.
 
-\subsubsection{Hypertable}
+\subsubsection{Hypertable}\label{sssec:hypertable}
 Hypertable is another open source Bigtable clone\cite{khetrapal_hbase_2006}. What sets Hypertable apart from the other Bigtable clones is its ability to store data using multiple third party filesystems. For example, Hypertable can make use of HDFS, CloudStore, or be ran on top of a normal file system.
 
 The above can be achieved because Hypertable introduces the idea of a \textit{DFSBroker} which provides a middleware API for interacting with different file systems.
@@ -515,7 +520,7 @@ Hypertable is equipped with a distributed lock manager which provides slightly s
 
 Hypertable also provides its own query language, HQL, which allows users to create, remove, modify, and query the underlying hypertable cluster.
 
-\subsection{Document}
+\subsection{Document}\label{ssec:document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
 
 Even though documents are restricted to their underlying structure (i.e. JSON, YAML, etc), document databases do not impose a schema like traditional RDMS databases. This allows for painless transitions of data storage when the underlying data change\cite{sharma_extended_2015}.  This is of special concern with heterogeneous sensor networks which can produce large varieties of data in different and changing formats.
@@ -524,16 +529,16 @@ Document based data stores often present less of an impedance mismatch between d
 
 An advantage that document based stores have over KV stores is that its possible to create more complex queries. Not only can you query on the primary key, but its possible to create queries over any keys in the document including in sub-documents. Indexes can be created on key and sub-keys. Many document based stores provide range and geospatial based queries. This advantage alone makes document based stores a decent choice for distributed sensor data.
 
-Common document based stores include MongoDB, CouchDB, OrientDB, RavenDB, SimpleDB, 
+Document databases that we explore in this review include MongoDB \ref{sssec:mongodb}, CouchDB \ref{sssec:couchdb}, and SimpleDB \ref{sssec:simpledb}.
 
-\subsubsection{MongoDB}
+\subsubsection{MongoDB}\label{sssec:mongodb}
 MongoDB is a highly popular, distributed document-based database\cite{mongo_arch_2016}. The name mongo comes from hu\textbf{mongo}us as it was designed to work with humongous data sets. 
 
 As a document database, MongoDB stores data in data structures that resemble JSON documents. Internally, these documents are serialized into a format called \textit{BSON} which essentially provides a binary encoding over top of JSON data structures. Documents in MongoDB can contain one or more fields where each field can store strings, ints, longs, dates, floating point numbers, booleans, and 128-bit decimals. Fields can also be arrays of data, binary data, and embedded documents. This structure is very flexible and allows great customization when designing data models. Unlike relational databases, MongoDB documents tend to store all required information in a single document, a form of de-normalization.
 
 Applications must use a specific driver developed for their programming language to interact with a MongoDB\cite{chen_big_2014}.
 
-MongoDB has a very rich query model and provides support for the following types of queries. Key-value queries similar to those in key-value stores, range queries based on inequalities (less than, greater than, equal to), geospatial queries working with points, lines, circles, and polygons such as nearest neighbor or point-in-polygon, textual search queries, aggregation queries (i.e. min, max, average, etc), left-outer joins, basic graph traversal queries, and MapReduce based queires where JavaScript is moved to the data and computed at the data.
+MongoDB has a very rich query model and provides support for the following types of queries. Key-value queries similar to those in key-value stores, range queries based on inequalities (less than, greater than, equal to), geospatial queries working with points, lines, circles, and polygons such as nearest neighbor or point-in-polygon, textual search queries, aggregation queries (i.e. min, max, average, etc), left-outer joins, basic graph traversal queries, and MapReduce based queries where JavaScript is moved to the data and computed at the data.
 
 A special type of query that MongoDB supports is called \textit{covered queries} which are queries taht return results containing only indexed fields. These types of queries are very efficient as MongoDB aggressively stores indexes in memory.
 
@@ -549,7 +554,7 @@ Read consistency is configurable and clients can configure to read from replica 
 
 MongoDB supports various security techniques including authentication and authorization, auditing, and encryption. 
 
-\subsubsection{CouchDB}
+\subsubsection{CouchDB}\label{sssec:couchdb}.
 CouchDB is a moderately popular document based database that stores data uses JSON and all communication with the database is performed over a REST interface\cite{sharma_extended_2015}. CouchDB is an open source project originally developed at IBM and now part of the Apache Software Foundation. and is described in great detail in Anderson et al's book \textit{CouchDB: The Definitive Guide}\cite{anderson2010couchdb}.
 
 Interacting with the database is performed over a RESTful interface using HTTP methods passing JSON back and forth. Javascript is used as the query language of CouchDB.
@@ -562,7 +567,7 @@ CouchDB provides strong consistency on a single machine and eventual consistency
 
 Chen et al\cite{chen_big_2014}. add that updates to documents in CouchDB require downloading and re-uploading entire documents. That is, updates on individual fields are not possible. It's also possible to tune the replication mechanism to create any custom replication topology, one area that's quite different than the other members in the document database space.
 
-\subsubsection{SimpleDB}
+\subsubsection{SimpleDB}\label{sssec:simpledb}
 SimpleDB\cite{cattell_scalable_2011} is a distributed document database developed by Amazon and provided as a database as a service. It is built on top of Amazon's cloud architecture. 
 
 SimpleDB is one or the older (2007) and simpler document databases. SimpleDB does not support nested documents like MongoDB. The only operations supported by SimpleDB are \textit{select}, \textit{delete}, \textit{getAtrributes}, and \textit{putAttributes}.
@@ -573,14 +578,16 @@ SimpleDB does not provide any manual index control. Instead, you can define mult
 
 Even though SimpleDB provides a rather \textit{simple} data model, it's provided as a service build on top of Amazon's cloud architecture. This allows you to scale as needed and only pay for what you use. 
 
-\subsection{Graph}
+\subsection{Graph}\label{ssec:graph}
 Graph databases are unique in the way that they store and relate data. Graph databases specialize in efficiently managing heavily linked data\cite{cattell_scalable_2011}.
 
 Data in graph databases are related along node, edges, and properties of a graph data structure\cite{sharma_extended_2015}. Items in graph databases directly point to their nearest neighbors and graph algorithms are used to traverse the data model.
 
 Graph databases are an integral part of big data, especially in social relations. Social networks such and Twitter and Facebook store massive amount of social interactions using graph databases. This data can be used in cluster analysis or other forms to learn about the interactions and communities within a platform. Graph databases are also used in location based services for path finding or recommendation systems\cite{cattell_scalable_2011}.
 
-\subsubsection{Neo4J}
+This section will review Neo4J \ref{sssec:neo4j} and several miscellaneous graph databases \ref{sssec:misc-graph}. 
+
+\subsubsection{Neo4J}\label{sssec:neo4j}
 Neo4J is perhaps the most popular graph database. Neubauer describes Neo4J works in his article \textit{Graph Databases, NOSQL and Neo4j}\cite{neubauer_2010} as an open source project written in Java that has been optimized for graph algorithms and traversal. Neo4J is fully ACID compliant on individual machines.
 
 Neo4J provides a native Java API and also has bindings for many third party programming languages.
@@ -597,8 +604,8 @@ Neo4J was not built with high write loads in mind and therefor does not handle v
 
 Neo4J is schemaless and the nature of the data structure can be updated dynamically\cite{sharma_extended_2015}. Neo4J provides querying capabilities using a build-in query language called \textit{Cypher} which makes heavy use of pattern matching to query mine the graph data structure.
 
-\subsubsection{Misc. Graph}
-FlockDB is a specialized graph database created for managing relationship data at Twitter. There is not a ton of accedemic information of whitepapers, but it is described by Hecht and Jablonksi in literature\cite{hecht_nosql_2011} and you can also find some information on their github \url{https://github.com/twitter/flockdb}.
+\subsubsection{Misc. Graph}\label{sssec:misc-graph}
+FlockDB is a specialized graph database created for managing relationship data at Twitter. There is not a ton of academic information of whitepapers, but it is described by Hecht and Jablonksi in literature\cite{hecht_nosql_2011} and you can also find some information on their github \url{https://github.com/twitter/flockdb}.
 
 FlockDB was optimized for working with very large adjacency lists with an emphasis on velocity: fast reads, writes, updates, and deletes. FlockDB also provides the ability to build complex queries, paging through millions of results in a single page. FlockDB can restore archived edges and provide for easy replication and scaling. 
 
@@ -606,16 +613,16 @@ FlockDB was not designed for graph-walking queries or automatic sharding.
 
 OrientDB, as described by Sharma et al.\cite{sharma_extended_2015} is another open source Java based graph database. The feature that OrientDB adds on top of something like Neo4J is that it blends traditional graph databases with a document database. OrientDB makes it possible to store documents as nodes in the graph data structure.
 
-OrientDB can provide schemaless, semi-scheeless, or full schema data models providing a lot of flexible to clients at the cost of higher complexity.
+OrientDB can provide schemaless, semi-schemaless, or full schema data models providing a lot of flexible to clients at the cost of higher complexity.
 
 OrientDB is fully distributed and used a MVRB-tree build on top or red-black trees to provide full system indexing.
 
 An SQL like query language is used to query OrientDB.
 
 
-\subsection{Misc.}
-\subsubsection{Google's Spanner}
-Spanner is a unique distributed database that doesn't really fit in any of the previous categories. Spanner was developed by Google as a globally distributed database that provides transaction support and ACID grantees by means of highly synchronized servers using GPS clocks. The system is described in Corbet et al.'s paper \textit{Spanner: Google's Globablly Distributed Database}\cite{corbett_spanner:_2013}.
+\subsection{Misc.}\label{ssec:misc}
+\subsubsection{Google's Spanner}\label{sssec:googles-spanner}
+Spanner is a unique distributed database that doesn't really fit in any of the previous categories. Spanner was developed by Google as a globally distributed database that provides transaction support and ACID grantees by means of highly synchronized servers using GPS clocks. The system is described in Corbet et al.'s paper \textit{Spanner: Google's Globally Distributed Database}\cite{corbett_spanner:_2013}.
 
 Spanner was designed to provide a globally distributed database that provides replication for global availability, geographic locality, automatic client failover between replicas, automatic resharding of data across machines as number of machine change, automatic migration of data for load balancing, all with the ability to scale to millions of machines across hundreds of data centers.
 
@@ -635,12 +642,14 @@ As we saw in the previous section, big data is generally stored on distributed s
 
 With a large volume of data, it's not possible to download  entire data sets to a single server for analysis. Therefore, we need technologies that can distribute computation over many server. Because of the wide variety of data to process, we need technologies that learn about data sets and extract signals from a a large volume of noise.Because of the velocity of data, we require technologies that perform analytics on real-time streaming data.
 
-This section reviews distributed computing platforms that are able to in one way or others meet the demands of processing distributed big data.
+This section reviews distributed computing platforms that are able to in one way or others meet the demands of processing distributed big data. First we explore MapReduce and Hadoop related technologies in \ref{ssec:mapreduce-and-friends}. Then we look at several other big data analytics engines that are not part of the Hadoop ecosystem including Dryad \ref{ssec:dryad}, Pregel \ref{ssec:pregel}, GraphLab \ref{ssec:graphlab}, Storm \ref{ssec:storm}, and Flink \ref{ssec:flink}.
 
-\subsection{MapReduce and Friends}
+\subsection{MapReduce and Friends}\label{ssec:mapreduce-and-friends}
 This section contains distributed processing technologies that are related in the fact that they were inspired or somehow work with the MapReduce framework.
 
-\subsubsection{MapReduce}
+Software in this ecosystem includes Google's MapReduce \ref{sssec:mapreduce}, Hadoop's MapReduce \ref{sssec:hadoop-mapreduce}, Twister \ref{sssec:twister}, Pig \ref{sssec:pig}, Impala \ref{sssec:impala}, YARN \ref{sssec:yarn}, Spark \ref{sssec:spark}, Spark Streaming \ref{sssec:spark-streaming}, GraphX \ref{sssec:graphx}, MLlib \ref{sssec:mllib}, and Spark SQL \ref{sssec:spark-sql}.
+
+\subsubsection{MapReduce}\label{sssec:mapreduce}
 We start by reviewing MapReduce, which is instrumental in influencing the designs of many of the distributed computation frameworks that we will discuss is future sections. 
 
 MapReduce was designed at Google by Jeffrey Dean and Sanjay Chemawat and is described in their 2008 paper \textit{MapReduce: Simplified Data Processing on Large Clusters}\cite{dean2008mapreduce}.
@@ -678,11 +687,11 @@ Google introduced several refinements on top of the basic MapReduce architecture
 
 Google successfully uses MapReduce at Google for many different purposes including machine learning, clustering, data mining and extraction, web page mining, large-scale graph computations, and more.
 
-\subsubsection{Hadoop MapReduce}
-Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections. 
+\subsubsection{Hadoop MapReduce}\label{sssec:hadoop-mapreduce}
+Hadoop\cite{white2012hadoop} was designed as an open source clone built on the principals of Google's MapReduce\ref{sssec:mapreduce}. The major differences between the two ecosystems is that MapReduce was written in C++ and Hadoop was written in Java. MapReduce utilized GFS for distributed data where Hadoop uses HDFS. Hadoop also has a very large ecosystem of related technologies associated with it as we will see in future sections. 
 
-\subsubsection{Twister}
-Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce programming model that open up distributed computing to a wider class of problems. 
+\subsubsection{Twister}\label{sssec:twister}
+Twister, described by Ekanayake et al.\cite{ekanayake2010twister}, provides extensions and improvements on top of the MapReduce\ref{sssec:hadoop-mapreduce} programming model that open up distributed computing to a wider class of problems. 
 
 The authors of Twister note that general MapReduce works for a single problem and produces a single result. Their are many iterative algorithms that can be described using MapReduce including k-means, pagerank, deterministic annealing clustering, and others. Twister aims to provide a framework for performing iterative MapReduce.
 
@@ -698,15 +707,15 @@ A publish-subscribe architecture is used for all communication and data transfer
 
 Twister provides fault tolerance by allowing the ability to save application state between iterations. Similar to MapReduce, Twister does not provide fault tolerance in the case of a master server failure.
 
-\subsubsection{Pig}
+\subsubsection{Pig}\label{sssec:pig}
 Pig\cite{olston2008pig} is an Apache project that uses a custom language, \textit{Pig Latin}, which mixes the declarative style of SQL with the procedural style of map-reduce. The resulting language makes it easy to develop MapReduce jobs and run ad-hoc queries as Pig Latin compiles directly to MapReduce jobs.
 
 Pig Latin claims to make parallel programming easier as it's a language designed to exploit data parallelism. Since Pig is in charge of interpreting Pig Latin and generating MapReduce jobs, the Pig interpreter can utilize optimizations that the developer may not have thought of using MapReduce directly.
 
 Pig interprets commands issued in Pig Latin. These commands are then use to dynamically form MapReduce jobs that can be triggered from the Pig interpreter.
 
-\subsubsection{Impala}
-Impala\cite{impala} is currently an incubating Apache project with similar goals to Pig. The system is described in Kornacker et al's paper \textit{Impala: A Modern, Open-Source SQL Engine for Hadoop}\cite{kornacker2015impala}.
+\subsubsection{Impala}\label{sssec:impala}
+Impala\cite{impala} is currently an incubating Apache project with similar goals to Pig\ref{sssec:pig}. The system is described in Kornacker et al's paper \textit{Impala: A Modern, Open-Source SQL Engine for Hadoop}\cite{kornacker2015impala}.
 
 Impala was designed to be ran on top of the Hadoop ecosystem and can work with HDFS, HBase, YARN, and other components from the ecosystem. Impala is able to naively read many of the Hadoop serialization formats including Parquet, Avro, and RCFiles.
 
@@ -718,8 +727,8 @@ On the backend, Impala makes use of runtime code generation using the LLVM compi
 
 Impala works along side YARN using a service called \textit{Llama}. Using YARN and Llama together, Impala is able to optimize the resource management needed to access data and efficiently query the cluster.
 
-\subsubsection{YARN}
-YARN, or Yet Another Resource Negotiator\cite{vavilapalli2013apache}, was designed to be the next evolution of Hadoop, sometimes referred to as Hadoop 2. YARN adds several benefits to the initial Hadoop MapReduce framework that we will discuss in this section.
+\subsubsection{YARN}\label{sssec:yarn}
+YARN, or Yet Another Resource Negotiator\cite{vavilapalli2013apache}, was designed to be the next evolution of Hadoop\ref{sssec:hadoop-mapreduce}, sometimes referred to as Hadoop 2. YARN adds several benefits to the initial Hadoop MapReduce framework that we will discuss in this section.
 
 Several of the limitations YARN improves upon over the initial version Hadoop MapReduce include scaling resource and task management, providing higher availability without the single point of failure of a JobTracker node, dynamic resource utilization, capability to perform real-time analysis, message passing semantics, and ad-hoc queries.
 
@@ -727,18 +736,18 @@ YARN provides pluggable support for more computation engines other than just Map
 
 YARN provides for multi-tenancy within Hadoop. This means multiple distributed computation engines can be running at the same time on the same Hadoop cluster, where before it was only possible to run one job at a time.
 
-YARN at its core is a resource manager which tracks, enforces allocation, and arbitrates contention among tenants in the system. The resource manager provides other services including monitoring of workloads, security, managing availability, and providing plugable computation frameworks. YARN is designed to provide cluster resource management and scale to thousands of servers. YARN is further designed to handle dynamic scaling of clusters.
+YARN at its core is a resource manager which tracks, enforces allocation, and arbitrates contention among tenants in the system. The resource manager provides other services including monitoring of workloads, security, managing availability, and providing pluggable computation frameworks. YARN is designed to provide cluster resource management and scale to thousands of servers. YARN is further designed to handle dynamic scaling of clusters.
 
 The other half of YARN is the application master whose job it is to coordinate the logical plan of a single job by requesting resources from the resource manager.
 
 YARN is completely backwards compatible and existing MapReduce jobs will run on top of YARN.
 
-\subsubsection{Spark}
+\subsubsection{Spark}\label{sssec:spark}
 Apache Spark, described by Zaharia et al. in their paper \textit{Spark: Cluster Computing with Working Sets}\cite{zaharia_spark:_2010}, is described as ``a fast and general engine for large-scale data processing''.
 
-Spark builds on Hadoop by optimizing in-memory operations and storing intermediate results for use in iterative applications. Spark also provides the concept of a new data type, the \textit{resilient distributed datasets (RDDs)}.
+Spark builds on Hadoop\ref{sssec:yarn} by optimizing in-memory operations and storing intermediate results for use in iterative applications. Spark also provides the concept of a new data type, the \textit{resilient distributed data sets (RDDs)}.
 
-The authors mention that MapReduce fails in two major areas. The first area is iterative jobs which frameworks like MapReduce do not support. It's possible to emulate iterative jobs by running multiple jobs, but each job must reload all data from disk. Spark provides a means to store intermediate results between runs. The second issue with tradional MapReduce systems is the latency involved with running interactive analytics on top of Hadoop. The authors note that Pig and Hive can make these ad-hoc queries easier, but there is still a large latency between queries as each query is its own MapReduce job.
+The authors mention that MapReduce fails in two major areas. The first area is iterative jobs which frameworks like MapReduce do not support. It's possible to emulate iterative jobs by running multiple jobs, but each job must reload all data from disk. Spark provides a means to store intermediate results between runs. The second issue with traditional MapReduce systems is the latency involved with running interactive analytics on top of Hadoop. The authors note that Pig and Hive can make these ad-hoc queries easier, but there is still a large latency between queries as each query is its own MapReduce job.
 
 The main abstraction that Spark provides is the RDD. RDDs contain collection of read-only objected that are automatically partitioned across machines in a cluster. RDDs can be automatically rebuilt in the event that partition or node is lost. 
 
@@ -748,8 +757,8 @@ Once data is represented as an RDD, there are many parallel operations that can 
 
 The Spark API mostly contains functional transformations and reductions that are familiar to many programmers. This aids in the development of distributed computation of massive data sets by delegating the scheduling, data management, and computational pipeline to Spark. Programmers can focus on the algorithm and not worry about the details of distributed computation as they might need to working directly with MapReduce.
 
-\subsubsection{Spark Streaming}
-Spark Streaming is an extension to Spark which allows for the computation and windowing of real-time streaming data. This extension is described in detail in Zaharia et al.'s 2012 paper \textit{Discretized Streams: An Efficient and Fault-Tolerant Model for Stream Processing on Large Clusters}\cite{zaharia2012discretized}.
+\subsubsection{Spark Streaming}\label{sssec:spark-streaming}
+Spark Streaming is an extension to Spark\ref{sssec:spark} which allows for the computation and windowing of real-time streaming data. This extension is described in detail in Zaharia et al.'s 2012 paper \textit{Discretized Streams: An Efficient and Fault-Tolerant Model for Stream Processing on Large Clusters}\cite{zaharia2012discretized}.
 
 The stated goals of Spark Streaming are to provide scalability to hundred of nodes, low replication overhead, second-scale latency, and second-scale recovery from faults of stragglers.
 
@@ -761,8 +770,8 @@ Each D-Stream contains a series of values inside of a small time window. These v
 
 The hybrid batch real-time processing notion of Spark Streaming works well for algorithms that require sliding window computations over a set of data, as each batch can be configured to be one view over that sliding window.
 
-\subsubsection{GraphX}
-GraphX\cite{xin_graphx:_2013} is a graph processing framework built on top of Apache Spark. GraphX aims to provide the advantages of data-parallel and graph-parallel systems into a single framework.
+\subsubsection{GraphX}\label{sssec:graphx}
+GraphX\cite{xin_graphx:_2013} is a graph processing framework built on top of Apache Spark\ref{sssec:spark}. GraphX aims to provide the advantages of data-parallel and graph-parallel systems into a single framework.
 
 GraphX extends on Spark's concept of an RDD by adding a resilient distributed graph (RDG). An RDG is immutable and transformations on one RDG result in the creation of a new RDG. Similar to Spark, this allows the state to me maintained between different versions of RDGs.
 
@@ -770,12 +779,12 @@ GraphX uses edge cutting and vertex cutting heuristics to achieve efficient part
 
 By taking a data-parallel approach to graph processing GraphX provides the following parallel operations on RDGs, retrieve lists of vertices and edges, filter vertices and edges by predicate, create subgraphs from predicate, map transformations on vertices and edges, and aggregate date about neighbors.
 
-GraphX also provides a graph parallel approach to processing by showing that data-parallel transformations can be mapped to graph-parallel operations. GraphX proves this by implementing the entirety of both Pregel and PowerGraph usinng RDGs in less than 20 lines of code each.
+GraphX also provides a graph parallel approach to processing by showing that data-parallel transformations can be mapped to graph-parallel operations. GraphX proves this by implementing the entirety of both Pregel and PowerGraph using RDGs in less than 20 lines of code each.
 
 The authors mention that future work will involve creating a declarative language ontop of GraphX for constructing and working with RDGs.
 
-\subsubsection{MLlib}
-MLlib is a machine learning libray designed to work on top of Spark. It is described by Meng et al. in their 2016 paper \textit{MLlib: Machine Learning in Apache Spark}\cite{meng2016mllib}. MLlib was designed to provide machine learning capabilities to very large data sets taking advantage of machine learning algorithms that exploit data or model parallelism.
+\subsubsection{MLlib}\label{sssec:mllib}
+MLlib is a machine learning library designed to work on top of Spark. It is described by Meng et al. in their 2016 paper \textit{MLlib: Machine Learning in Apache Spark}\cite{meng2016mllib}. MLlib was designed to provide machine learning capabilities to very large data sets taking advantage of machine learning algorithms that exploit data or model parallelism.
 
 Spark provides great support for distributed iterative algorithms by efficiently storing intermediate results in memory to be used in future iterations. By building MLlib on top of Spark, any improvements to efficiency in Spark will get passed on to the ML algorithms.
 
@@ -785,7 +794,7 @@ MLlib not only provides a wide range of algorithms on top of Spark, but also int
 
 MLlib also provides utilities for defining ML workflows and pipelines. MLlib specifically provides support for feature transformations, model evaluation, parameter tuning, and persisting models to and from the ML pipeline.
 
-\subsubsection{Spark SQL}
+\subsubsection{Spark SQL}\label{sssec:spark-sql}
 Spark SQL as described by Armbrust et al.\cite{armbrust2015spark} in 2015 attempts to mix the declarative queries and optimizations of SQL with Spark's functional parallel programming API.
 
 Many abstractions have been built on top of MapReduce that make it easier for application developers to create MapReduce jobs and work and query distributed data sets. These include systems such as Pig or Hive, some offering declarative languages on top that compile to MapReduce jobs. Having a compiler allows for optimizations to be built into the MapReduce jobs without the programmer having to explicitly add them.
@@ -813,11 +822,11 @@ The main job of the Catalyst optimizer is to take queries constructed using Data
     \label{fig:sparksql}
 \end{figure}
 
-Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations and applies a combination of rule and cost based optimization transformations on that tree. The tree is then used to to formulate a set of physical plans. Cost analysis optmizations are applied to the physical plans, and a single physical plan is selected. Spark SQL creates and optimizes RDDs and their transformations across Spark to execute the job and produce a result. This process is visualized in figure \ref{fig:sparksql}.
+Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations and applies a combination of rule and cost based optimization transformations on that tree. The tree is then used to to formulate a set of physical plans. Cost analysis optimizations are applied to the physical plans, and a single physical plan is selected. Spark SQL creates and optimizes RDDs and their transformations across Spark to execute the job and produce a result. This process is visualized in figure \ref{fig:sparksql}.
 
 Catalyst and Spark SQL were designed with extension in mind. Developers can add external data sources with varying degrees of optimization and allow those data sources to be queries using the DataFrame API. As of the time of this paper, this technique was already utilized to create data source adapters to CSV files, Avro files, Parquet files, and JDBC data sources such as RDBMS.
 
-\subsection{Dryad}
+\subsection{Dryad}\label{ssec:dryad}
 Dryad is a distributed execution engine developed at Microsoft Research by Isard et al. and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
 
 Dryad is described as a ``general-purpose distributed execution engine for coarse-grain data-parallel applications''.
@@ -830,7 +839,7 @@ Graphs can be constructed and described using C++. Once constructed, it's possib
 
 Because the structure of computation is a DAG, if any vertex in the DAG fails, it's possible to re-run the failed vertex (on a new machine if needed). If there is a failure of an edge (file corruption, network error, etc), the previous vertex can re-run its execution to recreate that edge. The job manager keeps track of the state of each edge and vertex and is in charge or recognizing and reacting to failures.
 
-\subsection{Pregel}
+\subsection{Pregel}\label{ssec:pregel}
 Pregal was designed at Google and is described in the 2010 paper \textit{Pregel: A System for Large-Scale Graph Processing}\cite{malewicz_pregel:_2010} by Malewicz et al. 
 
 Pregel was designed as a computational model to compute results on large graph data structures (trillions of edges) using a vertex centered approach where vertices can send and receive messages to other vertices and modify state based on contents of incoming and outgoing messages. 
@@ -853,29 +862,29 @@ Pregel has an aggregation system where each vertex can store and lookup aggregat
 
 Google showed that Pregel can be used for large scale distributed computations by applying the framework to several distributed graph problems including PageRank, shortest path calculations, bipartite matching, and semi-clustering.
 
-\subsection{GraphLab}
+\subsection{GraphLab}\label{ssec:graphlab}
 GraphLab, presented by Low et al.\cite{low2012distributed} was developed to provide a distributed computation engine for machine learning algorithms by exploiting the sparse structure and common patterns of machine learning algorithms. 
 
-GraphLab's stated contributions are a graph=based data model which represents both data and dependencies, a set of concurrent access models, modular scheduling mechanism, and aggregation framework to manage global state.
+GraphLab's stated contributions are a graph-based data model which represents both data and dependencies, a set of concurrent access models, modular scheduling mechanism, and aggregation framework to manage global state.
 
 GraphLab's data model consists of a direction data graph and a shared data table. Each node and edge in the graph can contain user defined data. State is shared via the shared data table. This allows all edges and nodes in the graph to read the global state at any time. This is different than the way Pregel defined state using message passing between supersteps.
 
-Computation in GraphLab is performed by an user defined update function which updates data locally or through a synch mechanism which performs global aggregation. Update is similar to map in Map reduce, but can access overlapping contexts within the graph. Updates can also trigger other vertices to run their updates as well. 
+Computation in GraphLab is performed by an user defined update function which updates data locally or through a synchronization mechanism which performs global aggregation. Update is similar to map in Map reduce, but can access overlapping contexts within the graph. Updates can also trigger other vertices to run their updates as well. 
 
 GraphLab provides several consistency models since overlapping updates could potentially cause race conditions if different updates were applied to part of the graph at the same time. The consistency models provide protection against race conditions, but decrease parallelism. Full consistency will ensure atomic access to nodes, but parallelism can only be achieved on vertices that do not share common neighbors. Edge consistency is weaker, protects against some race conditions, but provides for parallelism on non-adjacent vertices. Vertex consistency is the weakest, but allows for full parallelism and the application should ensure that race conditions do not occur.
 
 GraphLab's sync mechanism will aggregate data across all vertices using fold and reduce techniques. 
 
-GraphLab programs can contain multiple update functions and the scheduler is required to determine which functions to run, when to run them, and if they are able to be ran in parallel. GraphLab does include a synchronous scheduler which ensure that all vertices are updated at the same time, similar to Pregel's approach, but GraphLab also provides schedulers for updating vertices at different times using different techniques such as task schedulers, round-robin schedulers, FIFO schedulers, and priority schedulers.
+GraphLab programs can contain multiple update functions and the scheduler is required to determine which functions to run, when to run them, and if they are able to be ran in parallel. GraphLab does include a synchronous scheduler which ensure that all vertices are updated at the same time, similar to Pregel's\ref{ssec:pregel} approach, but GraphLab also provides schedulers for updating vertices at different times using different techniques such as task schedulers, round-robin schedulers, FIFO schedulers, and priority schedulers.
 
 GraphLab using distributed locking techniques to provide consistency when deployed on a cluster.
 
 Fault tolerance is provided using a distributed checkpointing mechanism similar to Pregel.
 
-\subsection{Storm}
+\subsection{Storm}\label{ssec:storm}
 Apache Storm\cite{storm}\cite{ballou2014}\cite{scott2016} is another stream processing engine aiming at analyzing real-time big data streams. Apache Storm fills a similar role as Spark Streaming, but takes several different approaches in the way that it handles and processes data.
 
-Unlike Spark, Storm processes individual items in a Stream while Spark processes small batches of items in a user configurable window.
+Unlike Spark\ref{sssec:spark-streaming}, Storm processes individual items in a Stream while Spark processes small batches of items in a user configurable window.
 
 Unlike Storm, Spark streaming provides a much richer set of integration libraries such as graph processing, machine learning, and SQL like access on top of streams. 
 
@@ -893,12 +902,12 @@ Storm provides two daemons \textit{Nimbus} and \textit{Supervisors} which monito
 
 Storm topologies can be defined using Thrift, an open source protocol specification language. Storm can be interacted with directly using languages that reside on the JVM and can be interacted with from any programming language over a JSON based protocol.
 
-\subsection{Flink}
+\subsection{Flink}\label{ssec:flink}
 Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine that servers similar purposes to Spark Streaming and Storm. Flink claims to provide better throughput than Storm while also offering several different streaming data models.
 
-One thing that sets Flink apart from Storm is that is uses something called \textit{event time semantics}. Instead processing data using the timestamps of arrival, Flink processes data using the event time of the data. In the case of data being delayed or arriving out of order, Flink is able to sort of the data and perform analysis using event time.
+One thing that sets Flink apart from Storm\ref{ssec:storm} is that is uses something called \textit{event time semantics}. Instead processing data using the timestamps of arrival, Flink processes data using the event time of the data. In the case of data being delayed or arriving out of order, Flink is able to sort of the data and perform analysis using event time.
 
-Flink also supports multiple windowing algorithms. Where Spark focuses on windowing by time, Flink allows windows to be created using counts, time, or user defined functions. The windowing model is very flexible making it easier to implement and model real world problems.
+Flink also supports multiple windowing algorithms. Where Spark\ref{sssec:spark-streaming} focuses on windowing by time, Flink allows windows to be created using counts, time, or user defined functions. The windowing model is very flexible making it easier to implement and model real world problems.
 
 Flink operates on two types of datasets. Unbounded datasets are your typical stream that are continuously appended to. Bounded datasets are finite and unchanging. Flink hopes to bridge the gap between analysis of both streaming and static data sets.
 
@@ -922,7 +931,7 @@ Flink supports efficient distributed checkpointing to provide fault tolerance. R
 %\subsection{Hive}
 %Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:conclusion}
 
 \bibliography{litreview}
 \bibliographystyle{plain}

@@ -893,19 +893,21 @@ Storm provides two daemons \textit{Nimbus} and \textit{Supervisors} which monito
 
 Storm topologies can be defined using Thrift, an open source protocol specification language. Storm can be interacted with directly using languages that reside on the JVM and can be interacted with from any programming language over a JSON based protocol.
 
-
-
 \subsection{Flink}
-Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine.
+Apache Flink\cite{carbone2015apache} is an open source stream and batch processing engine that servers similar purposes to Spark Streaming and Storm. Flink claims to provide better throughput than Storm while also offering several different streaming data models.
 
-\subsection{SawZall}
-SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
+One thing that sets Flink apart from Storm is that is uses something called \textit{event time semantics}. Instead processing data using the timestamps of arrival, Flink processes data using the event time of the data. In the case of data being delayed or arriving out of order, Flink is able to sort of the data and perform analysis using event time.
 
-\subsection{Hive}
-Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
+Flink also supports multiple windowing algorithms. Where Spark focuses on windowing by time, Flink allows windows to be created using counts, time, or user defined functions. The windowing model is very flexible making it easier to implement and model real world problems.
 
-\subsection{Mahout}
-Mahout\cite{owen2012mahout} is a machine learning framework capable of collective filtering, categorization, clustering, and parallel frequent pattern mining using a distributed cluster and producing MapReduce jobs.
+Flink operates on two types of datasets. Unbounded datasets are your typical stream that are continuously appended to. Bounded datasets are finite and unchanging. Flink hopes to bridge the gap between analysis of both streaming and static data sets.
+
+Flink provides both a functional programming model similar to Spark but also provides constructs for passing state around. 
+
+Computations in Flink are represented as a DAG that Flink calls \textit{Dataflow Graphs}. Each dataflow contains stateful operators as vertices and data streams represented as edges. The graph is then executed in a data parallel fashion. 
+
+Flink supports efficient distributed checkpointing to provide fault tolerance. Recovery from errors means applying the most recent checkpoint state to all operators
+
 
 % Things I ultimately left out
 %\subsubsection{Chukwa}
@@ -914,6 +916,11 @@ Mahout\cite{owen2012mahout} is a machine learning framework capable of collectiv
 %\subsection{PowerGraph}
 % Too damn complicated
 
+%\subsection{SawZall}
+%SawZall\cite{pike2005interpreting} was created at Google by Rob Pike and others as a procedural language that automates the creation of MapReduce tasks over regularly structured but distributed data sets. 
+
+%\subsection{Hive}
+%Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
 \section{Conclusion}
 

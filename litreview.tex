@@ -6,6 +6,8 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{hyperref}
+\usepackage{tabulary}
+\usepackage{adjustbox}
 %\usepackage[margin=1.5in]{geometry}
 \usepackage{microtype}
 
@@ -26,6 +28,7 @@
 
 \tableofcontents
 \listoffigures
+\listoftables
 \pagebreak
 
 \section{Introduction} \label{sec:introduction}
@@ -389,6 +392,13 @@ The Haystack Directory servers provide mappings from logical volumes to physical
 
 On-top of these three services, Haystack provides a small set of other improvements including compaction which reclaims space of deleted photos and custom binary encoding of indexes to improve space efficiency. In the end, Facebook was able to improve on their photo storage and management by showing performance and efficiency gains over their previous NFS based approach.
 
+\subsubsection{Comparison of Distributed File Systems}
+At a high level GFS and HDFS are very similar\cite{khalidcomparison}. GFS is proprietary and used inside of Google and supports many of their distributed applications. HDFS is open source and similarly has a very large ecosystem of software designed around it including both persistence and analytics. 
+
+HDFS was  designed to be an open source clone of GFS and their high level architectures are essentially the same. HDFS provides a permissions model that is more similar to Unix like permissions where Google uses a proprietary model.
+
+Haystack was optimized for high throughput and provides efficiency by utilizing CDNs. Haystack was designed specifically for photo storage at Facebook where GFS and HDFS are both much more general purpose and have many other use cases (as evidenced by the rest of this report).
+
 \subsection{Key-Value}\label{ssec:key-value}
 The simplest data model for distributed storage is likely the Key-Value (KV) data model \cite{weber_nosql_2010}. In this model, every piece of data stored is indexed by a unique primary key. Queries to that item all happen via its key to access the value. Values in a KV system can be treated as blobs and the content of the value is irrelevant to the semantics of KV stores. KV systems are popular due to their simplicity and ease of scaling.
 
@@ -453,6 +463,40 @@ Voldemort makes extensive use of data versioning. Symbolic links point to the mo
 
 LinkedIn continues to use Voldemort to power their people you may know data set as well as their collaborative filtering datasets. They found a 10x improvement in throughput against traditional MySQL solutions at scale. Voldemort also has smaller read latencies than MySQL. The biggest improvement comes from building data sets using MapReduce which scales linearly where the MySQL approach does not scale at all.
 
+\subsubsection{Comparison of Key-Value Stores}
+Memcached is one of the first distributed key-value stores. Unlike Dynamo and Voldemort, the distributed nature of Memcahced does not provide for high availability. Instead, the distributed nature allows Memcached to scale to many machines as a means of accessing more memory to store values in. Memcached itself does not provide any replication or cross server communication. Dynamo and Voldemort provide high availability, replication, and throughput at the cost of consistency. Memcached is very similar to a distributed hash table with multi-level lookups where Dynamo and Voldemort provide more robust cosistent hashing based solutions for storing, querying, and modifying data. Voldemort provides several extensions on top of Dynamo including build-in compression and (de)-serialization.
+
+
+
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.3\linewidth}{|c|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{Memcached} & \textbf{Dynamo} & \textbf{Voldemort} \\
+            \hline 
+            \textbf{Consistency} & Fully atomic & Weak / eventual & Strict or eventual \\ 
+            \hline 
+            \textbf{Indexing} & Index by key & Index by key & Index by key / Relationship indices computed offline via MapReduce \\ 
+            \hline 
+            \textbf{Architecture} & 2-way hash table & Ring of nodes with coordinator / preference lists & Ring of nodes with coordinator / preference lists \\ 
+            \hline 
+            \textbf{Availability} & None & High & High \\ 
+            \hline 
+            \textbf{Replication} & None & Optimistic with consistent hashing & Consistent hashing \\ 
+            \hline 
+            \textbf{Operations} & get / put & get / put & get / put \\ 
+            \hline 
+            \textbf{Versioning} & No & Yes & Yes \\ 
+            \hline 
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{Comparison of key-value stores}
+    \label{table:kv-comparison}
+\end{table}
+
+Table \ref{table:kv-comparison} displays high level comparisons between the key-value stores that we reviewed.
+
+
 \subsection{Column}\label{ssec:column}
 Wide-column stores at first glance appear to be a regular SQL-like table turned on its side where each table contains a ``small'' amount of rows, but each row can contain a huge number of dynamic columns. Column stores are schemaless and support dynamically named columns. Generally, rows are the unit of parallelism in a column store and also the main means of distribution. 
 
@@ -514,6 +558,8 @@ Hypertable is equipped with a distributed lock manager which provides slightly s
 
 Hypertable also provides its own query language, HQL, which allows users to create, remove, modify, and query the underlying hypertable cluster.
 
+\subsubsection{Comparison of Column Stores}
+
 \subsection{Document}\label{ssec:document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
 
@@ -572,6 +618,8 @@ SimpleDB does not provide any manual index control. Instead, you can define mult
 
 Even though SimpleDB provides a rather \textit{simple} data model, it's provided as a service build on top of Amazon's cloud architecture. This allows you to scale as needed and only pay for what you use. 
 
+\subsubsection{Comparison of Document Stores}
+
 \subsection{Graph}\label{ssec:graph}
 Graph databases are unique in the way that they store and relate data. Graph databases specialize in efficiently managing heavily linked data\cite{cattell_scalable_2011}.
 
@@ -613,6 +661,8 @@ OrientDB is fully distributed and used a MVRB-tree build on top or red-black tre
 
 An SQL like query language is used to query OrientDB.
 
+
+\subsubsection{Comparison of Graph Stores}
 
 \subsection{Other Distributed Databses}\label{ssec:misc}
 \subsubsection{Google's Spanner}\label{sssec:googles-spanner}
@@ -669,7 +719,7 @@ The paper provides a simple example to explain MapReduce in terms of a word URL 
     \label{fig:mr-execution}
 \end{figure}
 
-The actual architecture of splitting up the work is described in great detail in Dean's paper. Here is a short summary. A MapReduce job is initiated by a user library which defines the input data, map task, and reduce task. This job is replicated on many nodes in a cluster. One of the nodes is elected the mater node who assigns $M$ map tasks and $R$ reduce tasks over idle workers. Worker nodes with assigned map tasks transforms their input data with the user defined function and buffers intermediate pairs in memory and sometimes to disk. Worker nodes that were assigned reduce are provided the locations of intermediate data , groups together pairs with the same key, and reduces the values based on the user provided function. The results are these reductions are stored in $R$ files that have to be then managed by the user application. This process is shown in figure \ref{fig:mr-execution}.
+The actual architecture of splitting up the work is described in great detail in Dean's paper. Here is a short summary. A MapReduce job is initiated by a user library which defines the input data, map task, and reduce task. This job is replicated on many nodes in a cluster. One of the nodes is elected the master node who assigns $M$ map tasks and $R$ reduce tasks over idle workers. Worker nodes with assigned map tasks transforms their input data with the user defined function and buffers intermediate pairs in memory and sometimes to disk. Worker nodes that were assigned reduce are provided the locations of intermediate data , groups together pairs with the same key, and reduces the values based on the user provided function. The results are these reductions are stored in $R$ files that have to be then managed by the user application. This process is shown in figure \ref{fig:mr-execution}.
 
 The elected master node has several other duties including storing the state of each map and reduce task and also storing the locations of the intermediate pairs produced by the map task.
 
@@ -820,6 +870,8 @@ Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations
 
 Catalyst and Spark SQL were designed with extension in mind. Developers can add external data sources with varying degrees of optimization and allow those data sources to be queries using the DataFrame API. As of the time of this paper, this technique was already utilized to create data source adapters to CSV files, Avro files, Parquet files, and JDBC data sources such as RDBMS.
 
+\subsubsection{Comparisons of MapReduce Related Technologies}
+
 \subsection{Dryad}\label{ssec:dryad}
 Dryad is a distributed execution engine developed at Microsoft Research by Isard et al.\ and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
 
@@ -924,6 +976,8 @@ Flink supports efficient distributed checkpointing to provide fault tolerance. R
 
 %\subsection{Hive}
 %Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
+
+\subsection{Comparisons of Big Data Analytics Software}
 
 \section{Conclusion}\label{sec:conclusion}
 This review looked at management of large-scale distributed data with an emphasis on big data collected from distributed sensor networks. 

@@ -464,9 +464,11 @@ Voldemort makes extensive use of data versioning. Symbolic links point to the mo
 LinkedIn continues to use Voldemort to power their people you may know data set as well as their collaborative filtering datasets. They found a 10x improvement in throughput against traditional MySQL solutions at scale. Voldemort also has smaller read latencies than MySQL. The biggest improvement comes from building data sets using MapReduce which scales linearly where the MySQL approach does not scale at all.
 
 \subsubsection{Comparison of Key-Value Stores}
-Memcached is one of the first distributed key-value stores. Unlike Dynamo and Voldemort, the distributed nature of Memcahced does not provide for high availability. Instead, the distributed nature allows Memcached to scale to many machines as a means of accessing more memory to store values in. Memcached itself does not provide any replication or cross server communication. Dynamo and Voldemort provide high availability, replication, and throughput at the cost of consistency. Memcached is very similar to a distributed hash table with multi-level lookups where Dynamo and Voldemort provide more robust cosistent hashing based solutions for storing, querying, and modifying data. Voldemort provides several extensions on top of Dynamo including build-in compression and (de)-serialization.
+Memcached is one of the first distributed key-value stores. Unlike Dynamo and Voldemort, the distributed nature of Memcahced does not provide for high availability. Instead, the distributed nature allows Memcached to scale to many machines as a means of accessing more memory to store values in. 
 
+Memcached itself does not provide any replication or cross server communication. Dynamo and Voldemort provide high availability, replication, and throughput at the cost of consistency. 
 
+Memcached is very similar to a distributed hash table with multi-level lookups where Dynamo and Voldemort provide more robust cosistent hashing based solutions for storing, querying, and modifying data. Voldemort provides several extensions on top of Dynamo including build-in compression and (de)-serialization.
 
 \begin{table}
     \begin{adjustbox}{center} 
@@ -477,8 +479,6 @@ Memcached is one of the first distributed key-value stores. Unlike Dynamo and Vo
             \textbf{Consistency} & Fully atomic & Weak / eventual & Strict or eventual \\ 
             \hline 
             \textbf{Indexing} & Index by key & Index by key & Index by key / Relationship indices computed offline via MapReduce \\ 
-            \hline 
-            \textbf{Architecture} & 2-way hash table & Ring of nodes with coordinator / preference lists & Ring of nodes with coordinator / preference lists \\ 
             \hline 
             \textbf{Availability} & None & High & High \\ 
             \hline 
@@ -505,7 +505,7 @@ This section will review Google's Bigtable \ref{sssec:googles-bigtable} first as
 \subsubsection{Google's Bigtable}\label{sssec:googles-bigtable}
 2008 saw the release of Chang et al's paper \textit{Bigtable: A Distributed Storage System for Structured Data}, which describes a system developed at Google for storing structured data that has the ability to scale to petabytes across thousands of low cost commodity servers and data centers. Bigtable's stated goals are wide applicability, scalability, high performance, and high availability. Bigtable is more complex than simple KV stores and in many ways it can resemble traditional relational database management systems. Similar to the other data stores we've discussed so far, Bigtable's distributed nature means that it can not guarantee ACID-like transactions and Bigtable relaxes its views on consistency. Bigtable is also unique in that it allows its clients to determine data locality through schema creation and whether data is persisted to memory or backed by disk. These properties allow Bigtable to provide wide applicability to a a very wide range of applications both internal to google and external through Google's cloud computing infrastructure.
 
-Bigtable's structure can be described as ``a sparse, distributed, persistent multi-dimensional sorted map'' comprised of rows, columns, and column families. Data is indexed ny a combination of row key, column key, and 64-bit timestamp. Values in Bigtable are simple binary blobs encoded as strings forcing client side applications to make their own serialization and deserialization decisions. 
+Bigtable's structure can be described as ``a sparse, distributed, persistent multi-dimensional sorted map'' comprised of rows, columns, and column families. Data is indexed by a combination of row key, column key, and 64-bit timestamp. Values in Bigtable are simple binary blobs encoded as strings forcing client side applications to make their own serialization and deserialization decisions. 
 
 Rows are indexed by strings and reads/writes to individual rows are atomic. Ranges of rows in a table are called \textit{tablets}. Tablets are the main unit of parallelism and load balancing within Bigtable. In this structure, reads to rows can be made more efficient by keeping row ranges small and returning a small number of tablets (which generally come from a small amount of co-located machines). Each row can contain a small number of column families (on the order of hundreds), and each column family can contain arbitrarily unlimited columns. This type of data model flips the traditional row-column model of RDMSs on its head, using columns as the main means of expansion rather than rows.
 
@@ -559,6 +559,41 @@ Hypertable is equipped with a distributed lock manager which provides slightly s
 Hypertable also provides its own query language, HQL, which allows users to create, remove, modify, and query the underlying hypertable cluster.
 
 \subsubsection{Comparison of Column Stores}
+In the previous sections we reviewed Bigtable, Cassandra, HBase, and Hypertable. In this section, we will briefly compare and contract these technologies. Bigtable was designed at Google is and generally considered to be the inspiration that many of the later column stores are based on.
+
+Cassandra was designed at Facebook and uses a similar storage model to Bigtable, but also provides the concept of a super column family which groups multiple column families. This provides more expressive query possibilities in Cassandra compared to Bigtable.
+
+HBase is another clone of Bigtable and is built on top of HDFS. One feature that HBase provides over Bigtable is row level locking which provides atomic operations on individual rows. This gives HBase stronger consistency in certain scenarios.
+
+Hypertable is yet another clone of Bigtable. It's main contribution is providing the ability to store data in multiple 3rd party backends such as HDFS, CloudStore,  and others.
+
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.3\linewidth}{|c|L|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{Bigtable} & \textbf{Cassandra} & \textbf{HBase} & \textbf{Hypertable} \\
+            \hline 
+            \textbf{Consistency} & Eventual & Weak / eventual & Eventual  (Atomic at rows) & Eventual \\ 
+            \hline 
+            \textbf{Indexing} & Row key, column key, timestamp & Row key, column key, wide row, custom & Row key, column family, column key & Row key, column key \\ 
+            \hline 
+            \textbf{Query Language} & C++ API & CQL & Pig Latin / HQL & HQL \\
+            \hline 
+            \textbf{Availability} & High (Chubby) & High & High & High \\ 
+            \hline 
+            \textbf{Replication} & GFS & HDFS & HDFS & HDFS \\ 
+            \hline 
+            \textbf{Operations} & gets, puts, range queries, meta-data updates & gets, puts, range queries, meta-data updates & gets, puts, range queries, meta-data updates & gets, puts, range queries, meta-data updates \\ 
+            \hline 
+            \textbf{Versioning} & Yes & No & Yes & Yes \\ 
+            \hline 
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{Comparison of column stores}
+    \label{table:column-comparison}
+\end{table}
+
+Table \ref{table:column-comparison} summarizes the main features of these systems.
 
 \subsection{Document}\label{ssec:document}
 Document based data models allow data to be stored in structured documents including KV pairs. The underlying document structure can be anything as long as its structure is something that the store can understand. Common document formats include XML, JSON, YAML, BSON, RavenDB, and others\cite{chen_big_2014}. Documents can also store other documents recursively.
@@ -619,6 +654,9 @@ SimpleDB does not provide any manual index control. Instead, you can define mult
 Even though SimpleDB provides a rather \textit{simple} data model, it's provided as a service build on top of Amazon's cloud architecture. This allows you to scale as needed and only pay for what you use. 
 
 \subsubsection{Comparison of Document Stores}
+In the previous sections we reviewed MongoDB, CouchDB, and SimpleDB. This section will provide brief comparisons and contrasts between these document databases.
+
+MongoDB provides access to its data store in the form of multiple APIs for many different programming languages. CouchDB and SimpleDB provide an HTTP interface for access.
 
 \subsection{Graph}\label{ssec:graph}
 Graph databases are unique in the way that they store and relate data. Graph databases specialize in efficiently managing heavily linked data\cite{cattell_scalable_2011}.

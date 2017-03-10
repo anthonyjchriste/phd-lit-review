@@ -647,7 +647,7 @@ SimpleDB\cite{cattell_scalable_2011} is a distributed document database develope
 
 SimpleDB is one or the older (2007) and simpler document databases. SimpleDB does not support nested documents like MongoDB. The only operations supported by SimpleDB are \textit{select}, \textit{delete}, \textit{getAtrributes}, and \textit{putAttributes}.
 
-SimpleDB supports eventual consistency, but does not provide a way for alerting clients when conflicts arise This is due do the fact that SimpleDB does not use sharding, but instead uses asynchronous replication, similar to CouchDB. The difference betweem SimpleDB and CouchDB is that CouchDB maintains multiple versions od values where SimpleDB does not have a similar mechanism.
+SimpleDB supports eventual consistency, but does not provide a way for alerting clients when conflicts arise This is due do the fact that SimpleDB does not use sharding, but instead uses asynchronous replication, similar to CouchDB. The difference betweem SimpleDB and CouchDB is that CouchDB maintains multiple versions of values where SimpleDB does not have a similar mechanism.
 
 SimpleDB does not provide any manual index control. Instead, you can define multiple \textit{domains} per document. Domains can contain different constraints. This method allows data to be queried in multiple ways, using different constraints, using different domains and provides some facility for mimicking indexes.
 
@@ -719,7 +719,7 @@ FlockDB is a specialized graph database created for managing relationship data a
 
 FlockDB was optimized for working with very large adjacency lists with an emphasis on velocity: fast reads, writes, updates, and deletes. FlockDB also provides the ability to build complex queries, paging through millions of results in a single page. FlockDB can restore archived edges and provide for easy replication and scaling. 
 
-FlockDB was not designed for graph-walking queries or automatic sharding.
+FlockDB was not designed for graph-walking queries or automatic sharding, but instead is optimized for fast set operations.
 
 OrientDB, as described by Sharma et al.\cite{sharma_extended_2015} is another open source Java based graph database. The feature that OrientDB adds on top of something like Neo4J is that it blends traditional graph databases with a document database. OrientDB makes it possible to store documents as nodes in the graph data structure.
 
@@ -729,8 +729,36 @@ OrientDB is fully distributed and used a MVRB-tree build on top or red-black tre
 
 An SQL like query language is used to query OrientDB.
 
-
 \subsubsection{Comparison of Graph Stores}
+In the previous sections we reviewed Neo4J, FlockDB, and OrientDB. Neo4J is the appears to be the most active graph database discussed in the literature. FlockDB was designed at Twitter with an emphasis on velocity of incoming data and to perform queries on social connections within Twitter using fast set operations rather than walking the graph.
+
+OrientDB sets itself apart from the others providing multiple schema models including schemaless, semi-schemaless, and full schema models. OrientDB also provides full system indexing so that data can be queried in multiple ways.
+
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.3\linewidth}{|c|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{Neo4J} & \textbf{FlockDB} & \textbf{OrientDB} \\
+            \hline 
+            \textbf{Consistency} & Atomic updates to individual objects, ACID in single database, eventual in cluster & Eventual & Eventual  (Atomic at rows)\\ 
+            \hline 
+            \textbf{Indexing} & Single field & Primary and secondary & Full system indexing\\ 
+            \hline 
+            \textbf{Query Language} & Cypher other APIs & NA & SQL-like\\
+            \hline 
+            \textbf{Schema} & Schemaless & NA & Schemaless, semi-schemaless, full schema \\
+            \hline
+            \textbf{Replication} & Async replication & Sharding & Sharding  \\ 
+            \hline 
+            \textbf{Operations} & gets, puts, updates, graph traversals & gets, puts, set operations &  gets, puts, updates by index and graph traversals \\ 
+            \hline 
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{Comparison of graph stores}
+    \label{table:graph-comparison}
+\end{table}
+
+The main features of these graph databases are compared in table \ref{table:graph-comparison}.
 
 \subsection{Other Distributed Databses}\label{ssec:misc}
 \subsubsection{Google's Spanner}\label{sssec:googles-spanner}
@@ -748,6 +776,18 @@ Spanner further supports externally consistent reads and writes and globally con
 
 Spanner is able to provide absolute timestamps on a global scale by making use of their \textit{TrueTime API} which not only exposes clock timestamps, but also exposes clock uncertainty. Google uses a distributed network of atomic clocks and GPS receivers to maintain global synchronization. In the presence of uncertainty, Spanner can dynamically change its execution speed to match timestamp uncertainty. In the end, Spanner provides for uncertainty that is less than 10ms.
 
+\subsection{Comparison of Big Data Consistency Models}
+We reviewed distributed file systems, key-value stores, column stores, document stores, and graph stores in the previous sections. This section will briefly compare and contrast between these technologies.
+
+Distributed file systems provide a means of distributing files (large, small, and numerous) over many servers. These systems provide mechanism for replicating data and making sure that data is always available. With these mechanisms we end up having to deal with issues in consistency which is a common theme across all of these distributed data stores.
+
+Next, we examined ways of storing structured information across distributed servers. Key-value stores are the most simple and only store mappings from keys to values. The simplicity means that its possible to easily replicate data and parallelize operations over data. The simplicity also means that key-value stores lack a sophisticated query model. 
+
+Column stores provide a means of storing massive amounts of structures information. Column stores provide more ways of indexing data than key-value stores and also provide a richer data model in that data can be laid out in rows, columns, and column families. The richer data model and richer indexing also allows for querying based on ranges instead of only querying on a primary key.
+
+Document stores provide a data model that is very similar to JSON. Document stores provide more indexing options than column stores which include text indexes and geospatial indexes. Document stores are generally schemaless, but can enforce ``soft schemas''.
+
+Graph stores excel at walking graph data structures and performing large scale set operations. These are generally used to mine relationship information between a multitude of entities.
 
 \section{Big Data Analytics} \label{sec:big-data-analytics}
 As we saw in the previous section, big data is generally stored on distributed systems. Data can be spread out across hundreds or thousands of servers. These systems may be heterogeneous and due to their distributed nature, are not great candidates for technologies such as Message Passing Interface (MPI) or Open Multi-Procressing (OpenMP)\cite{chen_big_2014}. 

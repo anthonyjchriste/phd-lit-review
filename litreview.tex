@@ -978,8 +978,6 @@ Catalyst builds an abstract syntax tree (AST) from provided DataFrame operations
 
 Catalyst and Spark SQL were designed with extension in mind. Developers can add external data sources with varying degrees of optimization and allow those data sources to be queries using the DataFrame API. As of the time of this paper, this technique was already utilized to create data source adapters to CSV files, Avro files, Parquet files, and JDBC data sources such as RDBMS.
 
-\subsubsection{Comparisons of MapReduce Related Technologies}
-
 \subsection{Dryad}\label{ssec:dryad}
 Dryad is a distributed execution engine developed at Microsoft Research by Isard et al.\ and described in their 2007 paper \textit{Dryad: Distributed Data-Parallel Programs from Sequential Building Blocks}\cite{isard2007dryad}. 
 
@@ -1086,6 +1084,11 @@ Flink supports efficient distributed checkpointing to provide fault tolerance. R
 %Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
 \subsection{Comparisons of Big Data Analytics Software}
+\subsubsection{Comparison of Distributed Computation Frameworks}
+
+\subsubsection{Comparison of Graph Computation Frameworks}
+
+\subsubsection{Comparison of Distibuted Computation Languages}
 
 \section{Conclusion}\label{sec:conclusion}
 This review looked at management of large-scale distributed data with an emphasis on big data collected from distributed sensor networks. 

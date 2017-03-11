@@ -5,10 +5,11 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
-\usepackage{hyperref}
+\usepackage[bookmarksopen=true]{hyperref}
 \usepackage{tabulary}
 \usepackage{adjustbox}
 %\usepackage[margin=1.5in]{geometry}
+\usepackage{bookmark}
 \usepackage{microtype}
 
 \renewcommand{\familydefault}{phv}
@@ -1084,11 +1085,45 @@ Flink supports efficient distributed checkpointing to provide fault tolerance. R
 %Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
 \subsection{Comparisons of Big Data Analytics Software}
-\subsubsection{Comparison of Distributed Computation Frameworks}
+First we provide a general comparison of big data analytics software in table \ref{table:analytcs-comparison}.
 
-\subsubsection{Comparison of Graph Computation Frameworks}
-
-\subsubsection{Comparison of Distibuted Computation Languages}
+\begin{table}
+	\begin{adjustbox}{center} 
+		\begin{tabulary}{1.7\linewidth}{|c|L|L|L|L|L|L|L|L|}
+			\hline 
+			\textbf{Feature / KV} & \textbf{Computation Engine} & \textbf{Graph Parallel} & \textbf{Batch} & \textbf{Streaming} & \textbf{Iterative} & \textbf{Data Store} &\textbf{Fault Tolerance} & \textbf{In-Memory}  \\
+			\hline 
+			\textbf{MapReduce} & MapReduce & No & Yes & No & No & GFS & Re-run failed tasks & No\\ 
+			\hline 
+			\textbf{Hadoop} & MapReduce & No & Yes & No & No & HDFS & Re-run failed tasks & No\\ 
+			\hline 
+			\textbf{Twister} & MapReduce & No & Yes & No & Yes & HDFS & Save state between iterations & Yes\\ 
+			\hline 
+			\textbf{YARN} & Pluggable & No & Yes & Yes & Yes & HDFS & RM intervention & Yes\\ 
+			\hline 
+			\textbf{Spark} & Spark / RDDs DAG & No & Yes & No & Yes & HDFS, Cassandra, HBase, S3, sequence files & RDDs (can be rebuilt on partition failure) & Yes\\ 
+			\hline 
+			\textbf{Spark Streaming} & Spark & No & Yes & Yes & No & HDFS, Cassandra, HBase, S3, sequence files & RDDs (can be rebuilt on partition failure) & Yes\\ 
+			\hline 
+			\textbf{GraphX} & Spark  & Yes & Yes & Yes & Yes &HDFS, Cassandra, HBase, S3, sequence files & RDDs (can be rebuilt on partition failure) & Yes \\ 
+			\hline 
+			\textbf{Dryad} & Custom DAG & No & Yes & No & No & HDFS & Re-run railed vertex & No\\ 
+			\hline 
+			\textbf{Pregel} & Custom DAG  & Yes & Yes & Yes & Yes & File System & Checkpoints & Yes\\ 
+			\hline 
+			\textbf{GraphLab} & Custom DAG & Yes & Yes & No & Yes & HDFS, Cassandra, HBase, S3, sequence files & No & Yes\\ 
+			\hline 
+			\textbf{Storm} & Custom DAG & No & No & Yes & Yes & HDFS, Cassandra, HBase, S3, sequence files & Sequences are recomputed & Yes\\ 
+			\hline 
+			\textbf{MLlib} & Spark & No & Yes & Yes & Yes & HDFS, Cassandra, HBase, S3, sequence files & RDDs (can be rebuilt on partition failure) & Yes\\ 
+			\hline 
+			\textbf{Flink} & Custom DAG & No & Yes & Yes & Yes & DFS, logs, DBs & Checkpoints & Yes\\ 
+			\hline 
+		\end{tabulary} 
+	\end{adjustbox}
+	\caption{General comparison of big data analytics engines}
+	\label{table:analytcs-comparison}
+\end{table}
 
 \section{Conclusion}\label{sec:conclusion}
 This review looked at management of large-scale distributed data with an emphasis on big data collected from distributed sensor networks. 

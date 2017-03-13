@@ -683,7 +683,7 @@ MongoDB provides access to its data store in the form of multiple APIs for many 
             \hline 
         \end{tabulary} 
     \end{adjustbox}
-    \caption{Comparison of column stores}
+    \caption{Comparison of document stores}
     \label{table:document-comparison}
 \end{table}
 
@@ -930,6 +930,8 @@ GraphX extends on Spark's concept of an RDD by adding a resilient distributed gr
 
 GraphX uses edge cutting and vertex cutting heuristics to achieve efficient partitioning of data within a graph to maintain high locality within nodes of a cluster.
 
+GraphX utilized Gather-Apply-Scatter (GAS) execution model. In this model the gather stage gathers messages assigned to the same vertex. In the apply stage, a map operation is applied to all messages. In the scatter stage, each vertex property is scattered to all adjacent vertices.
+
 By taking a data-parallel approach to graph processing GraphX provides the following parallel operations on RDGs, retrieve lists of vertices and edges, filter vertices and edges by predicate, create subgraphs from predicate, map transformations on vertices and edges, and aggregate date about neighbors.
 
 GraphX also provides a graph parallel approach to processing by showing that data-parallel transformations can be mapped to graph-parallel operations. GraphX proves this by implementing the entirety of both Pregel and PowerGraph using RDGs in less than 20 lines of code each.
@@ -1111,7 +1113,7 @@ First we provide a general comparison of big data analytics software in table \r
 			\hline 
 			\textbf{Pregel} & Custom DAG  & Yes & Yes & Yes & Yes & File System & Checkpoints & Yes\\ 
 			\hline 
-			\textbf{GraphLab} & Custom DAG & Yes & Yes & No & Yes & HDFS, Cassandra, HBase, S3, sequence files & No & Yes\\ 
+			\textbf{GraphLab} & Custom DAG & Yes & Yes & No & Yes & HDFS, Cassandra, HBase, S3, sequence files & Checkpoints & Yes\\ 
 			\hline 
 			\textbf{Storm} & Custom DAG & No & No & Yes & Yes & HDFS, Cassandra, HBase, S3, sequence files & Sequences are recomputed & Yes\\ 
 			\hline 
@@ -1124,6 +1126,79 @@ First we provide a general comparison of big data analytics software in table \r
 	\caption{General comparison of big data analytics engines}
 	\label{table:analytcs-comparison}
 \end{table}
+
+Here we provide brief comparisons between the graph parallel computation engines that we reviewed. These comparisons are summarized in table \ref{table:graph-parallel-comparison}.
+
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.7\linewidth}{|c|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{GraphX} & \textbf{GraphLab} & \textbf{Pregel} \\
+            \hline 
+            \textbf{Programming Model} & RDD / RDG & DAG and global state table & DAG\\ 
+            \hline 
+            \textbf{Execution Model} & Gather-Apply-Scatter (GAS) & User supplied overlapping async update functions & Vertices update each superstep, message passing between vertices \\ 
+            \hline 
+            \textbf{Partitioning} & Vertex/edge-cutting & Two-phase & Hash based \\ 
+            \hline 
+            \textbf{Data Parallel} & Yes & No & No \\ 
+            \hline 
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{General comparison of graph parallel engines}
+    \label{table:graph-parallel-comparison}
+\end{table}
+
+All graph parallel engines compute data in parallel using a graph data structure where computation happens along the vertices and edges of the graph. All of GraphX, GraphLab, and Pregel perform graph parallel computations. 
+
+GraphX is unique in that it not only provides graph parallel computations, but it also provides a hybrid approach that allows for data parallelism as well.
+
+GraphLab is unique in that its update functions can update vertices in an asynchronous overlapping context. Due to this, GraphLab provides several tunable consistency models the affect how overlapping contexts can be created and queried.
+
+Next we provide a comparison of SQL like languages that compile to distributed computations. These comparisons are summarized in table \ref{table:sql-engine-comparison}.
+
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.7\linewidth}{|c|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{Pig Latin} & \textbf{Impala} & \textbf{Spark SQL} \\
+            \hline 
+            \textbf{Computation Engine} & MapReduce & Custom distributed daemons & Spark \\ 
+            \hline 
+            \textbf{Language} & SQL & SQL & DataFrame API\\ 
+            \hline 
+            \textbf{Optimizations} & Optimization rules and reducer estimations & Semantic analysis, LLVM & Catalyst, rule and cost based optimizations \\
+            \hline
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{Comparison of SQL engines}
+    \label{table:sql-engine-comparison}
+\end{table}
+
+Pig Latin was developed early on to provide a high-level language for performing ad-hoc MapReduce jobs. Impala works within the Hadoop ecosystem, but provides its own distributed computation engine. Impala is able to utilize efficient runtime code generation by using LLVM to perform back end optimizations. SparkSQL sets itself apart from the other offerings by providing a unifying data query language for pretty much the entire Spark ecosystem. Spark SQL also provides automatic schema identification for common formats such as JSON. Spark provides its own SQL like language in the form of the DataFrame API and uses a custom optimization enging called Catalyst.
+
+Finally, we provide a comparison of the reviewed streaming engines with a summary presented in table \ref{table:streaming-comparison}.
+\begin{table}
+    \begin{adjustbox}{center} 
+        \begin{tabulary}{1.7\linewidth}{|c|L|L|L|}
+            \hline 
+            \textbf{Feature / KV} & \textbf{Storm} & \textbf{Flink} & \textbf{Spark Streaming} \\
+            \hline 
+            \textbf{Smallest Streaming Unit} & Individual & Individual & Batch \\ 
+            \hline 
+            \textbf{Programming Model} & Spouts and bolts in a DAG  & DAG, Dataflow graphs& D-Streams / RDDs\\ 
+            \hline 
+            \textbf{Execution Model} & Topology, DAG, streaming bolts (vertices) & Data parallel DAG & DAG built from RDDs\\ 
+            \hline
+        \end{tabulary} 
+    \end{adjustbox}
+    \caption{Comparison of streaming analytics engines}
+    \label{table:streaming-comparison}
+\end{table}
+
+Spark Streaming provides the largest ecosystem of other software that it works with including machine learning, graph processing, and other high level analytics. What sets Flink and Storm part from Spark is that Spark streaming operations on small batches of values where both Flink and Storm operate on individual items in a stream. The advantage that batch processing provides in Spark Streaming is easy to create sliding window algorithms, however Flink also provides several means of windowing even over individual items.
+
+Storm provides multiple flexible portioning techniques which provides developers the means to optimize their Storm topologies over a cluster.
 
 \section{Conclusion}\label{sec:conclusion}
 This review looked at management of large-scale distributed data with an emphasis on big data collected from distributed sensor networks. 
@@ -1140,3 +1215,19 @@ Finally, in section \ref{sec:big-data-analytics}, we looked at different framewo
 \bibliographystyle{plain}
 
 \end{document}
+
+% Formatting for a table
+%
+%\begin{table}
+%    \begin{adjustbox}{center} 
+%        \begin{tabulary}{1.7\linewidth}{|c|L|L|L|}
+%            \hline 
+%            \textbf{Feature / KV} & \textbf{} & \textbf{} & \textbf{} \\
+%            \hline 
+%            \textbf{} &  &  & \\ 
+%            \hline 
+%        \end{tabulary} 
+%    \end{adjustbox}
+%    \caption{}
+%    \label{table:}
+%\end{table}

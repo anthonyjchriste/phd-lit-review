@@ -1087,13 +1087,14 @@ Flink supports efficient distributed checkpointing to provide fault tolerance. R
 %Hive\cite{thusoo2009hive} is an Apache project for warehousing huge amounts of data on HDFS. Hive provides an SQL like language called \textit{HiveQL} that converts queries into MapReduce, Apache Tez, or Apache Spark jobs. Hive has built-in support for operating on compressed data.
 
 \subsection{Comparisons of Big Data Analytics Software}
+\subsubsection{General Comparisons of Big Data Analytics Software}
 First we provide a general comparison of big data analytics software in table \ref{table:analytcs-comparison}.
 
 \begin{table}
 	\begin{adjustbox}{center} 
 		\begin{tabulary}{1.7\linewidth}{|c|L|L|L|L|L|L|L|L|}
 			\hline 
-			\textbf{Feature / KV} & \textbf{Computation Engine} & \textbf{Graph Parallel} & \textbf{Batch} & \textbf{Streaming} & \textbf{Iterative} & \textbf{Data Store} &\textbf{Fault Tolerance} & \textbf{In-Memory}  \\
+			\textbf{Feature / KV} & \textbf{Engine} & \textbf{Graph Parallel} & \textbf{Batch} & \textbf{Streaming} & \textbf{Iterative} & \textbf{Data Store} &\textbf{Fault Tolerance} & \textbf{In-Memory}  \\
 			\hline 
 			\textbf{MapReduce} & MapReduce & No & Yes & No & No & GFS & Re-run failed tasks & No\\ 
 			\hline 
@@ -1127,6 +1128,7 @@ First we provide a general comparison of big data analytics software in table \r
 	\label{table:analytcs-comparison}
 \end{table}
 
+\subsubsection{Comparison of Graph Parallel Engines}
 Here we provide brief comparisons between the graph parallel computation engines that we reviewed. These comparisons are summarized in table \ref{table:graph-parallel-comparison}.
 
 \begin{table}
@@ -1155,6 +1157,7 @@ GraphX is unique in that it not only provides graph parallel computations, but i
 
 GraphLab is unique in that its update functions can update vertices in an asynchronous overlapping context. Due to this, GraphLab provides several tunable consistency models the affect how overlapping contexts can be created and queried.
 
+\subsubsection{Comparison of High Level SQL-Like Languages}
 Next we provide a comparison of SQL like languages that compile to distributed computations. These comparisons are summarized in table \ref{table:sql-engine-comparison}.
 
 \begin{table}
@@ -1177,6 +1180,7 @@ Next we provide a comparison of SQL like languages that compile to distributed c
 
 Pig Latin was developed early on to provide a high-level language for performing ad-hoc MapReduce jobs. Impala works within the Hadoop ecosystem, but provides its own distributed computation engine. Impala is able to utilize efficient runtime code generation by using LLVM to perform back end optimizations. SparkSQL sets itself apart from the other offerings by providing a unifying data query language for pretty much the entire Spark ecosystem. Spark SQL also provides automatic schema identification for common formats such as JSON. Spark provides its own SQL like language in the form of the DataFrame API and uses a custom optimization enging called Catalyst.
 
+\subsubsection{Comparison of Streaming Computation Engines}
 Finally, we provide a comparison of the reviewed streaming engines with a summary presented in table \ref{table:streaming-comparison}.
 \begin{table}
     \begin{adjustbox}{center} 
